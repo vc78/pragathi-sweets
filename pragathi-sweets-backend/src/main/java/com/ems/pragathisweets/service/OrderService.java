@@ -1,0 +1,190 @@
+package com.ems.pragathisweets.service;
+
+import com.ems.pragathisweets.dto.CheckoutRequest;
+import com.ems.pragathisweets.dto.OrderItemResponse;
+import com.ems.pragathisweets.dto.OrderResponse;
+import com.ems.pragathisweets.entity.*;
+import com.ems.pragathisweets.exception.InsufficientStockException;
+import com.ems.pragathisweets.exception.ResourceNotFoundException;
+import com.ems.pragathisweets.repository.CartRepository;
+import com.ems.pragathisweets.repository.OrderRepository;
+import com.ems.pragathisweets.repository.ProductRepository;
+import com.ems.pragathisweets.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ThreadLocalRandom;
+
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final CouponService couponService;
+    private final EmailService emailService;
+
+    @Transactional
+    public OrderResponse checkout(Long userId, CheckoutRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart is empty"));
+
+        if (cart.getItems().isEmpty()) {
+            throw new IllegalArgumentException("Cannot checkout with an empty cart");
+        }
+
+        PaymentMethod paymentMethod;
+        try {
+            paymentMethod = PaymentMethod.valueOf(request.getPaymentMethod().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Invalid payment method. Use COD or RAZORPAY");
+        }
+
+        // Validate stock and build order items
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        Order order = Order.builder()
+                .orderNumber(generateOrderNumber())
+                .user(user)
+                .paymentMethod(paymentMethod)
+                .paymentStatus(paymentMethod == PaymentMethod.COD ? PaymentStatus.PENDING : PaymentStatus.PENDING)
+                .status(OrderStatus.PENDING)
+                .shippingAddress(request.getShippingAddress())
+                .contactPhone(request.getContactPhone())
+                .notes(request.getNotes())
+                .couponCode(request.getCouponCode())
+                .discountAmount(BigDecimal.ZERO)
+                .build();
+
+        for (CartItem cartItem : cart.getItems()) {
+            Product product = productRepository.findById(cartItem.getProduct().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + cartItem.getProduct().getId()));
+
+            if (product.getStockQuantity() < cartItem.getQuantity()) {
+                throw new InsufficientStockException("Insufficient stock for " + product.getName()
+                        + ". Available: " + product.getStockQuantity());
+            }
+
+            BigDecimal subtotal = product.getEffectivePrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+            totalAmount = totalAmount.add(subtotal);
+
+            OrderItem orderItem = OrderItem.builder()
+                    .product(product)
+                    .productName(product.getName())
+                    .quantity(cartItem.getQuantity())
+                    .price(product.getEffectivePrice())
+                    .subtotal(subtotal)
+                    .build();
+            order.addItem(orderItem);
+
+            // Decrement stock (reserved at order creation time)
+            product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
+            productRepository.save(product);
+        }
+
+        order.setTotalAmount(totalAmount);
+
+        BigDecimal discount = BigDecimal.ZERO;
+        if (request.getCouponCode() != null && !request.getCouponCode().isBlank()) {
+            discount = couponService.applyCoupon(request.getCouponCode(), totalAmount);
+        }
+        order.setDiscountAmount(discount);
+        order.setFinalAmount(totalAmount.subtract(discount));
+
+        Order saved = orderRepository.save(order);
+
+        // Clear the cart after order is placed
+        cart.getItems().clear();
+        cartRepository.save(cart);
+
+        emailService.sendOrderConfirmationEmail(user.getEmail(), saved.getOrderNumber(), saved.getFinalAmount().toString());
+
+        return toResponse(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> getUserOrders(Long userId, Pageable pageable) {
+        return orderRepository.findByUserId(userId, pageable).map(this::toResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderResponse getUserOrder(Long userId, Long orderId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+        return toResponse(order);
+    }
+
+    @Transactional
+    public OrderResponse cancelOrder(Long userId, Long orderId) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+        if (order.getStatus() == OrderStatus.SHIPPED || order.getStatus() == OrderStatus.DELIVERED) {
+            throw new IllegalArgumentException("Cannot cancel an order that has already been shipped or delivered");
+        }
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new IllegalArgumentException("Order is already cancelled");
+        }
+
+        // Restock items
+        for (OrderItem item : order.getItems()) {
+            if (item.getProduct() != null) {
+                Product product = item.getProduct();
+                product.setStockQuantity(product.getStockQuantity() + item.getQuantity());
+                productRepository.save(product);
+            }
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+        Order saved = orderRepository.save(order);
+        emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order.getOrderNumber(), "CANCELLED");
+        return toResponse(saved);
+    }
+
+    private String generateOrderNumber() {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        int random = ThreadLocalRandom.current().nextInt(100, 999);
+        return "PS" + timestamp + random;
+    }
+
+    public OrderResponse toResponse(Order order) {
+        var items = order.getItems().stream()
+                .map(item -> OrderItemResponse.builder()
+                        .productId(item.getProduct() != null ? item.getProduct().getId() : null)
+                        .productName(item.getProductName())
+                        .quantity(item.getQuantity())
+                        .price(item.getPrice())
+                        .subtotal(item.getSubtotal())
+                        .build())
+                .toList();
+
+        return OrderResponse.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .userId(order.getUser().getId())
+                .userName(order.getUser().getFullName())
+                .items(items)
+                .totalAmount(order.getTotalAmount())
+                .discountAmount(order.getDiscountAmount())
+                .finalAmount(order.getFinalAmount())
+                .couponCode(order.getCouponCode())
+                .status(order.getStatus().name())
+                .paymentMethod(order.getPaymentMethod().name())
+                .paymentStatus(order.getPaymentStatus().name())
+                .shippingAddress(order.getShippingAddress())
+                .contactPhone(order.getContactPhone())
+                .notes(order.getNotes())
+                .createdAt(order.getCreatedAt())
+                .build();
+    }
+}

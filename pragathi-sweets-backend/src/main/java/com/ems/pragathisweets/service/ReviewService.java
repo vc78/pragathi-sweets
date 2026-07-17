@@ -1,0 +1,93 @@
+package com.ems.pragathisweets.service;
+
+import com.ems.pragathisweets.dto.ReviewRequest;
+import com.ems.pragathisweets.dto.ReviewResponse;
+import com.ems.pragathisweets.entity.Product;
+import com.ems.pragathisweets.entity.Review;
+import com.ems.pragathisweets.entity.User;
+import com.ems.pragathisweets.exception.DuplicateResourceException;
+import com.ems.pragathisweets.exception.ProductNotFoundException;
+import com.ems.pragathisweets.exception.ResourceNotFoundException;
+import com.ems.pragathisweets.repository.ProductRepository;
+import com.ems.pragathisweets.repository.ReviewRepository;
+import com.ems.pragathisweets.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewService {
+
+    private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+
+    @Transactional(readOnly = true)
+    public Page<ReviewResponse> getByProduct(Long productId, Pageable pageable) {
+        return reviewRepository.findByProductId(productId, pageable).map(this::toResponse);
+    }
+
+    @Transactional
+    public ReviewResponse addReview(Long userId, ReviewRequest request) {
+        if (reviewRepository.findByProductIdAndUserId(request.getProductId(), userId).isPresent()) {
+            throw new DuplicateResourceException("You have already reviewed this product");
+        }
+
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new ProductNotFoundException(request.getProductId()));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        Review review = Review.builder()
+                .product(product)
+                .user(user)
+                .rating(request.getRating())
+                .comment(request.getComment())
+                .build();
+
+        Review saved = reviewRepository.save(review);
+        recalculateProductRating(product);
+
+        return toResponse(saved);
+    }
+
+    @Transactional
+    public void deleteReview(Long userId, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("You can only delete your own reviews");
+        }
+
+        Product product = review.getProduct();
+        reviewRepository.delete(review);
+        recalculateProductRating(product);
+    }
+
+    private void recalculateProductRating(Product product) {
+        var reviews = reviewRepository.findByProductId(product.getId(),
+                org.springframework.data.domain.Pageable.unpaged()).getContent();
+
+        double avg = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
+        product.setAvgRating(Math.round(avg * 10.0) / 10.0);
+        product.setNumReviews(reviews.size());
+        productRepository.save(product);
+    }
+
+    private ReviewResponse toResponse(Review review) {
+        return ReviewResponse.builder()
+                .id(review.getId())
+                .productId(review.getProduct().getId())
+                .userId(review.getUser().getId())
+                .userName(review.getUser().getFullName())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .createdAt(review.getCreatedAt())
+                .build();
+    }
+}

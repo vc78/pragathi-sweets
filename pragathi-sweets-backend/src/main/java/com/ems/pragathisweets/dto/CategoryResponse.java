@@ -1,0 +1,20 @@
+package com.ems.pragathisweets.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class CategoryResponse {
+
+    private Long id;
+    private String name;
+    private String description;
+    private String imageUrl;
+    private boolean active;
+    private long productCount;
+}

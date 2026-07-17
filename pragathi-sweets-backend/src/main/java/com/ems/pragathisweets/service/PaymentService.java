@@ -1,0 +1,132 @@
+package com.ems.pragathisweets.service;
+
+import com.ems.pragathisweets.config.RazorpayConfig;
+import com.ems.pragathisweets.dto.PaymentOrderResponse;
+import com.ems.pragathisweets.dto.PaymentVerificationRequest;
+import com.ems.pragathisweets.entity.Order;
+import com.ems.pragathisweets.entity.Payment;
+import com.ems.pragathisweets.entity.PaymentStatus;
+import com.ems.pragathisweets.exception.PaymentVerificationException;
+import com.ems.pragathisweets.exception.ResourceNotFoundException;
+import com.ems.pragathisweets.repository.OrderRepository;
+import com.ems.pragathisweets.repository.PaymentRepository;
+import com.razorpay.RazorpayClient;
+import com.razorpay.Utils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class PaymentService {
+
+    private final RazorpayClient razorpayClient;
+    private final RazorpayConfig razorpayConfig;
+    private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
+
+    /**
+     * Creates a Razorpay order for the given internal order and persists a Payment record.
+     */
+    @Transactional
+    public PaymentOrderResponse createRazorpayOrder(String internalOrderNumber) {
+        Order order = orderRepository.findByOrderNumber(internalOrderNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + internalOrderNumber));
+
+        long amountInPaise = order.getFinalAmount().multiply(BigDecimal.valueOf(100)).longValue();
+
+        try {
+            JSONObject orderRequest = new JSONObject();
+            orderRequest.put("amount", amountInPaise);
+            orderRequest.put("currency", "INR");
+            orderRequest.put("receipt", order.getOrderNumber());
+
+            com.razorpay.Order razorpayOrder = razorpayClient.orders.create(orderRequest);
+            String razorpayOrderId = razorpayOrder.get("id");
+
+            Payment payment = paymentRepository.findByOrderId(order.getId()).orElse(
+                    Payment.builder().order(order).build()
+            );
+            payment.setRazorpayOrderId(razorpayOrderId);
+            payment.setAmount(order.getFinalAmount());
+            payment.setCurrency("INR");
+            payment.setStatus(PaymentStatus.CREATED);
+            paymentRepository.save(payment);
+
+            return PaymentOrderResponse.builder()
+                    .razorpayOrderId(razorpayOrderId)
+                    .razorpayKeyId(razorpayConfig.getKeyId())
+                    .amountInPaise(amountInPaise)
+                    .currency("INR")
+                    .internalOrderId(order.getId())
+                    .orderNumber(order.getOrderNumber())
+                    .build();
+
+        } catch (Exception ex) {
+            log.error("Failed to create Razorpay order for {}: {}", internalOrderNumber, ex.getMessage());
+            throw new PaymentVerificationException("Unable to initiate payment. Please try again.");
+        }
+    }
+
+    /**
+     * Verifies the Razorpay payment signature and marks the order/payment as paid.
+     */
+    @Transactional
+    public void verifyPayment(PaymentVerificationRequest request) {
+        Order order = orderRepository.findByOrderNumber(request.getInternalOrderNumber())
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + request.getInternalOrderNumber()));
+
+        Payment payment = paymentRepository.findByOrderId(order.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("No payment record found for this order"));
+
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("razorpay_order_id", request.getRazorpayOrderId());
+        attributes.put("razorpay_payment_id", request.getRazorpayPaymentId());
+        attributes.put("razorpay_signature", request.getRazorpaySignature());
+
+        try {
+            boolean isValid = Utils.verifyPaymentSignature(new JSONObject(attributes), razorpayConfig.getKeySecret());
+            if (!isValid) {
+                payment.setStatus(PaymentStatus.FAILED);
+                payment.setFailureReason("Signature verification failed");
+                paymentRepository.save(payment);
+                throw new PaymentVerificationException("Payment verification failed. Please contact support.");
+            }
+        } catch (PaymentVerificationException pve) {
+            throw pve;
+        } catch (Exception ex) {
+            log.error("Error verifying payment signature: {}", ex.getMessage());
+            throw new PaymentVerificationException("Payment verification failed. Please contact support.");
+        }
+
+        payment.setRazorpayPaymentId(request.getRazorpayPaymentId());
+        payment.setRazorpaySignature(request.getRazorpaySignature());
+        payment.setStatus(PaymentStatus.SUCCESS);
+        paymentRepository.save(payment);
+
+        order.setPaymentStatus(PaymentStatus.SUCCESS);
+        order.setStatus(com.ems.pragathisweets.entity.OrderStatus.CONFIRMED);
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void markPaymentFailed(String internalOrderNumber, String reason) {
+        Order order = orderRepository.findByOrderNumber(internalOrderNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + internalOrderNumber));
+        Payment payment = paymentRepository.findByOrderId(order.getId()).orElse(null);
+        if (payment != null) {
+            payment.setStatus(PaymentStatus.FAILED);
+            payment.setFailureReason(reason);
+            paymentRepository.save(payment);
+        }
+        order.setPaymentStatus(PaymentStatus.FAILED);
+        orderRepository.save(order);
+    }
+}
