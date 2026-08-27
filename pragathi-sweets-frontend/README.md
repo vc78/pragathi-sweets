@@ -60,8 +60,9 @@ src/
 
 ## Payments
 
-Checkout supports **Razorpay** (loaded dynamically, calls
-`POST /payments/create-order` then `POST /payments/verify` on your backend) and
+Checkout supports **Razorpay** (loaded dynamically, creates the internal order,
+then calls `POST /payments/razorpay/create/{orderNumber}` and
+`POST /payments/razorpay/verify` on your backend) and
 **Cash on Delivery**. Set `VITE_RAZORPAY_KEY_ID` in `.env` for your Razorpay
 test/live key — falls back to a placeholder key in mock mode.
 

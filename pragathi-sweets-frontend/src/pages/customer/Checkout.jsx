@@ -75,32 +75,49 @@ export default function Checkout() {
       return placeOrder({ paymentStatus: 'Pending' })
     }
 
-    // Razorpay flow
+    // Create the internal order first so the server can bind the gateway order
+    // to its authoritative total and inventory reservation.
     setPlacing(true)
-    const scriptLoaded = await loadRazorpayScript()
-    if (!scriptLoaded) {
-      toast.error('Could not load payment gateway. Please try Cash on Delivery.')
+    try {
+      const scriptLoaded = await loadRazorpayScript()
+      if (!scriptLoaded) {
+        toast.error('Could not load payment gateway. Please try Cash on Delivery.')
+        return
+      }
+
+      const order = await orderService.createOrder({ items, address, total, paymentMethod })
+      const rpOrder = await orderService.createRazorpayOrder(order.id)
+      const options = {
+        key: rpOrder.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: rpOrder.amountInPaise,
+        currency: rpOrder.currency,
+        name: 'Pragathi Sweets',
+        description: 'Sweet box order',
+        order_id: rpOrder.razorpayOrderId,
+        handler: async (response) => {
+          try {
+            await orderService.verifyPayment({ ...response, internalOrderNumber: order.id })
+            clearCart()
+            toast.success('Order placed successfully!', {
+              style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+            })
+            navigate('/orders', { state: { newOrderId: order.id } })
+          } catch (err) {
+            toast.error('Payment verification failed. Please contact support.')
+          } finally {
+            setPlacing(false)
+          }
+        },
+        prefill: { name: address.name, contact: address.phone },
+        theme: { color: '#8B0000' },
+        modal: { ondismiss: () => setPlacing(false) },
+      }
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    } catch (err) {
+      toast.error('Could not initiate payment. Please try again.')
       setPlacing(false)
-      return
     }
-    const rpOrder = await orderService.createRazorpayOrder(total * 100)
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-      amount: rpOrder.amount,
-      currency: rpOrder.currency,
-      name: 'Pragathi Sweets',
-      description: 'Sweet box order',
-      order_id: rpOrder.id?.startsWith('order_mock') ? undefined : rpOrder.id,
-      handler: async (response) => {
-        await orderService.verifyPayment(response)
-        placeOrder({ paymentStatus: 'Paid', razorpayPaymentId: response.razorpay_payment_id })
-      },
-      prefill: { name: address.name, contact: address.phone },
-      theme: { color: '#8B0000' },
-      modal: { ondismiss: () => setPlacing(false) },
-    }
-    const rzp = new window.Razorpay(options)
-    rzp.open()
   }
 
   if (items.length === 0) {
@@ -130,9 +147,8 @@ export default function Checkout() {
         <div className="flex items-center gap-4 mb-12 select-none">
           <button
             onClick={() => setActiveStep(1)}
-            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors ${
-              activeStep === 1 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
-            }`}
+            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors ${activeStep === 1 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
+              }`}
           >
             1. Shipping Address
           </button>
@@ -140,19 +156,18 @@ export default function Checkout() {
           <button
             disabled={!address.name || !address.phone || !address.line1 || !address.city || !address.pincode}
             onClick={() => setActiveStep(2)}
-            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors disabled:opacity-50 ${
-              activeStep === 2 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
-            }`}
+            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors disabled:opacity-50 ${activeStep === 2 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
+              }`}
           >
             2. Payment Method
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
+
           {/* Left Column: Flow panels */}
           <div className="lg:col-span-8 space-y-6">
-            
+
             {activeStep === 1 ? (
               <motion.div
                 initial={{ opacity: 0, x: -15 }}

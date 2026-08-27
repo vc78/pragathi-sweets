@@ -39,7 +39,7 @@ const getItemsList = (o) => {
   const mockItems = [
     { name: 'Kaju Katli', price: 620, unit: 'kg', qty: 1, image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
     { name: 'Motichoor Ladoo', price: 380, unit: 'kg', qty: 1, image: '/images/pexels-divigraphy-14467844.jpg' },
-    { name: 'Gulab Jamun', price: 320, unit: 'kg', qty: 1, image: '/images/pexels-kailashkumarphotograpy-11887844.jpg' },
+    { name: 'Gulab Jamun', price: 320, unit: 'kg', qty: 1, image: '/images/pexels-kailashkumarphotography-11887844.jpg' },
     { name: 'Mysore Pak', price: 480, unit: 'kg', qty: 1, image: '/images/pexels-gaurav-kumar-1281378-18488310.jpg' },
   ]
   const count = o.items || 1

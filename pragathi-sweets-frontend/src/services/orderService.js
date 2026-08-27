@@ -5,7 +5,7 @@ export const orderService = {
     try {
       // 1. Clear database cart first
       await api.delete('/cart')
-      
+
       // 2. Add each item from local cart to backend cart
       for (const item of payload.items) {
         await api.post('/cart/items', {
@@ -13,7 +13,7 @@ export const orderService = {
           quantity: Number(item.qty)
         })
       }
-      
+
       // 3. Construct and send checkout payload
       const addressString = `${payload.address.line1}, ${payload.address.city} - ${payload.address.pincode}`
       const checkoutPayload = {
@@ -23,7 +23,7 @@ export const orderService = {
         couponCode: payload.couponCode || null,
         notes: `Delivery to ${payload.address.name}`
       }
-      
+
       const { data } = await api.post('/orders/checkout', checkoutPayload)
       return {
         id: data.data.orderNumber,
@@ -93,9 +93,9 @@ export const orderService = {
     }
   },
 
-  async createRazorpayOrder(amount) {
+  async createRazorpayOrder(orderNumber) {
     try {
-      const { data } = await api.post('/payments/create-order', { amount })
+      const { data } = await api.post(`/payments/razorpay/create/${orderNumber}`)
       return data.data
     } catch (err) {
       console.error(err)
@@ -105,7 +105,7 @@ export const orderService = {
 
   async verifyPayment(payload) {
     try {
-      const { data } = await api.post('/payments/verify', payload)
+      const { data } = await api.post('/payments/razorpay/verify', payload)
       return data.data
     } catch (err) {
       console.error(err)

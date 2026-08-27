@@ -1,11 +1,12 @@
 import api from './api'
+import { resolveImageUrl } from '../utils/media'
 
 // Normalize a product object from the backend so that all UI components
 // can use consistent field names (image, stock, rating, bestseller, category).
 export function normalizeProduct(p) {
   return {
     ...p,
-    image: p.image || p.imageUrl || '',
+    image: resolveImageUrl(p.image || p.imageUrl),
     stock: p.stock ?? p.stockQuantity ?? 0,
     rating: p.rating ?? p.averageRating ?? 0,
     bestseller: p.bestseller ?? p.bestSeller ?? false,
