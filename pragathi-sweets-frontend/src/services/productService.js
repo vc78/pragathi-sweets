@@ -1,9 +1,8 @@
 import api from './api'
-import { PRODUCTS, CATEGORIES } from './mockData'
 
 // Normalize a product object from the backend so that all UI components
 // can use consistent field names (image, stock, rating, bestseller, category).
-function normalizeProduct(p) {
+export function normalizeProduct(p) {
   return {
     ...p,
     image: p.image || p.imageUrl || '',
@@ -38,14 +37,8 @@ export const productService = {
       const { data } = await api.get('/products')
       return (data.data.content || []).map(normalizeProduct)
     } catch (err) {
-      if (err.response) throw err
-      let list = [...PRODUCTS]
-      if (params.category) list = list.filter((p) => p.category === params.category)
-      if (params.search) {
-        const q = params.search.toLowerCase()
-        list = list.filter((p) => p.name.toLowerCase().includes(q))
-      }
-      return list
+      console.error(err)
+      throw err
     }
   },
 
@@ -54,8 +47,8 @@ export const productService = {
       const { data } = await api.get(`/products/${id}`)
       return normalizeProduct(data.data)
     } catch (err) {
-      if (err.response) throw err
-      return PRODUCTS.find((p) => String(p.id) === String(id))
+      console.error(err)
+      throw err
     }
   },
 
@@ -65,8 +58,8 @@ export const productService = {
       // Return only the category names (strings) so the Products page can render them directly
       return (data.data || []).map((c) => c.name)
     } catch (err) {
-      if (err.response) throw err
-      return CATEGORIES
+      console.error(err)
+      throw err
     }
   },
 

@@ -1,28 +1,18 @@
 import api from './api'
-import { PRODUCTS, ORDERS, CUSTOMERS, REVIEWS, SALES_TREND, OFFERS } from './mockData'
-
-// Normalize a product from the backend into the shape the UI expects.
-function normalizeProduct(p) {
-  return {
-    ...p,
-    image: p.image || p.imageUrl || '',
-    stock: p.stock ?? p.stockQuantity ?? 0,
-    rating: p.rating ?? p.averageRating ?? 0,
-    bestseller: p.bestseller ?? p.bestSeller ?? false,
-    category: p.category || p.categoryName || '',
-  }
-}
+import { SALES_TREND } from './mockData'
+import { normalizeProduct } from './productService'
 
 export const adminService = {
   async getDashboardStats() {
     try {
       const { data } = await api.get('/admin/analytics/dashboard')
       const { data: ordersData } = await api.get('/admin/orders')
+      // Normalize real OrderResponse shape → Dashboard table columns (id, customer, total, status)
       const recentOrdersList = (ordersData.data?.content || []).slice(0, 5).map(o => ({
-        id: o.orderNumber,
-        customer: o.customerName || 'Guest',
-        total: o.finalAmount,
-        status: o.status
+        id: o.orderNumber || `#${o.id}`,
+        customer: o.userName || 'Guest',
+        total: o.finalAmount ?? o.totalAmount ?? 0,
+        status: o.status || 'PENDING',
       }))
       
       return {
@@ -31,18 +21,11 @@ export const adminService = {
         totalCustomers: data.data.totalUsers || 0,
         totalProducts: data.data.totalProducts || 0,
         salesTrend: SALES_TREND,
-        recentOrders: recentOrdersList.length ? recentOrdersList : ORDERS.slice(0, 5)
+        recentOrders: recentOrdersList
       }
     } catch (err) {
-      if (err.response) throw err
-      return {
-        totalRevenue: SALES_TREND.reduce((s, m) => s + m.sales, 0),
-        totalOrders: ORDERS.length,
-        totalCustomers: CUSTOMERS.length,
-        totalProducts: PRODUCTS.length,
-        salesTrend: SALES_TREND,
-        recentOrders: ORDERS.slice(0, 5),
-      }
+      console.error(err)
+      throw err
     }
   },
 
@@ -52,8 +35,8 @@ export const adminService = {
       const { data } = await api.get('/admin/products')
       return (data.data.content || []).map(normalizeProduct)
     } catch (err) {
-      if (err.response) throw err
-      return PRODUCTS
+      console.error(err)
+      throw err
     }
   },
   async createProduct(payload) {
@@ -94,10 +77,21 @@ export const adminService = {
   async getOrders() {
     try {
       const { data } = await api.get('/admin/orders')
-      return data.data.content
+      // Normalize real OrderResponse → shape expected by OrdersManagement column keys:
+      // { id (numeric DB id, for PATCH), orderNumber (display), customer, date, items, total, payment, status }
+      return (data.data.content || []).map(o => ({
+        id: o.id,                                                       // numeric — used for /admin/orders/{id}/status
+        orderNumber: o.orderNumber || `#${o.id}`,                       // display label
+        customer: o.userName || 'Guest',
+        date: o.createdAt ? o.createdAt.split('T')[0] : 'N/A',
+        items: Array.isArray(o.items) ? o.items.length : (o.items ?? 0),
+        total: o.finalAmount ?? o.totalAmount ?? 0,
+        payment: o.paymentStatus || o.paymentMethod || 'N/A',
+        status: o.status || 'PENDING',
+      }))
     } catch (err) {
-      if (err.response) throw err
-      return ORDERS
+      console.error(err)
+      throw err
     }
   },
   async updateOrderStatus(id, status) {
@@ -132,8 +126,8 @@ export const adminService = {
           }
         })
     } catch (err) {
-      if (err.response) throw err
-      return CUSTOMERS
+      console.error(err)
+      throw err
     }
   },
 
@@ -149,8 +143,8 @@ export const adminService = {
         lowStockThreshold: 10
       }))
     } catch (err) {
-      if (err.response) throw err
-      return PRODUCTS.map((p) => ({ id: p.id, name: p.name, stock: p.stock, unit: p.unit, lowStockThreshold: 10 }))
+      console.error(err)
+      throw err
     }
   },
   async updateStock(id, stock) {
@@ -176,8 +170,8 @@ export const adminService = {
         active: o.active
       }))
     } catch (err) {
-      if (err.response) throw err
-      return OFFERS
+      console.error(err)
+      throw err
     }
   },
   async createOffer(payload) {
@@ -236,8 +230,8 @@ export const adminService = {
       const { data } = await api.get('/admin/reviews')
       return data.data
     } catch (err) {
-      if (err.response) throw err
-      return REVIEWS
+      console.error(err)
+      throw err
     }
   },
   async moderateReview(id, approved) {
@@ -252,32 +246,33 @@ export const adminService = {
 
   // Analytics
   async getAnalytics() {
+    const CATEGORY_BREAKDOWN = [
+      { name: 'Milk Sweets', value: 34 },
+      { name: 'Dry Fruit Sweets', value: 26 },
+      { name: 'Bengali Sweets', value: 18 },
+      { name: 'Savouries', value: 12 },
+      { name: 'Festival Hampers', value: 10 },
+    ]
     try {
-      const { data } = await api.get('/admin/analytics/dashboard')
+      // Fetch dashboard stats (for context) AND real products for topProducts section.
+      // NOTE: The /admin/analytics/dashboard endpoint returns aggregate counts only —
+      // it does NOT return a month-by-month salesTrend. SALES_TREND below is a
+      // documented placeholder until a time-series analytics endpoint is available.
+      await api.get('/admin/analytics/dashboard')
+      const { data: productsData } = await api.get('/admin/products')
+      const topProducts = (productsData.data?.content || [])
+        .map(normalizeProduct)
+        .filter(p => p.rating > 0)
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 5)
       return {
-        salesTrend: SALES_TREND,
-        topProducts: PRODUCTS.slice().sort((a, b) => b.rating - a.rating).slice(0, 5),
-        categoryBreakdown: [
-          { name: 'Milk Sweets', value: 34 },
-          { name: 'Dry Fruit Sweets', value: 26 },
-          { name: 'Bengali Sweets', value: 18 },
-          { name: 'Savouries', value: 12 },
-          { name: 'Festival Hampers', value: 10 },
-        ]
+        salesTrend: SALES_TREND,   // placeholder — no month-trend endpoint in backend
+        topProducts: topProducts,
+        categoryBreakdown: CATEGORY_BREAKDOWN,
       }
     } catch (err) {
-      if (err.response) throw err
-      return {
-        salesTrend: SALES_TREND,
-        topProducts: PRODUCTS.slice().sort((a, b) => b.rating - a.rating).slice(0, 5),
-        categoryBreakdown: [
-          { name: 'Milk Sweets', value: 34 },
-          { name: 'Dry Fruit Sweets', value: 26 },
-          { name: 'Bengali Sweets', value: 18 },
-          { name: 'Savouries', value: 12 },
-          { name: 'Festival Hampers', value: 10 },
-        ],
-      }
+      console.error(err)
+      throw err
     }
   },
 }

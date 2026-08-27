@@ -8,14 +8,35 @@ const COLORS = ['#6E1E1E', '#C79A3B', '#2D1A12', '#4E7D58', '#A67D28']
 
 export default function Analytics() {
   const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  useEffect(() => { adminService.getAnalytics().then(setData) }, [])
+  useEffect(() => {
+    setLoading(true)
+    adminService.getAnalytics()
+      .then(setData)
+      .catch(err => {
+        console.error(err)
+        setError('Failed to compile business analytics. Please verify backend connection.')
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
-  if (!data) {
+  if (loading) {
     return (
       <AdminLayout>
-        <div className="py-20 text-center font-body text-xs text-charcoal/50">
+        <div className="py-20 text-center font-body text-xs text-charcoal/50 animate-pulse">
           Compiling business analytics...
+        </div>
+      </AdminLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="py-20 text-center font-body text-sm text-red-600 font-semibold border border-red-200/20 bg-red-50/10 rounded-3xl">
+          {error}
         </div>
       </AdminLayout>
     )

@@ -32,8 +32,8 @@ export const orderService = {
         date: data.data.createdAt ? data.data.createdAt.split('T')[0] : new Date().toISOString().slice(0, 10)
       }
     } catch (err) {
-      if (err.response) throw err
-      return { id: `PS-${Math.floor(10000 + Math.random() * 89999)}`, ...payload, status: 'Pending', date: new Date().toISOString().slice(0, 10) }
+      console.error(err)
+      throw err
     }
   },
 
@@ -60,8 +60,8 @@ export const orderService = {
         }
       }))
     } catch (err) {
-      if (err.response) throw err
-      return [] // Backend unreachable — return empty so no other user's data leaks
+      console.error(err)
+      throw err
     }
   },
 
@@ -88,8 +88,8 @@ export const orderService = {
         }
       }
     } catch (err) {
-      if (err.response) throw err
-      return null // Backend unreachable — return null so no other user's data leaks
+      console.error(err)
+      throw err
     }
   },
 
@@ -98,8 +98,8 @@ export const orderService = {
       const { data } = await api.post('/payments/create-order', { amount })
       return data.data
     } catch (err) {
-      if (err.response) throw err
-      return { id: `order_mock_${Date.now()}`, amount, currency: 'INR' }
+      console.error(err)
+      throw err
     }
   },
 
@@ -108,8 +108,8 @@ export const orderService = {
       const { data } = await api.post('/payments/verify', payload)
       return data.data
     } catch (err) {
-      if (err.response) throw err
-      return { verified: true }
+      console.error(err)
+      throw err
     }
   },
 }

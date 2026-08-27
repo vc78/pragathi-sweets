@@ -8,23 +8,43 @@ const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
 
 export default function OrdersManagement() {
   const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  useEffect(() => { adminService.getOrders().then(setOrders) }, [])
+  useEffect(() => {
+    setLoading(true)
+    adminService.getOrders()
+      .then(setOrders)
+      .catch(err => {
+        console.error(err)
+        setError('Failed to load orders. Please verify backend connection.')
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleStatusChange = async (id, status) => {
-    await adminService.updateOrderStatus(id, status)
-    setOrders((list) => list.map((o) => (o.id === id ? { ...o, status } : o)))
-    toast.success(`Order ${id} marked as ${status}`, {
-      style: { background: '#6E1E1E', color: '#FFF8F1' }
-    })
+    try {
+      await adminService.updateOrderStatus(id, status)
+      setOrders((list) => list.map((o) => (o.id === id ? { ...o, status } : o)))
+      toast.success(`Order status marked as ${status}`, {
+        style: { background: '#6E1E1E', color: '#FFF8F1' }
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to update order status.')
+    }
   }
 
   const columns = [
-    { key: 'id', label: 'Order ID', render: (r) => <span className="font-display font-bold text-maroon-dark text-sm">{r.id}</span> },
+    {
+      key: 'orderNumber',
+      label: 'Order ID',
+      render: (r) => <span className="font-display font-bold text-maroon-dark text-sm">{r.orderNumber}</span>
+    },
     { key: 'customer', label: 'Customer' },
     { key: 'date', label: 'Date' },
     { key: 'items', label: 'Items' },
-    { key: 'total', label: 'Total', render: (r) => <span className="font-semibold text-maroon">₹{r.total}</span> },
+    { key: 'total', label: 'Total', render: (r) => <span className="font-semibold text-maroon">₹{Number(r.total ?? 0).toLocaleString('en-IN')}</span> },
     { key: 'payment', label: 'Payment' },
     {
       key: 'status', label: 'Status Action', render: (r) => (
@@ -45,7 +65,17 @@ export default function OrdersManagement() {
         <h2 className="font-display text-3xl font-light text-maroon-dark">Order Dispatch Hub</h2>
         <p className="font-body text-xs text-charcoal/50 mt-1">Monitor storefront transactions, status tracking, and dispatch settings.</p>
       </div>
-      <DataTable columns={columns} rows={orders} emptyMessage="No orders placed yet." />
+      {loading ? (
+        <div className="py-20 text-center font-body text-xs text-charcoal/50 animate-pulse">
+          Loading orders...
+        </div>
+      ) : error ? (
+        <div className="py-20 text-center font-body text-sm text-red-600 font-semibold border border-red-200/20 bg-red-50/10 rounded-3xl">
+          {error}
+        </div>
+      ) : (
+        <DataTable columns={columns} rows={orders} emptyMessage="No orders placed yet." />
+      )}
     </AdminLayout>
   )
 }

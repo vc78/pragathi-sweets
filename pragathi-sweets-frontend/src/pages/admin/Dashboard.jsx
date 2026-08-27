@@ -8,9 +8,18 @@ import { adminService } from '../../services/adminService'
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    adminService.getDashboardStats().then(setStats)
+    setLoading(true)
+    adminService.getDashboardStats()
+      .then(setStats)
+      .catch(err => {
+        console.error(err)
+        setError('Failed to load dashboard metrics. Please verify backend connection.')
+      })
+      .finally(() => setLoading(false))
   }, [])
 
   const columns = [
@@ -27,9 +36,13 @@ export default function Dashboard() {
         <p className="font-body text-xs text-charcoal/50 mt-1">Real-time boutique metrics and recent sales performance.</p>
       </div>
 
-      {!stats ? (
-        <div className="py-20 text-center font-body text-xs text-charcoal/50">
+      {loading ? (
+        <div className="py-20 text-center font-body text-xs text-charcoal/50 animate-pulse">
           Loading boutique stats...
+        </div>
+      ) : error ? (
+        <div className="py-20 text-center font-body text-sm text-red-600 font-semibold border border-red-200/20 bg-red-50/10 rounded-3xl">
+          {error}
         </div>
       ) : (
         <>

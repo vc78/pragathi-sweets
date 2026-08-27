@@ -1,20 +1,6 @@
 import api from './api'
 
-// All calls hit the Spring Boot backend (AuthController). During local
-// frontend-only development (backend not running), calls fail and we fall
-// back to a mock login so the UI remains fully clickable end to end.
-
-function mockLogin(email, isAdmin = false) {
-  return {
-    token: 'mock-jwt-token',
-    user: {
-      id: 1,
-      name: isAdmin ? 'Admin' : email.split('@')[0],
-      email,
-      role: isAdmin ? 'ADMIN' : 'CUSTOMER',
-    },
-  }
-}
+// All calls hit the Spring Boot backend (AuthController) for real-time authentication.
 
 export const authService = {
   async login(credentials) {
@@ -30,9 +16,8 @@ export const authService = {
         }
       }
     } catch (err) {
-      if (err.response) throw err
-      console.warn('authService.login: backend unavailable, using mock session')
-      return mockLogin(credentials.email)
+      console.error(err)
+      throw err
     }
   },
 
@@ -52,9 +37,8 @@ export const authService = {
         }
       }
     } catch (err) {
-      if (err.response || err.message === 'Not authorized as admin') throw err
-      console.warn('authService.adminLogin: backend unavailable, using mock session')
-      return mockLogin(credentials.email, true)
+      console.error(err)
+      throw err
     }
   },
 
@@ -85,9 +69,8 @@ export const authService = {
         }
       }
     } catch (err) {
-      if (err.response) throw err
-      console.warn('authService.register: backend unavailable, using mock session')
-      return mockLogin(payload.email)
+      console.error(err)
+      throw err
     }
   },
 
@@ -103,8 +86,8 @@ export const authService = {
         role: data.data.role === 'ROLE_ADMIN' ? 'ADMIN' : 'CUSTOMER'
       }
     } catch (err) {
-      if (err.response) throw err
-      return payload
+      console.error(err)
+      throw err
     }
   },
 }
