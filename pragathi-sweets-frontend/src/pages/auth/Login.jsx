@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import toast from 'react-hot-toast'
 import { authService } from '../../services/authService'
 import { credentialsReceived } from '../../store/authSlice'
@@ -11,6 +11,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { isAuthenticated, user } = useSelector((state) => state.auth)
+
+  // Redirect away if already authenticated
+  if (isAuthenticated) {
+    if (user?.role === 'ADMIN') return <Navigate to="/admin/dashboard" replace />
+    return <Navigate to="/" replace />
+  }
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 

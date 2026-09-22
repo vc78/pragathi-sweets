@@ -25,8 +25,13 @@ const authSlice = createSlice({
       state.user = null
       state.token = null
       state.isAuthenticated = false
+      // Clear ALL session-scoped keys so the next user starts fresh
       localStorage.removeItem('ps_user')
       localStorage.removeItem('ps_token')
+      localStorage.removeItem('ps_cart')       // ← clears cart on logout
+      localStorage.removeItem('ps_wishlist')   // ← clears wishlist on logout
+      // Notify cart hook listeners so UI count badge resets immediately
+      window.dispatchEvent(new Event('ps-cart-updated'))
     },
     profileUpdated: (state, action) => {
       state.user = { ...state.user, ...action.payload }
