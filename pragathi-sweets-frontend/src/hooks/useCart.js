@@ -4,18 +4,70 @@ import { useCallback, useEffect, useState } from 'react'
 // is modeled in the store, per the app's state slice) but exposed as a hook
 // so any page/component can read and mutate the cart consistently.
 
-const CART_KEY = 'ps_cart'
+// User-isolated cart persisted to localStorage.
+// Guest cart is kept separate under ps_cart_guest and merged into the user cart upon login.
+
+function getCartKey() {
+  try {
+    const rawUser = localStorage.getItem('ps_user')
+    if (rawUser) {
+      const user = JSON.parse(rawUser)
+      const identifier = user.id || user.email
+      if (identifier) {
+        return `ps_cart_${identifier}`
+      }
+    }
+  } catch {
+    // fallback to guest
+  }
+  return 'ps_cart_guest'
+}
 
 function readCart() {
   try {
-    return JSON.parse(localStorage.getItem(CART_KEY) || '[]')
+    const key = getCartKey()
+    let items = JSON.parse(localStorage.getItem(key) || 'null')
+
+    // Migration from old legacy global ps_cart if present
+    if (items === null) {
+      const legacy = localStorage.getItem('ps_cart')
+      if (legacy) {
+        items = JSON.parse(legacy)
+        localStorage.setItem(key, JSON.stringify(items))
+        localStorage.removeItem('ps_cart')
+      } else {
+        items = []
+      }
+    }
+
+    // If authenticated, check and merge any remaining guest cart items
+    if (key !== 'ps_cart_guest') {
+      const guestItems = JSON.parse(localStorage.getItem('ps_cart_guest') || '[]')
+      if (Array.isArray(guestItems) && guestItems.length > 0) {
+        guestItems.forEach((gItem) => {
+          const existing = items.find((i) => i.id === gItem.id)
+          if (existing) {
+            existing.qty += gItem.qty
+          } else {
+            items.push(gItem)
+          }
+        })
+        localStorage.setItem(key, JSON.stringify(items))
+        localStorage.removeItem('ps_cart_guest')
+      }
+    }
+
+    return Array.isArray(items) ? items : []
   } catch {
     return []
   }
 }
 
 function writeCart(items) {
-  localStorage.setItem(CART_KEY, JSON.stringify(items))
+  const key = getCartKey()
+  localStorage.setItem(key, JSON.stringify(items))
+  // Keep legacy key cleared
+  localStorage.removeItem('ps_cart')
   window.dispatchEvent(new Event('ps-cart-updated'))
 }
 

@@ -9,7 +9,9 @@ const STATUS_OPTIONS = [
   { value: 'PENDING', label: 'Pending', color: 'bg-amber-50 text-amber-800 border-amber-200' },
   { value: 'CONFIRMED', label: 'Confirmed', color: 'bg-blue-50 text-blue-800 border-blue-200' },
   { value: 'PROCESSING', label: 'Processing', color: 'bg-purple-50 text-purple-800 border-purple-200' },
+  { value: 'PREPARING', label: 'Preparing', color: 'bg-yellow-50 text-yellow-800 border-yellow-200' },
   { value: 'SHIPPED', label: 'Shipped', color: 'bg-indigo-50 text-indigo-800 border-indigo-200' },
+  { value: 'OUT_FOR_DELIVERY', label: 'Out for Delivery', color: 'bg-cyan-50 text-cyan-800 border-cyan-200' },
   { value: 'DELIVERED', label: 'Delivered', color: 'bg-green-50 text-green-800 border-green-200' },
   { value: 'CANCELLED', label: 'Cancelled', color: 'bg-red-50 text-red-800 border-red-200' }
 ]

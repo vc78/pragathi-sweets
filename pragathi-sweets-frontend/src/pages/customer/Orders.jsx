@@ -30,8 +30,10 @@ const getStatusBadge = (status = '') => {
     case 'DELIVERED':
       return 'bg-green-50 text-green-700 border-green-200/60'
     case 'SHIPPED':
+    case 'OUT_FOR_DELIVERY':
       return 'bg-blue-50 text-blue-700 border-blue-200/60'
     case 'PROCESSING':
+    case 'PREPARING':
       return 'bg-[#B8860B]/10 text-[#B8860B] border-[#B8860B]/25'
     case 'CONFIRMED':
       return 'bg-indigo-50 text-indigo-700 border-indigo-200/60'
@@ -44,24 +46,10 @@ const getStatusBadge = (status = '') => {
   }
 }
 
-// Function to generate detailed items if order.items is a number
+// Return real items if present, never synthesize mock sweets
 const getItemsList = (o) => {
-  if (Array.isArray(o.items)) return o.items
-  // Generate mock items for standard mock data
-  const seed = parseInt((o.id || '').replace(/\D/g, '')) || 0
-  const mockItems = [
-    { name: 'Kaju Katli', price: 620, unit: 'kg', qty: 1, image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
-    { name: 'Motichoor Ladoo', price: 380, unit: 'kg', qty: 1, image: '/images/pexels-divigraphy-14467844.jpg' },
-    { name: 'Gulab Jamun', price: 320, unit: 'kg', qty: 1, image: '/images/pexels-kailashkumarphotography-11887844.jpg' },
-    { name: 'Mysore Pak', price: 480, unit: 'kg', qty: 1, image: '/images/pexels-gaurav-kumar-1281378-18488310.jpg' },
-  ]
-  const count = o.items || 1
-  const result = []
-  for (let i = 0; i < count; i++) {
-    const item = mockItems[(seed + i) % mockItems.length]
-    result.push({ ...item, qty: i === 0 && count > 1 ? 2 : 1 })
-  }
-  return result
+  if (Array.isArray(o.items) && o.items.length > 0) return o.items
+  return []
 }
 
 export default function Orders() {
@@ -112,8 +100,10 @@ export default function Orders() {
     switch (status.toUpperCase()) {
       case 'PENDING': return 1
       case 'CONFIRMED': return 2
-      case 'PROCESSING': return 3
-      case 'SHIPPED': return 4
+      case 'PROCESSING':
+      case 'PREPARING': return 3
+      case 'SHIPPED':
+      case 'OUT_FOR_DELIVERY': return 4
       case 'DELIVERED': return 5
       case 'CANCELLED': return 0
       default: return 1
@@ -389,31 +379,37 @@ export default function Orders() {
                                   <h4 className="font-display font-bold text-xs text-[#8B0000] tracking-wider uppercase border-b border-[#B8860B]/5 pb-1">
                                     Selected Confections
                                   </h4>
-                                  <div className="divide-y divide-[#B8860B]/5 space-y-3">
-                                    {itemsList.map((item, idx) => (
-                                      <div key={idx} className="flex justify-between items-center pt-3 first:pt-0">
-                                        <div className="flex items-center gap-3">
-                                          <ReliableImage
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="w-12 h-12 rounded-lg border border-[#B8860B]/10 shadow-sm shrink-0"
-                                          />
-                                          <div>
-                                            <p className="font-display text-sm font-bold text-[#8B0000]">{item.name}</p>
-                                            <p className="text-[10px] text-[#3A2D23]/40">
-                                              ₹{item.price} / {item.unit}
-                                            </p>
+                                  {itemsList.length === 0 ? (
+                                    <p className="text-xs text-[#3A2D23]/50 italic py-2">
+                                      Item details will be updated as the kitchen prepares your package.
+                                    </p>
+                                  ) : (
+                                    <div className="divide-y divide-[#B8860B]/5 space-y-3">
+                                      {itemsList.map((item, idx) => (
+                                        <div key={idx} className="flex justify-between items-center pt-3 first:pt-0">
+                                          <div className="flex items-center gap-3">
+                                            <ReliableImage
+                                              src={item.image || item.imageUrl || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+                                              alt={item.name || item.productName || 'Confection'}
+                                              className="w-12 h-12 rounded-lg border border-[#B8860B]/10 shadow-sm shrink-0 object-cover"
+                                            />
+                                            <div>
+                                              <p className="font-display text-sm font-bold text-[#8B0000]">{item.name || item.productName || 'Pragathi Confection'}</p>
+                                              <p className="text-[10px] text-[#3A2D23]/40">
+                                                ₹{item.price || item.unitPrice || 0} {item.unit ? `/ ${item.unit}` : ''}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <div className="text-right">
+                                            <span className="text-xs text-[#3A2D23]/60 block">Qty: {item.qty || item.quantity || 1}</span>
+                                            <span className="font-display font-bold text-xs text-[#8B0000]">
+                                              ₹{(item.price || item.unitPrice || 0) * (item.qty || item.quantity || 1)}
+                                            </span>
                                           </div>
                                         </div>
-                                        <div className="text-right">
-                                          <span className="text-xs text-[#3A2D23]/60 block">Qty: {item.qty}</span>
-                                          <span className="font-display font-bold text-xs text-[#8B0000]">
-                                            ₹{item.price * item.qty}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
 
                                 {/* Delivery & Payment details summary */}

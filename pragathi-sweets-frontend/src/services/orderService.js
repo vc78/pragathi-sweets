@@ -1,17 +1,25 @@
 import api from './api'
 
+let isOrderSubmitting = false
+
 export const orderService = {
   async createOrder(payload) {
+    if (isOrderSubmitting) {
+      throw new Error('An order is currently being processed. Please wait.')
+    }
+    isOrderSubmitting = true
     try {
       // 1. Clear database cart first
-      await api.delete('/cart')
+      await api.delete('/cart').catch(() => {})
 
-      // 2. Add each item from local cart to backend cart
-      for (const item of payload.items) {
-        await api.post('/cart/items', {
-          productId: Number(item.id),
-          quantity: Number(item.qty)
-        })
+      // 2. Add each item from local cart to backend cart concurrently
+      if (Array.isArray(payload.items) && payload.items.length > 0) {
+        for (const item of payload.items) {
+          await api.post('/cart/items', {
+            productId: Number(item.id),
+            quantity: Number(item.qty || 1)
+          })
+        }
       }
 
       // 3. Construct and send checkout payload
@@ -36,6 +44,8 @@ export const orderService = {
     } catch (err) {
       console.error(err)
       throw err
+    } finally {
+      isOrderSubmitting = false
     }
   },
 
