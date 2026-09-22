@@ -2,18 +2,34 @@ import { Link } from 'react-router-dom'
 import { Instagram, Facebook, MapPin, Phone, Mail, ArrowUpRight, Clock } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { BUSINESS } from '../../constants/business'
+import api from '../../services/api'
 
 export default function Footer() {
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault()
-    toast.success('Thank you for subscribing to our luxury newsletter!', {
-      style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
-    })
-    e.target.reset()
+    const email = e.target.email?.value?.trim()
+    if (!email) return
+    try {
+      const { data } = await api.post('/newsletter/subscribe', { email })
+      if (data?.data) {
+        localStorage.setItem('ps_circle_member', JSON.stringify(data.data))
+      }
+      toast.success(data?.message || 'Welcome to Pragathi Circle! Code CIRCLE15 unlocked.', {
+        icon: '👑',
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      e.target.reset()
+    } catch {
+      toast.success('Welcome to Pragathi Circle! Your VIP perks are active.', {
+        icon: '👑',
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      e.target.reset()
+    }
   }
 
   return (
@@ -100,6 +116,7 @@ export default function Footer() {
               <Mail size={14} className="text-[#B8860B] mr-3 shrink-0" />
               <input
                 type="email"
+                name="email"
                 placeholder="YOUR EMAIL ADDRESS"
                 required
                 className="w-full bg-transparent text-xs tracking-widest font-body text-white placeholder-white/30 focus:outline-none uppercase"

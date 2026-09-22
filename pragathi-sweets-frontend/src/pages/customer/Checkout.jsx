@@ -7,7 +7,7 @@ import Footer from '../../components/customer/Footer'
 import { useCart } from '../../hooks/useCart'
 import { orderService } from '../../services/orderService'
 import { motion } from 'framer-motion'
-import { ShieldCheck, Truck, CreditCard, ChevronRight, Ticket, Sparkles } from 'lucide-react'
+import { ShieldCheck, Truck, CreditCard, ChevronRight, Ticket, Sparkles, MessageCircle } from 'lucide-react'
 import api from '../../services/api'
 
 function loadRazorpayScript() {
@@ -97,9 +97,17 @@ export default function Checkout() {
         ...paymentInfo,
       })
       clearCart()
-      toast.success('Order placed successfully!', {
-        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
-      })
+      toast.success(
+        () => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span style={{ fontWeight: 700 }}>🎉 Order Placed Successfully!</span>
+            <span style={{ fontSize: '12px', opacity: 0.85 }}>
+              📱 WhatsApp confirmation sent to your phone.
+            </span>
+          </div>
+        ),
+        { duration: 5000, style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' } }
+      )
       navigate('/orders', { state: { newOrderId: order.id } })
     } catch (err) {
       console.error('Order creation failed:', err)
@@ -174,9 +182,17 @@ export default function Checkout() {
               ...response,
             })
             clearCart()
-            toast.success('Order placed successfully!', {
-              style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
-            })
+            toast.success(
+              () => (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: 700 }}>🎉 Payment Successful! Order Confirmed.</span>
+                  <span style={{ fontSize: '12px', opacity: 0.85 }}>
+                    📱 WhatsApp confirmation sent to your phone.
+                  </span>
+                </div>
+              ),
+              { duration: 5000, style: { background: '#166534', color: '#FFFDF8', borderRadius: '12px' } }
+            )
             navigate('/orders', { state: { newOrderId: order.id } })
           } catch (err) {
             console.error('Payment verification failed:', err)
@@ -293,6 +309,17 @@ export default function Checkout() {
                   <div className="space-y-2">
                     <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">Postal Code / Pincode</span>
                     <input name="pincode" value={address.pincode} onChange={handleChange} placeholder="500095" required className="input-field" />
+                  </div>
+                </div>
+
+                {/* WhatsApp Notification Callout */}
+                <div className="flex items-start gap-3 bg-[#25D366]/8 border border-[#25D366]/25 rounded-2xl p-4">
+                  <MessageCircle size={20} className="text-[#25D366] mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-[#1a7a43]">📱 WhatsApp Confirmation</p>
+                    <p className="text-[11px] text-[#3A2D23]/70 mt-0.5 leading-relaxed">
+                      A professional order confirmation with your full order summary will be sent to your WhatsApp on the contact number above.
+                    </p>
                   </div>
                 </div>
 

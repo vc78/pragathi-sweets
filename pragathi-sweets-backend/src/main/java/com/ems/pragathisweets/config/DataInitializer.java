@@ -201,5 +201,22 @@ public class DataInitializer implements CommandLineRunner {
                     .build());
             log.info("Boutique coupons seeded successfully (AZADI15, RAKHI200, SWEET10).");
         }
+
+        if (couponRepository.findByCodeIgnoreCase("CIRCLE15").isEmpty()) {
+            couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
+                    .code("CIRCLE15")
+                    .description("Pragathi Circle VIP Member Exclusive — 15% off confections")
+                    .discountType(com.ems.pragathisweets.entity.DiscountType.PERCENTAGE)
+                    .discountValue(new java.math.BigDecimal("15.00"))
+                    .minOrderAmount(new java.math.BigDecimal("499.00"))
+                    .maxDiscountAmount(new java.math.BigDecimal("300.00"))
+                    .validFrom(java.time.LocalDateTime.now().minusDays(1))
+                    .validTo(java.time.LocalDateTime.now().plusMonths(12))
+                    .usageLimit(5000)
+                    .usedCount(0)
+                    .active(true)
+                    .build());
+            log.info("VIP Circle coupon CIRCLE15 seeded successfully.");
+        }
     }
 }

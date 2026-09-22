@@ -31,6 +31,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CouponService couponService;
     private final EmailService emailService;
+    private final WhatsAppService whatsAppService;
 
     @Transactional
     public OrderResponse checkout(Long userId, CheckoutRequest request) {
@@ -118,7 +119,14 @@ public class OrderService {
 
         emailService.sendOrderConfirmationEmail(user.getEmail(), saved.getOrderNumber(), saved.getFinalAmount().toString());
 
-        return toResponse(saved);
+        // WhatsApp confirmation – uses contactPhone from the order (preferred) or user profile phone
+        String phone = (request.getContactPhone() != null && !request.getContactPhone().isBlank())
+                ? request.getContactPhone()
+                : user.getPhone();
+        OrderResponse orderResponse = toResponse(saved);
+        whatsAppService.sendOrderConfirmation(orderResponse, user.getFullName(), phone);
+
+        return orderResponse;
     }
 
     @Transactional(readOnly = true)
@@ -131,6 +139,26 @@ public class OrderService {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
         return toResponse(order);
+    }
+
+    @Transactional(readOnly = true)
+    public Order findUserOrderEntity(Long userId, String identifier) {
+        try {
+            Long numericId = Long.parseLong(identifier);
+            return orderRepository.findByIdAndUserId(numericId, userId)
+                    .orElseGet(() -> orderRepository.findByOrderNumberAndUserId(identifier, userId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + identifier)));
+        } catch (NumberFormatException e) {
+            return orderRepository.findByOrderNumberAndUserId(identifier, userId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + identifier));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public String getOrderWhatsAppMessage(Long userId, String identifier) {
+        Order order = findUserOrderEntity(userId, identifier);
+        OrderResponse response = toResponse(order);
+        return whatsAppService.buildOrderConfirmationMessage(response, order.getUser().getFullName());
     }
 
     @Transactional
@@ -157,6 +185,9 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         Order saved = orderRepository.save(order);
         emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order.getOrderNumber(), "CANCELLED");
+        // WhatsApp cancellation notice
+        String cancelPhone = order.getContactPhone() != null ? order.getContactPhone() : order.getUser().getPhone();
+        whatsAppService.sendOrderStatusUpdate(order.getOrderNumber(), "CANCELLED", order.getUser().getFullName(), cancelPhone);
         return toResponse(saved);
     }
 

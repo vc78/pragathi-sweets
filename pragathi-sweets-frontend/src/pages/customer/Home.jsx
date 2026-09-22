@@ -1,11 +1,30 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { ArrowRight, Star, Flame, Gift, ShieldCheck, Clock, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  ArrowRight,
+  Star,
+  Flame,
+  Gift,
+  ShieldCheck,
+  Clock,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  Copy,
+  Sparkles,
+  Ticket,
+  Calendar,
+  Zap,
+  Award,
+  BookOpen
+} from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
 import SweetCard from '../../components/customer/SweetCard'
 import { productService } from '../../services/productService'
+import api from '../../services/api'
 import { useCart } from '../../hooks/useCart'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ProductGridSkeleton } from '../../components/common/SkeletonLoaders'
@@ -98,6 +117,57 @@ export default function Home() {
   const [giftHampers, setGiftHampers] = useState([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
+
+  // Pragathi Circle Subscription state
+  const [emailInput, setEmailInput] = useState('')
+  const [subscribing, setSubscribing] = useState(false)
+  const [circleMember, setCircleMember] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ps_circle_member')
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
+  })
+  const [copiedCode, setCopiedCode] = useState(false)
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+    if (!emailInput || !emailInput.includes('@')) {
+      toast.error('Please enter a valid email address.')
+      return
+    }
+
+    setSubscribing(true)
+    try {
+      const { data } = await api.post('/newsletter/subscribe', { email: emailInput })
+      if (data?.success && data?.data) {
+        const memberData = data.data
+        setCircleMember(memberData)
+        localStorage.setItem('ps_circle_member', JSON.stringify(memberData))
+        toast.success(data.message || 'Welcome to the Pragathi Circle! 🎉', {
+          icon: '👑',
+          style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '14px' }
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error(err?.response?.data?.message || 'Could not process subscription. Please try again.')
+    } finally {
+      setSubscribing(false)
+    }
+  }
+
+  const handleCopyCode = () => {
+    const code = circleMember?.couponCode || 'CIRCLE15'
+    navigator.clipboard.writeText(code)
+    setCopiedCode(true)
+    toast.success(`Coupon code ${code} copied! Ready to use at checkout.`, {
+      icon: '✨',
+      style: { background: '#5C1A2B', color: '#FBF3E7', borderRadius: '12px' }
+    })
+    setTimeout(() => setCopiedCode(false), 2500)
+  }
 
   // Hero state
   const [heroIdx, setHeroIdx] = useState(0)
@@ -415,22 +485,200 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ NEWSLETTER ════════════════════════════════════════════ */}
-      <section className="mx-6 md:mx-12 xl:mx-20 mb-24 rounded-3xl bg-[#8B0000] overflow-hidden relative py-16 px-8 md:px-16">
-        <div className="absolute inset-0 opacity-5 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#B8860B]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="text-[9px] tracking-[0.5em] font-semibold text-[#E6C687]/70 uppercase font-body block mb-4">✦ Exclusive Access</span>
-          <h2 className="font-display text-3xl md:text-4xl text-white font-bold mb-4">Join the Pragathi Circle</h2>
-          <p className="font-body text-sm text-white/60 mb-8">
-            First access to festive drops, heritage recipes, and private gifting offers.
-          </p>
-          <form onSubmit={e => { e.preventDefault(); toast.success('Welcome to the Pragathi Circle! 🎉') }} className="flex max-w-md mx-auto">
-            <input type="email" required placeholder="Your email address" className="flex-1 bg-white/10 border border-white/20 text-white placeholder-white/30 text-xs tracking-wider font-body px-5 py-4 rounded-l-full focus:outline-none focus:border-[#E6C687] transition-colors" />
-            <button type="submit" className="bg-[#E6C687] text-[#3A1F0F] font-bold px-7 py-4 rounded-r-full text-xs tracking-widest uppercase hover:bg-white transition-colors shrink-0">
-              Join
-            </button>
-          </form>
+      {/* ══ PRAGATHI CIRCLE & VIP PRIVILEGES ════════════════════════ */}
+      <section className="mx-6 md:mx-12 xl:mx-20 mb-24 rounded-3xl bg-[#8B0000] overflow-hidden relative py-16 px-6 md:px-14 shadow-2xl border border-[#B8860B]/30">
+        <div className="absolute inset-0 opacity-10 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#B8860B]/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#B8860B]/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
+          <span className="text-[10px] tracking-[0.45em] font-semibold text-[#E6C687] uppercase font-body block mb-3">
+            ✦ EXCLUSIVE ACCESS ✦
+          </span>
+
+          {!circleMember ? (
+            <div>
+              <h2 className="font-display text-3xl md:text-5xl text-white font-bold mb-4 tracking-tight">
+                Join the Pragathi Circle
+              </h2>
+              <p className="font-body text-sm md:text-base text-white/75 mb-8 max-w-xl mx-auto leading-relaxed">
+                First access to seasonal confections, heritage family recipes, and private luxury gifting privileges.
+              </p>
+
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row max-w-md mx-auto shadow-xl rounded-full sm:rounded-full bg-white/10 p-1 border border-white/20 backdrop-blur-md">
+                <input
+                  type="email"
+                  required
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  placeholder="Your email address"
+                  className="flex-1 bg-transparent text-white placeholder-white/50 text-xs md:text-sm tracking-wide font-body px-6 py-4 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={subscribing}
+                  className="bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold px-8 py-4 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shrink-0 shadow-md active:scale-95 disabled:opacity-70 mt-2 sm:mt-0 flex items-center justify-center gap-2"
+                >
+                  {subscribing ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-[#3A1F0F] border-t-transparent rounded-full animate-spin" />
+                      <span>Joining...</span>
+                    </>
+                  ) : (
+                    <span>JOIN</span>
+                  )}
+                </button>
+              </form>
+              <p className="text-[11px] text-[#E6C687]/60 mt-4 tracking-wide">
+                Instant 15% Welcome Confectionery Credit unlocked immediately upon enrollment.
+              </p>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-6"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E6C687]/15 border border-[#E6C687]/40 text-[#E6C687] text-xs font-semibold tracking-wider uppercase">
+                <Sparkles size={14} className="text-[#E6C687]" />
+                <span>Pragathi Circle VIP Member</span>
+              </div>
+
+              <h2 className="font-display text-3xl md:text-4xl text-white font-bold tracking-tight">
+                Welcome to the Inner Circle
+              </h2>
+
+              <p className="text-xs md:text-sm text-white/80 max-w-lg mx-auto">
+                Privileges activated for <span className="font-bold text-[#E6C687]">{circleMember.email}</span>. Use your personal promo code below for your next confectionery order.
+              </p>
+
+              {/* Special Voucher Card */}
+              <div className="bg-gradient-to-r from-[#2A1117] via-[#3D141F] to-[#2A1117] border-2 border-dashed border-[#E6C687]/60 rounded-2xl p-6 max-w-lg mx-auto shadow-2xl relative overflow-hidden text-left">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E6C687]/10 rounded-full blur-2xl pointer-events-none" />
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                  <div>
+                    <span className="text-[10px] text-[#E6C687] tracking-[0.2em] uppercase font-bold block mb-1">
+                      VIP WELCOME VOUCHER
+                    </span>
+                    <span className="font-mono text-2xl md:text-3xl font-bold text-white tracking-widest">
+                      {circleMember.couponCode || 'CIRCLE15'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleCopyCode}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95"
+                    >
+                      {copiedCode ? (
+                        <>
+                          <Check size={14} className="text-green-700" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} />
+                          <span>Copy Code</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-3 flex flex-wrap items-center justify-between text-[11px] text-white/70 gap-2">
+                  <div className="flex items-center gap-1.5 text-[#E6C687]">
+                    <Calendar size={13} />
+                    <span>
+                      Valid till{' '}
+                      {circleMember.validTill
+                        ? new Date(circleMember.validTill).toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })
+                        : 'Active for 30 Days'}
+                    </span>
+                    {circleMember.daysRemaining !== undefined && (
+                      <span className="bg-[#E6C687]/20 text-[#E6C687] px-2 py-0.5 rounded-full font-bold ml-1">
+                        {circleMember.daysRemaining} days left
+                      </span>
+                    )}
+                  </div>
+
+                  <span className="text-white/50 text-[10px]">
+                    Min spend ₹{circleMember.minOrderAmount || 499}
+                  </span>
+                </div>
+              </div>
+
+              {/* 4 Unlocked Exclusive Perks */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-left pt-2">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
+                    <Ticket size={16} />
+                  </div>
+                  <h4 className="font-display font-bold text-xs text-white mb-1">15% First Order Credit</h4>
+                  <p className="text-[11px] text-white/65 leading-relaxed">
+                    Instant 15% savings across all artisanal confections on orders over ₹499.
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
+                    <Gift size={16} />
+                  </div>
+                  <h4 className="font-display font-bold text-xs text-white mb-1">Royale Gift Packaging</h4>
+                  <p className="text-[11px] text-white/65 leading-relaxed">
+                    Complimentary keepsake box with satin ribbon wrap and custom gift message card.
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
+                    <Zap size={16} />
+                  </div>
+                  <h4 className="font-display font-bold text-xs text-white mb-1">Priority Dispatch</h4>
+                  <p className="text-[11px] text-white/65 leading-relaxed">
+                    Guaranteed same-day kitchen preparation even during festive peak rush days.
+                  </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
+                    <BookOpen size={16} />
+                  </div>
+                  <h4 className="font-display font-bold text-xs text-white mb-1">Heritage Confection Menus</h4>
+                  <p className="text-[11px] text-white/65 leading-relaxed">
+                    First invitations to secret seasonal batches and regional festival tastings.
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Bar */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  to="/products"
+                  className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95"
+                >
+                  <span>Explore Boutique & Redeem 15%</span>
+                  <ArrowRight size={14} />
+                </Link>
+
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('ps_circle_member')
+                    setCircleMember(null)
+                    setEmailInput('')
+                  }}
+                  className="text-white/60 hover:text-white text-xs underline transition-colors"
+                >
+                  Enroll a different email
+                </button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 
