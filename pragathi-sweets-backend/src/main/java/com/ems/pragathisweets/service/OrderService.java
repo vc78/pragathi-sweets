@@ -99,7 +99,16 @@ public class OrderService {
             discount = couponService.applyCoupon(request.getCouponCode(), totalAmount);
         }
         order.setDiscountAmount(discount);
-        order.setFinalAmount(totalAmount.subtract(discount));
+
+        BigDecimal deliveryFee = (totalAmount.compareTo(BigDecimal.valueOf(999)) >= 0 || totalAmount.compareTo(BigDecimal.ZERO) == 0)
+                ? BigDecimal.ZERO
+                : BigDecimal.valueOf(50);
+
+        BigDecimal finalAmount = totalAmount.subtract(discount).add(deliveryFee);
+        if (finalAmount.compareTo(BigDecimal.ZERO) < 0) {
+            finalAmount = BigDecimal.ZERO;
+        }
+        order.setFinalAmount(finalAmount);
 
         Order saved = orderRepository.save(order);
 

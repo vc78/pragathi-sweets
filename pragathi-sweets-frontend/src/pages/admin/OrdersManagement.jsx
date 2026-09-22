@@ -97,8 +97,17 @@ export default function OrdersManagement() {
     },
     {
       key: 'total',
-      label: 'Order Total',
-      render: (r) => <span className="font-bold text-sm text-[#8B0000]">₹{Number(r.total ?? 0).toLocaleString('en-IN')}</span>
+      label: 'Order Total & Billing',
+      render: (r) => (
+        <div>
+          <span className="font-bold text-sm text-[#8B0000] block">₹{Number(r.total ?? 0).toLocaleString('en-IN')}</span>
+          {r.couponCode && Number(r.discountAmount || 0) > 0 && (
+            <span className="text-[9px] font-mono font-bold text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200 block w-fit mt-0.5">
+              {r.couponCode} (-₹{r.discountAmount})
+            </span>
+          )}
+        </div>
+      )
     },
     {
       key: 'payment',

@@ -29,6 +29,21 @@ public class CouponService {
     }
 
     @Transactional(readOnly = true)
+    public List<CouponResponse> getActiveCoupons() {
+        return couponRepository.findByActiveTrue().stream()
+                .filter(Coupon::isCurrentlyValid)
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional
+    public CouponResponse toggleStatus(Long id) {
+        Coupon coupon = findEntity(id);
+        coupon.setActive(!coupon.isActive());
+        return toResponse(couponRepository.save(coupon));
+    }
+
+    @Transactional(readOnly = true)
     public CouponResponse getById(Long id) {
         return toResponse(findEntity(id));
     }

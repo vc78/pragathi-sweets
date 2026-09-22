@@ -22,6 +22,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final com.ems.pragathisweets.repository.CategoryRepository categoryRepository;
     private final com.ems.pragathisweets.repository.ProductRepository productRepository;
+    private final com.ems.pragathisweets.repository.CouponRepository couponRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${app.admin.default-email}")
@@ -152,6 +153,53 @@ public class DataInitializer implements CommandLineRunner {
                         .active(true)
                         .build());
             }
+        }
+
+        // Seed initial promotional coupons if not already present
+        if (couponRepository.count() == 0) {
+            log.info("Seeding initial boutique promotional coupons...");
+            couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
+                    .code("AZADI15")
+                    .description("Festive Special — 15% discount across boutique confections")
+                    .discountType(com.ems.pragathisweets.entity.DiscountType.PERCENTAGE)
+                    .discountValue(new java.math.BigDecimal("15.00"))
+                    .minOrderAmount(new java.math.BigDecimal("400.00"))
+                    .maxDiscountAmount(new java.math.BigDecimal("250.00"))
+                    .validFrom(java.time.LocalDateTime.now().minusDays(1))
+                    .validTo(java.time.LocalDateTime.now().plusMonths(6))
+                    .usageLimit(500)
+                    .usedCount(0)
+                    .active(true)
+                    .build());
+
+            couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
+                    .code("RAKHI200")
+                    .description("Special Celebration — Flat ₹200 off on festive gift boxes")
+                    .discountType(com.ems.pragathisweets.entity.DiscountType.FLAT)
+                    .discountValue(new java.math.BigDecimal("200.00"))
+                    .minOrderAmount(new java.math.BigDecimal("999.00"))
+                    .maxDiscountAmount(null)
+                    .validFrom(java.time.LocalDateTime.now().minusDays(1))
+                    .validTo(java.time.LocalDateTime.now().plusMonths(6))
+                    .usageLimit(300)
+                    .usedCount(0)
+                    .active(true)
+                    .build());
+
+            couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
+                    .code("SWEET10")
+                    .description("Welcome Gift — 10% off for traditional sweets lovers")
+                    .discountType(com.ems.pragathisweets.entity.DiscountType.PERCENTAGE)
+                    .discountValue(new java.math.BigDecimal("10.00"))
+                    .minOrderAmount(new java.math.BigDecimal("299.00"))
+                    .maxDiscountAmount(new java.math.BigDecimal("100.00"))
+                    .validFrom(java.time.LocalDateTime.now().minusDays(1))
+                    .validTo(java.time.LocalDateTime.now().plusMonths(12))
+                    .usageLimit(1000)
+                    .usedCount(0)
+                    .active(true)
+                    .build());
+            log.info("Boutique coupons seeded successfully (AZADI15, RAKHI200, SWEET10).");
         }
     }
 }

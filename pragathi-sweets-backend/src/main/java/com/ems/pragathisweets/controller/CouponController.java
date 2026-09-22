@@ -18,6 +18,11 @@ public class CouponController {
 
     private final CouponService couponService;
 
+    @GetMapping("/active")
+    public ResponseEntity<ApiResponse<java.util.List<com.ems.pragathisweets.dto.CouponResponse>>> getActiveCoupons() {
+        return ResponseEntity.ok(ApiResponse.success(couponService.getActiveCoupons()));
+    }
+
     @GetMapping("/validate")
     public ResponseEntity<ApiResponse<CouponValidationResponse>> validate(@RequestParam String code,
                                                                            @RequestParam BigDecimal orderAmount) {

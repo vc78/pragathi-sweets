@@ -43,6 +43,13 @@ public class AdminCouponController {
         return ResponseEntity.ok(ApiResponse.success("Coupon updated", couponService.update(id, request)));
     }
 
+    @PatchMapping("/{id}/toggle-status")
+    public ResponseEntity<ApiResponse<CouponResponse>> toggleStatus(@PathVariable Long id) {
+        CouponResponse updated = couponService.toggleStatus(id);
+        String msg = updated.isActive() ? "Coupon implemented & active" : "Coupon stopped & paused";
+        return ResponseEntity.ok(ApiResponse.success(msg, updated));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         couponService.delete(id);

@@ -150,11 +150,17 @@ export const adminService = {
       return (data.data.content || []).map(o => ({
         id: o.id,                                                       // numeric — used for /admin/orders/{id}/status
         orderNumber: o.orderNumber || `#${o.id}`,                       // display label
+        userId: o.userId ?? null,                                       // for customer matching
         customer: o.userName || 'Guest',
+        userEmail: o.userEmail || o.email || null,                      // for customer email matching
         date: o.createdAt ? o.createdAt.split('T')[0] : 'N/A',
         items: Array.isArray(o.items) ? o.items.length : (o.items ?? 0),
         total: o.finalAmount ?? o.totalAmount ?? 0,
+        subtotal: o.totalAmount ?? o.finalAmount ?? 0,
+        discountAmount: o.discountAmount ?? 0,
+        couponCode: o.couponCode || null,
         payment: o.paymentStatus || o.paymentMethod || 'N/A',
+        paymentMethod: o.paymentMethod || 'COD',
         status: o.status || 'PENDING',
       }))
     } catch (err) {
@@ -178,16 +184,23 @@ export const adminService = {
       const { data } = await api.get('/admin/users')
       const { data: ordersData } = await api.get('/admin/orders')
       const allOrders = ordersData.data?.content || []
-      
+
       return data.data.content
         .filter(u => u.role === 'ROLE_USER')
         .map(u => {
-          const userOrders = allOrders.filter(o => o.customerId === u.id || o.customerEmail === u.email)
-          const spentTotal = userOrders.reduce((sum, o) => sum + (o.finalAmount || 0), 0)
+          // Match orders by userId (preferred), customerEmail, or userEmail
+          const userOrders = allOrders.filter(o =>
+            (o.userId != null && o.userId === u.id) ||
+            (o.customerId != null && o.customerId === u.id) ||
+            (o.userEmail && o.userEmail === u.email) ||
+            (o.customerEmail && o.customerEmail === u.email)
+          )
+          const spentTotal = userOrders.reduce((sum, o) => sum + (o.finalAmount ?? o.totalAmount ?? 0), 0)
           return {
             id: u.id,
-            name: u.fullName,
+            name: u.fullName || u.name || u.username || 'Unknown',
             email: u.email,
+            phone: u.phone || u.phoneNumber || null,
             orders: userOrders.length,
             spent: spentTotal,
             joined: u.createdAt ? u.createdAt.split('T')[0] : 'N/A'
@@ -411,6 +424,15 @@ export const adminService = {
       return true
     } catch (err) {
       console.error('Failed to delete coupon:', err)
+      throw err
+    }
+  },
+  async toggleCouponStatus(id) {
+    try {
+      const { data } = await api.patch(`/admin/coupons/${id}/toggle-status`)
+      return data.data
+    } catch (err) {
+      console.error('Failed to toggle coupon status:', err)
       throw err
     }
   },

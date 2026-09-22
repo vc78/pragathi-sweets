@@ -56,6 +56,10 @@ export const orderService = {
           image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
         })),
         total: o.finalAmount,
+        totalAmount: o.totalAmount,
+        discountAmount: o.discountAmount || 0,
+        finalAmount: o.finalAmount,
+        couponCode: o.couponCode,
         status: o.status,
         payment: o.paymentStatus,
         paymentStatus: o.paymentStatus,
@@ -88,6 +92,10 @@ export const orderService = {
           image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
         })),
         total: data.data.finalAmount,
+        totalAmount: data.data.totalAmount,
+        discountAmount: data.data.discountAmount || 0,
+        finalAmount: data.data.finalAmount,
+        couponCode: data.data.couponCode,
         status: data.data.status,
         payment: data.data.paymentStatus,
         paymentStatus: data.data.paymentStatus,

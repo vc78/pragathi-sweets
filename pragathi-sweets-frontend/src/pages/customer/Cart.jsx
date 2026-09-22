@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Minus, Plus, Trash2, ArrowRight, ShieldCheck, Ticket } from 'lucide-react'
+import { Minus, Plus, Trash2, ArrowRight, ShieldCheck, Ticket, Sparkles } from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
 import { useCart } from '../../hooks/useCart'
 import toast from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReliableImage from '../../components/common/ReliableImage'
+import api from '../../services/api'
 
 export default function Cart() {
   const { items, updateQty, removeFromCart, subtotal } = useCart()
@@ -16,39 +17,77 @@ export default function Cart() {
   const [couponCode, setCouponCode] = useState('')
   const [discountAmount, setDiscountAmount] = useState(0)
   const [appliedCoupon, setAppliedCoupon] = useState('')
+  const [appliedCouponCode, setAppliedCouponCode] = useState('')
+  const [activeOffers, setActiveOffers] = useState([])
+  const [validating, setValidating] = useState(false)
 
   const deliveryFee = items.length > 0 ? (subtotal >= 999 ? 0 : 50) : 0
   const discount = discountAmount
   const total = Math.max(0, subtotal + deliveryFee - discount)
 
-  const handleApplyCoupon = (e) => {
-    e.preventDefault()
-    const code = couponCode.trim().toUpperCase()
+  // Load live active coupons from backend
+  useEffect(() => {
+    api.get('/coupons/active')
+      .then((res) => {
+        if (res.data?.data) setActiveOffers(res.data.data)
+      })
+      .catch(() => {})
+  }, [])
 
-    if (code === 'AZADI15') {
-      const calculated = Math.round(subtotal * 0.15)
-      setDiscountAmount(calculated)
-      setAppliedCoupon('AZADI15 (15% OFF)')
-      toast.success('Promo code AZADI15 applied successfully!')
-    } else if (code === 'RAKHI200') {
-      const calculated = Math.min(subtotal, 200)
-      setDiscountAmount(calculated)
-      setAppliedCoupon('RAKHI200 (₹200 OFF)')
-      toast.success('Promo code RAKHI200 applied successfully!')
-    } else if (code === 'DIWALI2025') {
-      const calculated = Math.round(subtotal * 0.25)
-      setDiscountAmount(calculated)
-      setAppliedCoupon('DIWALI2025 (25% OFF)')
-      toast.success('Promo code DIWALI2025 applied successfully!')
-    } else {
-      toast.error('Invalid coupon code. Try AZADI15 or RAKHI200.')
+  // Revalidate coupon if subtotal changes (e.g. qty updated)
+  useEffect(() => {
+    if (appliedCouponCode && subtotal > 0) {
+      api.get('/coupons/validate', {
+        params: { code: appliedCouponCode, orderAmount: subtotal }
+      }).then(res => {
+        const result = res.data?.data
+        if (result?.valid) {
+          setDiscountAmount(Number(result.discountAmount || 0))
+          setAppliedCoupon(`${result.code} (-₹${result.discountAmount})`)
+        } else {
+          setDiscountAmount(0)
+          setAppliedCoupon('')
+          setAppliedCouponCode('')
+          toast.error(result?.message || 'Coupon requirements no longer met after quantity change.')
+        }
+      }).catch(() => {})
     }
-    setCouponCode('')
+  }, [subtotal])
+
+  const handleApplyCoupon = async (e, directCode = null) => {
+    if (e) e.preventDefault()
+    const code = (directCode || couponCode).trim().toUpperCase()
+    if (!code) return
+
+    setValidating(true)
+    try {
+      const { data } = await api.get('/coupons/validate', {
+        params: { code, orderAmount: subtotal }
+      })
+      const result = data?.data
+      if (result?.valid) {
+        setDiscountAmount(Number(result.discountAmount || 0))
+        setAppliedCoupon(`${result.code} (-₹${result.discountAmount})`)
+        setAppliedCouponCode(result.code)
+        toast.success(result.message || `Coupon ${result.code} applied successfully!`, {
+          style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        })
+        setCouponCode('')
+      } else {
+        toast.error(result?.message || 'Invalid or expired promo code.')
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error(err?.response?.data?.message || 'Could not validate coupon. Please try again.')
+    } finally {
+      setValidating(false)
+    }
   }
 
   const handleRemoveCoupon = () => {
     setDiscountAmount(0)
     setAppliedCoupon('')
+    setAppliedCouponCode('')
     toast.success('Coupon removed')
   }
 
@@ -164,7 +203,14 @@ export default function Cart() {
 
                 {/* Checkout Trigger */}
                 <button
-                  onClick={() => navigate('/checkout', { state: { discount } })}
+                  onClick={() => navigate('/checkout', { 
+                    state: { 
+                      discount, 
+                      couponCode: appliedCouponCode,
+                      subtotal,
+                      deliveryFee 
+                    } 
+                  })}
                   className="btn-primary w-full text-center flex items-center justify-center gap-2 py-4"
                 >
                   Proceed to Checkout <ArrowRight size={14} />
@@ -189,20 +235,43 @@ export default function Cart() {
                   <form onSubmit={handleApplyCoupon} className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="ENTER CODE (e.g. AZADI15)"
+                      placeholder="ENTER CODE"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
                       className="input-field !py-2.5 uppercase !rounded-xl !border-[#B8860B]/20"
                     />
-                    <button type="submit" className="btn-outline !py-2.5 !px-4 hover:!bg-[#8B0000] hover:!text-white hover:!border-[#8B0000] text-xs">
-                      Apply
+                    <button 
+                      type="submit" 
+                      disabled={validating}
+                      className="btn-outline !py-2.5 !px-4 hover:!bg-[#8B0000] hover:!text-white hover:!border-[#8B0000] text-xs font-bold"
+                    >
+                      {validating ? 'Checking...' : 'Apply'}
                     </button>
                   </form>
                 )}
                 
-                <p className="text-[10px] text-[#3A2D23]/40 mt-3 leading-relaxed">
-                  Tip: Use coupon <strong className="text-[#B8860B]">AZADI15</strong> for 15% discount or <strong className="text-[#B8860B]">RAKHI200</strong> for ₹200 off!
-                </p>
+                {activeOffers.length > 0 ? (
+                  <div className="mt-4 pt-3 border-t border-[#B8860B]/10">
+                    <span className="text-[10px] text-[#3A2D23]/50 block mb-2 font-bold uppercase tracking-wider">Available Offers:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {activeOffers.slice(0, 3).map((offer) => (
+                        <button
+                          key={offer.id || offer.code}
+                          type="button"
+                          onClick={() => handleApplyCoupon(null, offer.code)}
+                          className="text-[10px] bg-[#B8860B]/10 hover:bg-[#B8860B]/20 text-[#8B0000] font-mono font-bold px-2 py-1 rounded-lg border border-[#B8860B]/25 transition-colors flex items-center gap-1"
+                        >
+                          <Sparkles size={10} className="text-[#B8860B]" />
+                          {offer.code} ({offer.discountType === 'PERCENTAGE' ? `${offer.discountValue}%` : `₹${offer.discountValue}`})
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-[10px] text-[#3A2D23]/40 mt-3 leading-relaxed">
+                    Tip: Use coupon <strong className="text-[#B8860B]">AZADI15</strong> for 15% discount or <strong className="text-[#B8860B]">RAKHI200</strong> for ₹200 off!
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center justify-center gap-1.5 text-[10px] text-[#3A2D23]/40 font-bold">

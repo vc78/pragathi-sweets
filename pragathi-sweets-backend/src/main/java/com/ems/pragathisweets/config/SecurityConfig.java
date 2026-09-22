@@ -33,7 +33,8 @@ public class SecurityConfig {
             "/api/products/**",
             "/api/categories/**",
             "/api/reviews/product/**",
-            "/api/festival-offers/**"
+            "/api/festival-offers/**",
+            "/api/coupons/**"
     };
 
     private static final String[] PUBLIC_ENDPOINTS = {

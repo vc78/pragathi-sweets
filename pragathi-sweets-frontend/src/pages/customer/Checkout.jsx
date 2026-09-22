@@ -7,7 +7,8 @@ import Footer from '../../components/customer/Footer'
 import { useCart } from '../../hooks/useCart'
 import { orderService } from '../../services/orderService'
 import { motion } from 'framer-motion'
-import { ShieldCheck, Truck, CreditCard, ChevronRight } from 'lucide-react'
+import { ShieldCheck, Truck, CreditCard, ChevronRight, Ticket, Sparkles } from 'lucide-react'
+import api from '../../services/api'
 
 function loadRazorpayScript() {
   return new Promise((resolve) => {
@@ -25,7 +26,11 @@ export default function Checkout() {
   const { user, isAuthenticated } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   const locationState = useLocation().state || {}
-  const discount = locationState.discount || 0
+  
+  const [couponCode, setCouponCode] = useState(locationState.couponCode || '')
+  const [discount, setDiscount] = useState(locationState.discount || 0)
+  const [couponInput, setCouponInput] = useState('')
+  const [validatingCoupon, setValidatingCoupon] = useState(false)
 
   const [address, setAddress] = useState({ name: user?.name || '', phone: '', line1: '', city: '', pincode: '' })
   const [paymentMethod, setPaymentMethod] = useState('razorpay')
@@ -36,6 +41,41 @@ export default function Checkout() {
   const total = Math.max(0, subtotal + deliveryFee - discount)
 
   const handleChange = (e) => setAddress({ ...address, [e.target.name]: e.target.value })
+
+  const handleApplyCoupon = async (e) => {
+    if (e) e.preventDefault()
+    const code = couponInput.trim().toUpperCase()
+    if (!code) return
+
+    setValidatingCoupon(true)
+    try {
+      const { data } = await api.get('/coupons/validate', {
+        params: { code, orderAmount: subtotal }
+      })
+      const result = data?.data
+      if (result?.valid) {
+        setDiscount(Number(result.discountAmount || 0))
+        setCouponCode(result.code)
+        setCouponInput('')
+        toast.success(result.message || `Coupon ${result.code} applied successfully!`, {
+          style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        })
+      } else {
+        toast.error(result?.message || 'Invalid or expired promo code.')
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error(err?.response?.data?.message || 'Could not validate coupon.')
+    } finally {
+      setValidatingCoupon(false)
+    }
+  }
+
+  const handleRemoveCoupon = () => {
+    setDiscount(0)
+    setCouponCode('')
+    toast.success('Coupon removed')
+  }
 
   const placeOrder = async (paymentInfo = {}) => {
     if (!isAuthenticated) {
@@ -53,6 +93,7 @@ export default function Checkout() {
         address,
         total,
         paymentMethod,
+        couponCode: couponCode || null,
         ...paymentInfo,
       })
       clearCart()
@@ -104,7 +145,13 @@ export default function Checkout() {
         return
       }
 
-      const order = await orderService.createOrder({ items, address, total, paymentMethod })
+      const order = await orderService.createOrder({ 
+        items, 
+        address, 
+        total, 
+        paymentMethod,
+        couponCode: couponCode || null
+      })
       const orderRef = order.orderNumber || order.id
       const rpOrder = await orderService.createRazorpayOrder(orderRef)
       const options = {
@@ -365,7 +412,7 @@ export default function Checkout() {
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-green-700 font-bold">
-                    <span>Applied Discount</span>
+                    <span>Applied Discount {couponCode ? `(${couponCode})` : ''}</span>
                     <span>-₹{discount}</span>
                   </div>
                 )}
@@ -373,6 +420,46 @@ export default function Checkout() {
                   <span>Grand Total</span>
                   <span>₹{total}</span>
                 </div>
+              </div>
+
+              {/* In-Checkout Coupon Code Section */}
+              <div className="border-t border-[#B8860B]/10 pt-4">
+                {couponCode ? (
+                  <div className="bg-green-50 border border-green-200/70 rounded-xl p-3 flex items-center justify-between text-xs text-green-800">
+                    <span className="flex items-center gap-1.5 font-bold">
+                      <Ticket size={14} className="text-green-600" />
+                      {couponCode} (-₹{discount})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-[10px] text-red-700 font-bold uppercase underline hover:text-red-900"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] text-[#3A2D23]/60 uppercase tracking-wider font-bold block">Have a promo code?</span>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="ENTER CODE"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value)}
+                        className="input-field !py-2 !text-xs uppercase !rounded-xl !border-[#B8860B]/20"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleApplyCoupon}
+                        disabled={validatingCoupon}
+                        className="btn-outline !py-2 !px-4 text-xs font-bold shrink-0"
+                      >
+                        {validatingCoupon ? '...' : 'Apply'}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-center gap-1.5 text-[9px] text-[#3A2D23]/40 font-bold border-t border-[#B8860B]/5 pt-4">
