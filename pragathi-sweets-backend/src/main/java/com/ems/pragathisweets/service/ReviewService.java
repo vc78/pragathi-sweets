@@ -79,12 +79,27 @@ public class ReviewService {
         productRepository.save(product);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ReviewResponse> getAllReviews(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(this::toResponse);
+    }
+
+    @Transactional
+    public void deleteReviewAdmin(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+        Product product = review.getProduct();
+        reviewRepository.delete(review);
+        recalculateProductRating(product);
+    }
+
     private ReviewResponse toResponse(Review review) {
         return ReviewResponse.builder()
                 .id(review.getId())
-                .productId(review.getProduct().getId())
-                .userId(review.getUser().getId())
-                .userName(review.getUser().getFullName())
+                .productId(review.getProduct() != null ? review.getProduct().getId() : null)
+                .productName(review.getProduct() != null ? review.getProduct().getName() : null)
+                .userId(review.getUser() != null ? review.getUser().getId() : null)
+                .userName(review.getUser() != null ? review.getUser().getFullName() : null)
                 .rating(review.getRating())
                 .comment(review.getComment())
                 .createdAt(review.getCreatedAt())

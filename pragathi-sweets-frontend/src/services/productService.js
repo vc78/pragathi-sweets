@@ -8,8 +8,8 @@ export function normalizeProduct(p) {
     ...p,
     image: resolveImageUrl(p.image || p.imageUrl),
     stock: p.stock ?? p.stockQuantity ?? 0,
-    rating: p.rating ?? p.averageRating ?? 0,
-    bestseller: p.bestseller ?? p.bestSeller ?? false,
+    rating: p.rating ?? p.avgRating ?? p.averageRating ?? 4.8,
+    bestseller: p.bestseller ?? p.isBestseller ?? (p.id <= 4),
     category: p.category || p.categoryName || '',
   }
 }

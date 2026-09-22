@@ -6,6 +6,7 @@ import Footer from '../../components/customer/Footer'
 import { useCart } from '../../hooks/useCart'
 import toast from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
+import ReliableImage from '../../components/common/ReliableImage'
 
 export default function Cart() {
   const { items, updateQty, removeFromCart, subtotal } = useCart()
@@ -82,10 +83,10 @@ export default function Cart() {
                     key={item.id}
                     className="bg-white border border-[#B8860B]/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-6 shadow-sm hover:shadow-md transition-shadow relative"
                   >
-                    <img
+                    <ReliableImage
                       src={item.image}
                       alt={item.name}
-                      className="w-20 h-20 rounded-2xl object-cover border border-[#B8860B]/10 shrink-0"
+                      className="w-20 h-20 rounded-2xl border border-[#B8860B]/10 shrink-0"
                     />
                     
                     <div className="flex-1 text-center sm:text-left">

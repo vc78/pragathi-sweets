@@ -8,29 +8,52 @@ import { adminService } from '../../services/adminService'
 
 export default function Offers() {
   const [offers, setOffers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState({ title: '', code: '', discount: '', expires: '' })
 
-  const load = () => adminService.getOffers().then(setOffers)
+  const load = async () => {
+    setLoading(true)
+    try {
+      const data = await adminService.getOffers()
+      setOffers(data)
+      setError(null)
+    } catch (err) {
+      console.error(err)
+      setError('Failed to load festival offers.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => { load() }, [])
 
   const handleToggle = async (id) => {
-    await adminService.toggleOffer(id)
-    setOffers((list) => list.map((o) => (o.id === id ? { ...o, active: !o.active } : o)))
-    toast.success('Offer status updated', {
-      style: { background: '#6E1E1E', color: '#FFF8F1' }
-    })
+    try {
+      await adminService.toggleOffer(id)
+      setOffers((list) => list.map((o) => (o.id === id ? { ...o, active: !o.active } : o)))
+      toast.success('Offer status updated', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+    } catch (err) {
+      toast.error('Failed to update offer status.')
+    }
   }
 
   const handleCreate = async (e) => {
     e.preventDefault()
-    const offer = await adminService.createOffer({ ...form, active: true })
-    setOffers((list) => [offer, ...list])
-    toast.success('Offer created successfully', {
-      style: { background: '#6E1E1E', color: '#FFF8F1' }
-    })
-    setForm({ title: '', code: '', discount: '', expires: '' })
-    setShowForm(false)
+    try {
+      const offer = await adminService.createOffer({ ...form, active: true })
+      setOffers((list) => [offer, ...list])
+      toast.success('Offer created successfully', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      setForm({ title: '', code: '', discount: '', expires: '' })
+      setShowForm(false)
+    } catch (err) {
+      toast.error('Failed to create offer.')
+    }
   }
 
   const columns = [
@@ -100,7 +123,17 @@ export default function Offers() {
         </motion.form>
       )}
 
-      <DataTable columns={columns} rows={offers} emptyMessage="No offers created yet." />
+      {loading ? (
+        <div className="py-20 text-center font-body text-xs text-charcoal/50 animate-pulse">
+          Loading festival offers...
+        </div>
+      ) : error ? (
+        <div className="py-20 text-center font-body text-sm text-red-600 font-semibold border border-red-200/20 bg-red-50/10 rounded-3xl">
+          {error}
+        </div>
+      ) : (
+        <DataTable columns={columns} rows={offers} emptyMessage="No offers created yet." />
+      )}
     </AdminLayout>
   )
 }

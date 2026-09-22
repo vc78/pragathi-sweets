@@ -7,15 +7,36 @@ import { adminService } from '../../services/adminService'
 
 export default function Reviews() {
   const [reviews, setReviews] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => { adminService.getReviews().then(setReviews) }, [])
+  const loadReviews = async () => {
+    setLoading(true)
+    try {
+      const data = await adminService.getReviews()
+      setReviews(data)
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to load reviews.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { loadReviews() }, [])
 
   const handleModerate = async (id, approved) => {
-    await adminService.moderateReview(id, approved)
-    setReviews((list) => list.map((r) => (r.id === id ? { ...r, approved } : r)))
-    toast.success(approved ? 'Review approved for display' : 'Review rejected successfully', {
-      style: { background: '#6E1E1E', color: '#FFF8F1' }
-    })
+    try {
+      await adminService.moderateReview(id, approved)
+      if (!approved) {
+        setReviews((list) => list.filter((r) => r.id !== id))
+        toast.success('Review removed successfully')
+      } else {
+        setReviews((list) => list.map((r) => (r.id === id ? { ...r, approved: true } : r)))
+        toast.success('Review approved for display')
+      }
+    } catch (err) {
+      toast.error('Action failed')
+    }
   }
 
   const columns = [

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,13 +33,28 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
 
+    private Order findOrderByIdOrNumber(String orderIdentifier) {
+        if (orderIdentifier == null || orderIdentifier.isBlank()) {
+            throw new ResourceNotFoundException("Order identifier is required");
+        }
+        return orderRepository.findByOrderNumber(orderIdentifier)
+                .or(() -> {
+                    try {
+                        Long id = Long.parseLong(orderIdentifier);
+                        return orderRepository.findById(id);
+                    } catch (NumberFormatException e) {
+                        return Optional.empty();
+                    }
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderIdentifier));
+    }
+
     /**
      * Creates a Razorpay order for the given internal order and persists a Payment record.
      */
     @Transactional
     public PaymentOrderResponse createRazorpayOrder(String internalOrderNumber) {
-        Order order = orderRepository.findByOrderNumber(internalOrderNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + internalOrderNumber));
+        Order order = findOrderByIdOrNumber(internalOrderNumber);
 
         long amountInPaise = order.getFinalAmount().multiply(BigDecimal.valueOf(100)).longValue();
 
@@ -80,8 +96,7 @@ public class PaymentService {
      */
     @Transactional
     public void verifyPayment(PaymentVerificationRequest request) {
-        Order order = orderRepository.findByOrderNumber(request.getInternalOrderNumber())
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + request.getInternalOrderNumber()));
+        Order order = findOrderByIdOrNumber(request.getInternalOrderNumber());
 
         Payment payment = paymentRepository.findByOrderId(order.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No payment record found for this order"));

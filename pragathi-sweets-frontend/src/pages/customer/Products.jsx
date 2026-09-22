@@ -8,6 +8,8 @@ import SweetCard from '../../components/customer/SweetCard'
 import { productService } from '../../services/productService'
 import { useCart } from '../../hooks/useCart'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ProductCardSkeleton } from '../../components/common/SkeletonLoaders'
+import ReliableImage from '../../components/common/ReliableImage'
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -269,11 +271,11 @@ export default function Products() {
               </div>
             )}
 
-            {/* Loading Indicator */}
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-24 select-none">
-                <div className="w-10 h-10 border-2 border-[#B8860B] border-t-transparent rounded-full animate-spin mb-4" />
-                <p className="font-display text-sm italic text-[#B8860B]/80 font-bold">Unlocking Confections...</p>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {Array.from({ length: 6 }).map((_, idx) => (
+                  <ProductCardSkeleton key={idx} />
+                ))}
               </div>
             ) : products.length === 0 ? (
               <div className="text-center py-24 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
@@ -312,12 +314,10 @@ export default function Products() {
 
                         <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden shrink-0 bg-[#F5E6C8]/40 border border-[#B8860B]/10">
                           <Link to={`/products/${product.id}`} className="block h-full">
-                            <img
-                              src={product.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+                            <ReliableImage
+                              src={product.image}
                               alt={product.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-600 ease-out"
-                              loading="lazy"
-                              onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+                              className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
                           </Link>
                         </div>

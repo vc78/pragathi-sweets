@@ -1,7 +1,8 @@
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, ExternalLink } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { BUSINESS } from '../../constants/business'
 
 export default function Contact() {
   const handleSubmit = (e) => {
@@ -28,36 +29,45 @@ export default function Contact() {
                 <MapPin size={16} className="text-[#B8860B] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#3A2D23] block">Main Boutique</strong>
-                  <span>Koti, Hyderabad, Telangana, 500095</span>
+                  <span>{BUSINESS.location.fullAddress}</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Phone size={16} className="text-[#B8860B] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#3A2D23] block">Call Us</strong>
-                  <span>+91 98490 12345</span>
+                  <a href={`tel:${BUSINESS.contact.phoneRaw}`} className="hover:text-[#8B0000] transition-colors">{BUSINESS.contact.phone}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Mail size={16} className="text-[#B8860B] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#3A2D23] block">Email support</strong>
-                  <span>info@pragathisweets.com</span>
+                  <a href={`mailto:${BUSINESS.contact.email}`} className="hover:text-[#8B0000] transition-colors">{BUSINESS.contact.email}</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Clock size={16} className="text-[#B8860B] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#3A2D23] block">Boutique Hours</strong>
-                  <span>9:00 AM - 9:00 PM Daily</span>
+                  <span>{BUSINESS.contact.hours} ({BUSINESS.contact.openDays})</span>
                 </div>
               </div>
             </div>
 
-            {/* Google Map Placeholder */}
-            <div className="border border-[#B8860B]/15 rounded-3xl overflow-hidden h-48 relative bg-[#F5E6C8]/25 flex items-center justify-center">
-              <span className="text-[10px] tracking-widest text-[#B8860B] uppercase font-bold">Interactive Map</span>
-            </div>
+            {/* Google Maps Link Card */}
+            <a 
+              href={BUSINESS.location.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="border border-[#B8860B]/20 rounded-3xl p-5 bg-[#F5E6C8]/25 flex items-center justify-between hover:bg-[#F5E6C8]/40 hover:border-[#B8860B]/40 transition-all duration-300 group block"
+            >
+              <div>
+                <span className="text-[10px] tracking-widest text-[#B8860B] uppercase font-bold block mb-1">Locate Us On Map</span>
+                <span className="text-xs text-[#8B0000] font-semibold">{BUSINESS.location.street}, {BUSINESS.location.city}</span>
+              </div>
+              <ExternalLink size={16} className="text-[#B8860B] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
           </div>
 
           <div className="md:col-span-7 bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-8 shadow-sm">

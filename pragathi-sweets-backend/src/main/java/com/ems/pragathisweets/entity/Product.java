@@ -53,6 +53,10 @@ public class Product {
     private boolean active = true;
 
     @Builder.Default
+    @Column(name = "is_bestseller")
+    private boolean bestseller = false;
+
+    @Builder.Default
     @Column(name = "avg_rating")
     private Double avgRating = 0.0;
 

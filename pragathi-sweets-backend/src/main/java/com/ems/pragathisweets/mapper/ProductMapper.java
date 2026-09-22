@@ -25,6 +25,7 @@ public class ProductMapper {
                 .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .categoryName(product.getCategory() != null ? product.getCategory().getName() : null)
                 .active(product.isActive())
+                .bestseller(product.isBestseller())
                 .avgRating(product.getAvgRating())
                 .numReviews(product.getNumReviews())
                 .inStock(product.isInStock())

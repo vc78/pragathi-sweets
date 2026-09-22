@@ -4,6 +4,8 @@ import com.ems.pragathisweets.dto.OrderResponse;
 import com.ems.pragathisweets.dto.admin.OrderStatusRequest;
 import com.ems.pragathisweets.entity.Order;
 import com.ems.pragathisweets.entity.OrderStatus;
+import com.ems.pragathisweets.entity.PaymentMethod;
+import com.ems.pragathisweets.entity.PaymentStatus;
 import com.ems.pragathisweets.exception.ResourceNotFoundException;
 import com.ems.pragathisweets.repository.OrderRepository;
 import com.ems.pragathisweets.service.EmailService;
@@ -50,6 +52,21 @@ public class AdminOrderService {
         }
 
         order.setStatus(newStatus);
+
+        // ── COD Auto-Settlement ──────────────────────────────────────────────
+        // When an admin marks a COD order as DELIVERED, cash has been collected
+        // at the doorstep. Automatically update paymentStatus to COLLECTED so
+        // the customer's order history reflects real payment state.
+        if (newStatus == OrderStatus.DELIVERED
+                && order.getPaymentMethod() == PaymentMethod.COD
+                && order.getPaymentStatus() == PaymentStatus.PENDING) {
+            order.setPaymentStatus(PaymentStatus.COLLECTED);
+            emailService.sendCodPaymentCollectedEmail(
+                    order.getUser().getEmail(),
+                    order.getOrderNumber(),
+                    order.getFinalAmount().toString());
+        }
+
         Order saved = orderRepository.save(order);
 
         emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order.getOrderNumber(), newStatus.name());

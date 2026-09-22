@@ -50,6 +50,21 @@ public class EmailService {
         send(to, subject, body);
     }
 
+    /**
+     * Sent when a COD order is delivered and cash payment is confirmed collected
+     * by the delivery agent. Serves as the customer's payment receipt for COD.
+     */
+    @Async
+    public void sendCodPaymentCollectedEmail(String to, String orderNumber, String amount) {
+        String subject = "Payment Received — Order " + orderNumber;
+        String body = "Hi,\n\n" +
+                "Your Cash on Delivery payment of ₹" + amount + " for order " + orderNumber +
+                " has been successfully collected by our delivery partner.\n\n" +
+                "Your order is now complete. Thank you for choosing Pragathi Sweets!\n\n" +
+                "Warm regards,\nPragathi Sweets Team";
+        send(to, subject, body);
+    }
+
     private void send(String to, String subject, String body) {
         if (!mailEnabled) {
             log.info("Mail disabled (app.mail.enabled=false). Skipping email to {} - subject: {}", to, subject);

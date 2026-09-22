@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Star, Plus, Eye, Heart } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import ReliableImage from '../common/ReliableImage'
 
 export default function SweetCard({ product, onAdd, onAddToCart }) {
   const [isFavorite, setIsFavorite] = useState(false)
@@ -36,12 +37,10 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
 
         {/* Photo */}
         <Link to={`/products/${product.id}`} className="block w-full h-full">
-          <img
-            src={product.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+          <ReliableImage
+            src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-600 ease-out"
-            loading="lazy"
-            onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+            className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
           />
         </Link>
 

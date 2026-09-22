@@ -64,9 +64,7 @@ export default function Login() {
         <p className="text-center text-xs text-[#3A2D23]/60 mt-6 font-body">
           New here? <Link to="/register" className="text-[#B8860B] hover:text-[#8B0000] font-bold underline decoration-[#B8860B]/30 transition-colors">Create an account</Link>
         </p>
-        <p className="text-center text-[9px] text-[#3A2D23]/40 mt-4 font-body">
-          <Link to="/admin/login" className="hover:text-[#8B0000] transition-colors uppercase tracking-widest font-bold">Access Admin Panel →</Link>
-        </p>
+
       </div>
     </div>
   )

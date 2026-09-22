@@ -27,6 +27,7 @@ public class ProductResponse {
     private Long categoryId;
     private String categoryName;
     private boolean active;
+    private boolean bestseller;
     private Double avgRating;
     private Integer numReviews;
     private boolean inStock;

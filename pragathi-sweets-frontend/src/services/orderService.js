@@ -26,7 +26,9 @@ export const orderService = {
 
       const { data } = await api.post('/orders/checkout', checkoutPayload)
       return {
-        id: data.data.orderNumber,
+        id: data.data.orderNumber || data.data.id,
+        orderNumber: data.data.orderNumber,
+        backendId: data.data.id,
         ...payload,
         status: data.data.status,
         date: data.data.createdAt ? data.data.createdAt.split('T')[0] : new Date().toISOString().slice(0, 10)
@@ -41,10 +43,12 @@ export const orderService = {
     try {
       const { data } = await api.get('/orders')
       return data.data.content.map(o => ({
-        id: o.orderNumber,
+        id: o.orderNumber || `ORD-${o.id}`,
+        orderNumber: o.orderNumber,
+        backendId: o.id,
         customer: o.userName || 'Guest',
         date: o.createdAt ? o.createdAt.split('T')[0] : 'N/A',
-        items: o.items.map(i => ({
+        items: (o.items || []).map(i => ({
           name: i.productName,
           price: i.price,
           unit: 'kg',
@@ -54,6 +58,8 @@ export const orderService = {
         total: o.finalAmount,
         status: o.status,
         payment: o.paymentStatus,
+        paymentStatus: o.paymentStatus,
+        paymentMethod: o.paymentMethod || 'COD',
         address: {
           line1: o.shippingAddress,
           phone: o.contactPhone
@@ -69,10 +75,12 @@ export const orderService = {
     try {
       const { data } = await api.get(`/orders/${id}`)
       return {
-        id: data.data.orderNumber,
+        id: data.data.orderNumber || `ORD-${data.data.id}`,
+        orderNumber: data.data.orderNumber,
+        backendId: data.data.id,
         customer: data.data.userName || 'Guest',
         date: data.data.createdAt ? data.data.createdAt.split('T')[0] : 'N/A',
-        items: data.data.items.map(i => ({
+        items: (data.data.items || []).map(i => ({
           name: i.productName,
           price: i.price,
           unit: 'kg',
@@ -82,6 +90,8 @@ export const orderService = {
         total: data.data.finalAmount,
         status: data.data.status,
         payment: data.data.paymentStatus,
+        paymentStatus: data.data.paymentStatus,
+        paymentMethod: data.data.paymentMethod || 'COD',
         address: {
           line1: data.data.shippingAddress,
           phone: data.data.contactPhone

@@ -22,7 +22,7 @@ function loadRazorpayScript() {
 
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
-  const { user } = useSelector((state) => state.auth)
+  const { user, isAuthenticated } = useSelector((state) => state.auth)
   const navigate = useNavigate()
   const locationState = useLocation().state || {}
   const discount = locationState.discount || 0
@@ -38,6 +38,14 @@ export default function Checkout() {
   const handleChange = (e) => setAddress({ ...address, [e.target.name]: e.target.value })
 
   const placeOrder = async (paymentInfo = {}) => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to confirm your order and track live dispatch.', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      navigate('/login', { state: { from: '/checkout' } })
+      return
+    }
+
     setPlacing(true)
     try {
       const order = await orderService.createOrder({
@@ -53,7 +61,9 @@ export default function Checkout() {
       })
       navigate('/orders', { state: { newOrderId: order.id } })
     } catch (err) {
-      toast.error('Could not place order. Please try again.')
+      console.error('Order creation failed:', err)
+      const msg = err?.response?.data?.message || err?.message || 'Could not place order. Please try again.'
+      toast.error(msg)
     } finally {
       setPlacing(false)
     }
@@ -71,6 +81,14 @@ export default function Checkout() {
       return
     }
 
+    if (!isAuthenticated) {
+      toast.error('Please sign in to place your order and track delivery.', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      navigate('/login', { state: { from: '/checkout' } })
+      return
+    }
+
     if (paymentMethod === 'cod') {
       return placeOrder({ paymentStatus: 'Pending' })
     }
@@ -82,11 +100,13 @@ export default function Checkout() {
       const scriptLoaded = await loadRazorpayScript()
       if (!scriptLoaded) {
         toast.error('Could not load payment gateway. Please try Cash on Delivery.')
+        setPlacing(false)
         return
       }
 
       const order = await orderService.createOrder({ items, address, total, paymentMethod })
-      const rpOrder = await orderService.createRazorpayOrder(order.id)
+      const orderRef = order.orderNumber || order.id
+      const rpOrder = await orderService.createRazorpayOrder(orderRef)
       const options = {
         key: rpOrder.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: rpOrder.amountInPaise,
@@ -96,14 +116,24 @@ export default function Checkout() {
         order_id: rpOrder.razorpayOrderId,
         handler: async (response) => {
           try {
-            await orderService.verifyPayment({ ...response, internalOrderNumber: order.id })
+            await orderService.verifyPayment({
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+              internalOrderNumber: orderRef,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              ...response,
+            })
             clearCart()
             toast.success('Order placed successfully!', {
               style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
             })
             navigate('/orders', { state: { newOrderId: order.id } })
           } catch (err) {
-            toast.error('Payment verification failed. Please contact support.')
+            console.error('Payment verification failed:', err)
+            toast.error(err?.response?.data?.message || 'Payment verification failed. Please contact support.')
           } finally {
             setPlacing(false)
           }
@@ -115,7 +145,9 @@ export default function Checkout() {
       const rzp = new window.Razorpay(options)
       rzp.open()
     } catch (err) {
-      toast.error('Could not initiate payment. Please try again.')
+      console.error('Payment initiation error:', err)
+      const msg = err?.response?.data?.message || err?.message || 'Could not initiate payment. Please try Cash on Delivery.'
+      toast.error(msg)
       setPlacing(false)
     }
   }
@@ -139,9 +171,25 @@ export default function Checkout() {
       <Navbar />
 
       <div className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16">
-        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-10 select-none">
+        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-6 select-none">
           Secure Checkout
         </h1>
+
+        {!isAuthenticated && (
+          <div className="bg-[#B8860B]/10 border border-[#B8860B]/20 rounded-2xl p-4 mb-8 flex flex-wrap items-center justify-between gap-3 select-none">
+            <div>
+              <span className="font-bold text-xs text-[#8B0000] block">Sign in to complete your luxury order</span>
+              <span className="text-[11px] text-[#3A2D23]/60">Link this purchase to your account for live dispatch tracking and saved addresses.</span>
+            </div>
+            <Link
+              to="/login"
+              state={{ from: '/checkout' }}
+              className="btn-primary !py-2 !px-5 text-[10px] tracking-wider uppercase font-bold"
+            >
+              Sign In Now
+            </Link>
+          </div>
+        )}
 
         {/* Multi-step indicator bar */}
         <div className="flex items-center gap-4 mb-12 select-none">

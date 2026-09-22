@@ -2,6 +2,7 @@ import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import ReliableImage from '../../components/common/ReliableImage'
 
 const CATS = [
   {
@@ -49,7 +50,11 @@ export default function Categories() {
             <div key={idx} className="bg-white border border-[#B8860B]/10 hover:border-[#B8860B]/30 rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_16px_48px_rgba(184,134,11,0.08)] transition-all duration-300 flex flex-col justify-between group">
               <div>
                 <div className="h-48 overflow-hidden bg-[#F5E6C8]/40 border-b border-[#B8860B]/5">
-                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <ReliableImage
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="font-display text-xl text-[#8B0000] font-bold mb-2">{cat.name}</h3>

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Instagram, Facebook, MapPin, Phone, Mail, ArrowUpRight, Clock } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { BUSINESS } from '../../constants/business'
 
 export default function Footer() {
   const handleScrollTop = () => {
@@ -8,7 +10,10 @@ export default function Footer() {
 
   const handleSubscribe = (e) => {
     e.preventDefault()
-    alert('Thank you for subscribing to our luxury newsletter!')
+    toast.success('Thank you for subscribing to our luxury newsletter!', {
+      style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+    })
+    e.target.reset()
   }
 
   return (
@@ -31,13 +36,16 @@ export default function Footer() {
               </span>
             </Link>
             <p className="font-body text-xs tracking-wider text-white/60 leading-relaxed max-w-sm mb-6">
-              Creating heritage confections in small, artisanal batches since 1994. Built on purity, ghee, and generation-old secrets.
+              {BUSINESS.description}
             </p>
             <div className="flex gap-4">
-              {[{ Icon: Instagram, link: '#' }, { Icon: Facebook, link: '#' }].map(({ Icon, link }, idx) => (
+              {[{ Icon: Instagram, link: BUSINESS.social.instagram }, { Icon: Facebook, link: BUSINESS.social.facebook }].map(({ Icon, link }, idx) => (
                 <a
                   key={idx}
                   href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Social Link"
                   className="w-10 h-10 rounded-full border border-[#B8860B]/20 flex items-center justify-center text-[#B8860B] hover:text-white hover:border-[#B8860B] transition-all duration-300"
                 >
                   <Icon size={16} />
@@ -66,15 +74,15 @@ export default function Footer() {
               <ul className="space-y-4 font-body text-xs tracking-wider text-white/60">
                 <li className="flex items-start gap-2.5">
                   <MapPin size={13} className="text-[#B8860B] mt-0.5 shrink-0" />
-                  <span>Koti, Hyderabad,<br />Telangana, 500095</span>
+                  <span>{BUSINESS.location.street},<br />{BUSINESS.location.city}, {BUSINESS.location.state} {BUSINESS.location.postalCode}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Phone size={13} className="text-[#B8860B] shrink-0" />
-                  <span>+91 98490 12345</span>
+                  <a href={`tel:${BUSINESS.contact.phoneRaw}`} className="hover:text-white transition-colors">{BUSINESS.contact.phone}</a>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Clock size={13} className="text-[#B8860B] shrink-0" />
-                  <span>9:00 AM - 9:00 PM</span>
+                  <span>{BUSINESS.contact.hours}</span>
                 </li>
               </ul>
             </div>

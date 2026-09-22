@@ -9,6 +9,8 @@ import {
 import { loggedOut } from '../../store/authSlice'
 import { useCart } from '../../hooks/useCart'
 import { motion, AnimatePresence } from 'framer-motion'
+import AnnouncementTicker from './AnnouncementTicker'
+import ReliableImage from '../common/ReliableImage'
 
 const MEGA_MENU_CATEGORIES = [
   {
@@ -112,49 +114,8 @@ export default function Navbar() {
 
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerBg}`}>
 
-        {/* ── TOP ANNOUNCEMENT BAR ── */}
-        <div className="bg-[#8B0000] text-white overflow-hidden select-none">
-          <div className="flex items-center justify-between max-w-7xl mx-auto px-4 md:px-8 py-2 gap-4">
-            {/* Left: Info pills */}
-            <div className="hidden md:flex items-center gap-5 text-[10px] font-medium tracking-widest uppercase shrink-0">
-              <span className="flex items-center gap-1.5 text-amber-200">
-                <Phone size={10} />
-                +91 98490 12345
-              </span>
-              <span className="w-px h-3 bg-white/20" />
-              <span className="flex items-center gap-1.5 text-amber-200">
-                <MapPin size={10} />
-                Hyderabad
-              </span>
-              <span className="w-px h-3 bg-white/20" />
-              <span className="flex items-center gap-1.5 text-amber-200">
-                <Clock size={10} />
-                9 AM – 9 PM Daily
-              </span>
-            </div>
-
-            {/* Centre: scrolling marquee */}
-            <div className="flex-1 relative overflow-hidden mx-4">
-              <div className="flex w-[200%] animate-marquee whitespace-nowrap gap-16">
-                {[
-                  '✨ AZADI15 — 15% OFF Storewide!',
-                  '🚚 Free Delivery above ₹999',
-                  '👑 Join Pragathi Royale — Earn Gold Coins Every Order',
-                  '🎁 RAKHI200 — ₹200 Off Gift Hampers',
-                ].flatMap((t, i) => [
-                  <span key={`a${i}`} className="text-[10px] tracking-widest font-medium text-amber-100 mr-16">{t}</span>,
-                  <span key={`b${i}`} className="text-[10px] tracking-widest font-medium text-amber-100 mr-16">{t}</span>,
-                ])}
-              </div>
-            </div>
-
-            {/* Right: Language placeholder */}
-            <span className="hidden md:flex items-center gap-1 text-[10px] uppercase tracking-widest text-amber-200 shrink-0 cursor-pointer hover:text-white transition-colors">
-              🌐 EN
-              <ChevronDown size={10} />
-            </span>
-          </div>
-        </div>
+        {/* ── TOP ANNOUNCEMENT SCROLLER ── */}
+        <AnnouncementTicker />
 
         {/* ── MAIN NAVBAR ── */}
         <div className={`max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between transition-all duration-500 ${scrolled ? 'py-3' : 'py-4'}`}>
@@ -224,10 +185,10 @@ export default function Navbar() {
                                 className="group flex flex-col rounded-2xl overflow-hidden border border-gold/10 hover:border-gold/30 hover:shadow-[0_8px_32px_rgba(184,134,11,0.12)] transition-all duration-300 bg-[#FFFDF8]"
                               >
                                 <div className="h-28 overflow-hidden">
-                                  <img
+                                  <ReliableImage
                                     src={cat.image}
                                     alt={cat.label}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                                   />
                                 </div>
                                 <div className="p-3">
@@ -449,7 +410,7 @@ export default function Navbar() {
               <div className="px-6 py-4 border-b border-gold/15 flex justify-between items-center bg-[#F5E6C8]/30">
                 <div className="flex items-center gap-2">
                   <ShoppingCart size={17} className="text-[#8B0000]" />
-                  <span className="font-display text-base font-bold uppercase tracking-wider text-[#8B0000]">Your Selection</span>
+                  <span className="font-display text-base font-bold uppercase tracking-wider text-[#8B0000]">Your Cart</span>
                   {count > 0 && <span className="text-xs text-[#3A2D23]/50 font-body">({count} items)</span>}
                 </div>
                 <button onClick={() => setCartDrawerOpen(false)} className="p-2 text-[#3A2D23]/50 hover:text-[#8B0000] transition-colors"><X size={18} /></button>
@@ -466,7 +427,7 @@ export default function Navbar() {
                 ) : (
                   items.map((item) => (
                     <motion.div layout key={item.id} className="flex gap-4 p-4 border border-gold/15 rounded-2xl bg-white hover:border-gold/30 transition-all">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover border border-gold/10 shrink-0" />
+                      <ReliableImage src={item.image} alt={item.name} className="w-16 h-16 rounded-xl border border-gold/10 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="font-display text-sm font-bold text-[#8B0000] truncate">{item.name}</p>
                         <p className="text-[11px] text-[#3A2D23]/40 mt-0.5 font-body">₹{item.price} / {item.unit}</p>

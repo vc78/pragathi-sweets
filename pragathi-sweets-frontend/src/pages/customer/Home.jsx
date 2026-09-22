@@ -8,6 +8,7 @@ import SweetCard from '../../components/customer/SweetCard'
 import { productService } from '../../services/productService'
 import { useCart } from '../../hooks/useCart'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { ProductGridSkeleton } from '../../components/common/SkeletonLoaders'
 
 // ── Hero Slides ────────────────────────────────────────────
 const HERO_SLIDES = [
@@ -95,6 +96,7 @@ export default function Home() {
   const [bestsellers, setBestsellers] = useState([])
   const [allProducts, setAllProducts] = useState([])
   const [giftHampers, setGiftHampers] = useState([])
+  const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
 
   // Hero state
@@ -109,11 +111,15 @@ export default function Home() {
   const yBg = useTransform(scrollY, [0, 600], [0, 120])
 
   useEffect(() => {
+    setLoading(true)
     productService.getAll().then((list) => {
-      setBestsellers(list.filter(p => p.bestseller).slice(0, 4))
+      const best = list.filter(p => p.bestseller)
+      setBestsellers(best.length > 0 ? best.slice(0, 4) : list.slice(0, 4))
       setAllProducts(list.slice(0, 8))
-      setGiftHampers(list.filter(p => p.category === 'Festival Hampers'))
+      const hampers = list.filter(p => p.category === 'Festival Hampers')
+      setGiftHampers(hampers.length > 0 ? hampers : list.slice(0, 3))
     }).catch(() => {})
+    .finally(() => setLoading(false))
   }, [])
 
   const startHeroTimer = () => {
@@ -164,6 +170,8 @@ export default function Home() {
             <motion.img
               src={slide.image}
               alt={slide.title}
+              loading={heroIdx === 0 ? 'eager' : 'lazy'}
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
               style={{ y: yBg }}
             />
@@ -253,12 +261,8 @@ export default function Home() {
           title="Bestselling Sweets"
           subtitle="Handcrafted in small batches each morning. Every piece tells a story of heritage and devotion."
         />
-        {bestsellers.length === 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-[#F5E6C8]/40 rounded-2xl h-80 animate-pulse" />
-            ))}
-          </div>
+        {loading && bestsellers.length === 0 ? (
+          <ProductGridSkeleton count={4} />
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {bestsellers.map((p, i) => (
@@ -350,6 +354,8 @@ export default function Home() {
         <img
           src="/images/pexels-jonathanborba-19863265.jpg"
           alt="Festival Hampers"
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/90 via-[#8B0000]/70 to-transparent" />
@@ -429,8 +435,6 @@ export default function Home() {
       </section>
 
       <Footer />
-
-
     </div>
   )
 }

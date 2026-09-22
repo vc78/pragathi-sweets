@@ -8,6 +8,8 @@ import SweetCard from '../../components/customer/SweetCard'
 import { productService } from '../../services/productService'
 import { useCart } from '../../hooks/useCart'
 import { motion, AnimatePresence } from 'framer-motion'
+import ReliableImage from '../../components/common/ReliableImage'
+import { ProductDetailsSkeleton } from '../../components/common/SkeletonLoaders'
 
 export default function ProductDetails() {
   const { id } = useParams()
@@ -43,9 +45,8 @@ export default function ProductDetails() {
     return (
       <div className="min-h-screen bg-[#FFFDF8] flex flex-col justify-between font-body">
         <Navbar />
-        <div className="flex-1 flex flex-col items-center justify-center py-20 select-none">
-          <div className="w-12 h-12 border-2 border-[#B8860B] border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="font-display text-sm italic text-[#B8860B]/80 font-bold">Loading heritage recipe details...</p>
+        <div className="flex-1 pt-24 pb-12">
+          <ProductDetailsSkeleton />
         </div>
         <Footer />
       </div>
@@ -111,11 +112,10 @@ export default function ProductDetails() {
           {/* Left Column: Premium Zoom Image Gallery */}
           <div className="lg:col-span-6 relative">
             <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-[#B8860B]/15 shadow-md bg-[#F5E6C8]/25 relative group">
-              <img
-                src={product.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+              <ReliableImage
+                src={product.image}
                 alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+                className="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
@@ -126,13 +126,12 @@ export default function ProductDetails() {
             </div>
             
             <div className="flex gap-4 mt-6">
-              {[product.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg', product.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'].map((img, idx) => (
+              {[product.image, product.image].map((img, idx) => (
                 <div key={idx} className="w-24 h-16 rounded-2xl overflow-hidden border-2 border-[#B8860B]/20 relative cursor-pointer hover:border-[#B8860B] transition-all bg-[#F5E6C8]/40">
-                  <img
+                  <ReliableImage
                     src={img}
                     alt="Thumbnail"
-                    className="w-full h-full object-cover"
-                    onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+                    className="w-full h-full"
                   />
                 </div>
               ))}

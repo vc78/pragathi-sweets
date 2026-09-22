@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import AdminLayout from '../../components/admin/AdminLayout'
 import toast from 'react-hot-toast'
+import { BUSINESS } from '../../constants/business'
 
 export default function Settings() {
   const [form, setForm] = useState({
-    boutiqueName: 'Pragathi Sweets & Savouries',
-    supportPhone: '+91 98490 12345',
-    supportEmail: 'info@pragathisweets.com',
+    boutiqueName: BUSINESS.name,
+    supportPhone: BUSINESS.contact.phone,
+    supportEmail: BUSINESS.contact.email,
     minimumOrderValue: '200',
     freeDeliveryThreshold: '999',
   })

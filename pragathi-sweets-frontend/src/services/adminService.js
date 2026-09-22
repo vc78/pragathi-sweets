@@ -7,20 +7,39 @@ export const adminService = {
     try {
       const { data } = await api.get('/admin/analytics/dashboard')
       const { data: ordersData } = await api.get('/admin/orders')
+      const ordersList = ordersData.data?.content || []
       // Normalize real OrderResponse shape → Dashboard table columns (id, customer, total, status)
-      const recentOrdersList = (ordersData.data?.content || []).slice(0, 5).map(o => ({
+      const recentOrdersList = ordersList.slice(0, 5).map(o => ({
         id: o.orderNumber || `#${o.id}`,
         customer: o.userName || 'Guest',
         total: o.finalAmount ?? o.totalAmount ?? 0,
         status: o.status || 'PENDING',
       }))
+
+      let salesTrend = SALES_TREND
+      if (ordersList.length > 0) {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        const monthlyTotals = {}
+        ordersList.forEach(o => {
+          if (o.createdAt) {
+            const d = new Date(o.createdAt)
+            const m = monthNames[d.getMonth()]
+            const amt = o.finalAmount ?? o.totalAmount ?? 0
+            monthlyTotals[m] = (monthlyTotals[m] || 0) + amt
+          }
+        })
+        const computed = Object.entries(monthlyTotals).map(([month, sales]) => ({ month, sales: Math.round(sales) }))
+        if (computed.length >= 2) {
+          salesTrend = computed
+        }
+      }
       
       return {
         totalRevenue: data.data.totalRevenue || 0,
         totalOrders: data.data.totalOrders || 0,
         totalCustomers: data.data.totalUsers || 0,
         totalProducts: data.data.totalProducts || 0,
-        salesTrend: SALES_TREND,
+        salesTrend,
         recentOrders: recentOrdersList
       }
     } catch (err) {
@@ -35,32 +54,81 @@ export const adminService = {
       const { data } = await api.get('/admin/products')
       return (data.data.content || []).map(normalizeProduct)
     } catch (err) {
-      console.error(err)
+      console.error('Failed to get products:', err)
       throw err
     }
   },
   async createProduct(payload) {
-    // Map frontend 'image' field to backend 'imageUrl'
     const { image, stock, ...rest } = payload
-    const backendPayload = { ...rest, imageUrl: image || '', stockQuantity: stock }
+    let categoryId = payload.categoryId ? Number(payload.categoryId) : undefined
+    
+    // Auto-resolve categoryId if not provided but category name is available
+    if (!categoryId && payload.category) {
+      try {
+        const cats = await adminService.getCategories()
+        const matched = cats.find(c => c.name.toLowerCase() === String(payload.category).toLowerCase())
+        if (matched) categoryId = matched.id
+      } catch (e) {
+        console.warn('Could not auto-resolve categoryId from category name:', e)
+      }
+    }
+
+    const backendPayload = {
+      ...rest,
+      name: payload.name?.trim(),
+      description: payload.description || '',
+      sku: payload.sku || `PRG-${Date.now().toString().slice(-6)}`,
+      price: Number(payload.price),
+      discountPrice: payload.discountPrice ? Number(payload.discountPrice) : null,
+      stockQuantity: Number(stock ?? payload.stockQuantity ?? 0),
+      unit: payload.unit || 'kg',
+      imageUrl: image || payload.imageUrl || '',
+      categoryId: categoryId,
+      active: payload.active ?? true,
+    }
+
     try {
       const { data } = await api.post('/admin/products', backendPayload)
       return normalizeProduct(data.data)
     } catch (err) {
-      if (err.response) throw err
-      return { id: Date.now(), ...payload }
+      console.error('Failed to create product:', err)
+      throw err
     }
   },
   async updateProduct(id, payload) {
-    // Map frontend 'image' field to backend 'imageUrl'
     const { image, stock, ...rest } = payload
-    const backendPayload = { ...rest, imageUrl: image || '', stockQuantity: stock }
+    let categoryId = payload.categoryId ? Number(payload.categoryId) : undefined
+
+    if (!categoryId && payload.category) {
+      try {
+        const cats = await adminService.getCategories()
+        const matched = cats.find(c => c.name.toLowerCase() === String(payload.category).toLowerCase())
+        if (matched) categoryId = matched.id
+      } catch (e) {
+        console.warn('Could not auto-resolve categoryId:', e)
+      }
+    }
+
+    const backendPayload = {
+      ...rest,
+      name: payload.name?.trim(),
+      description: payload.description || '',
+      sku: payload.sku,
+      price: Number(payload.price),
+      discountPrice: payload.discountPrice ? Number(payload.discountPrice) : null,
+      stockQuantity: Number(stock ?? payload.stockQuantity ?? 0),
+      unit: payload.unit || 'kg',
+      imageUrl: image || payload.imageUrl || '',
+      categoryId: categoryId,
+      active: payload.active ?? true,
+    }
+
     try {
       const { data } = await api.put(`/admin/products/${id}`, backendPayload)
       return normalizeProduct(data.data)
     } catch (err) {
-      if (err.response) throw err
-      return { id, ...payload }
+      console.error('Failed to update product:', err)
+      throw err
     }
   },
   async deleteProduct(id) {
@@ -68,8 +136,8 @@ export const adminService = {
       await api.delete(`/admin/products/${id}`)
       return true
     } catch (err) {
-      if (err.response) throw err
-      return true
+      console.error('Failed to delete product:', err)
+      throw err
     }
   },
 
@@ -135,12 +203,12 @@ export const adminService = {
   async getInventory() {
     try {
       const { data } = await api.get('/admin/products')
-      return data.data.content.map((p) => ({
+      return (data.data?.content || []).map((p) => ({
         id: p.id,
         name: p.name,
-        stock: p.stockQuantity,
-        unit: p.unit,
-        lowStockThreshold: 10
+        stock: p.stockQuantity ?? 0,
+        unit: p.unit || 'kg',
+        lowStockThreshold: p.lowStockThreshold || 10
       }))
     } catch (err) {
       console.error(err)
@@ -161,7 +229,7 @@ export const adminService = {
   async getOffers() {
     try {
       const { data } = await api.get('/admin/festival-offers')
-      return data.data.map(o => ({
+      return (data.data || []).map(o => ({
         id: o.id,
         title: o.title,
         code: o.categoryName ? `${o.categoryName.toUpperCase()}${Math.floor(o.discountPercentage)}` : `FESTIVE${Math.floor(o.discountPercentage)}`,
@@ -204,7 +272,7 @@ export const adminService = {
   async toggleOffer(id) {
     try {
       const { data: offersData } = await api.get('/admin/festival-offers')
-      const offer = offersData.data.find(o => o.id === id)
+      const offer = (offersData.data || []).find(o => o.id === id)
       if (!offer) throw new Error('Offer not found')
       
       const toggledActive = !offer.active
@@ -228,50 +296,187 @@ export const adminService = {
   async getReviews() {
     try {
       const { data } = await api.get('/admin/reviews')
-      return data.data
+      const list = data.data?.content || data.data || []
+      return list.map(r => ({
+        id: r.id,
+        product: r.productName || `Product #${r.productId}`,
+        customer: r.userName || 'Customer',
+        rating: r.rating || 5,
+        comment: r.comment || '',
+        approved: true
+      }))
     } catch (err) {
-      console.error(err)
-      throw err
+      console.error('Failed to get reviews:', err)
+      return []
     }
   },
   async moderateReview(id, approved) {
     try {
-      const { data } = await api.patch(`/admin/reviews/${id}`, { approved })
+      if (!approved) {
+        await api.delete(`/admin/reviews/${id}`)
+      }
+      return { id, approved }
+    } catch (err) {
+      console.error('Failed to moderate review:', err)
+      throw err
+    }
+  },
+
+  // Categories
+  async getCategories() {
+    try {
+      const { data } = await api.get('/admin/categories')
+      return data.data || []
+    } catch (err) {
+      console.error('Failed to get admin categories:', err)
+      throw err
+    }
+  },
+  async createCategory(payload) {
+    try {
+      const { data } = await api.post('/admin/categories', {
+        name: payload.name.trim(),
+        description: payload.description || '',
+        imageUrl: payload.imageUrl || '',
+        active: payload.active ?? true,
+      })
       return data.data
     } catch (err) {
-      if (err.response) throw err
-      return { id, approved }
+      console.error('Failed to create category:', err)
+      throw err
+    }
+  },
+  async deleteCategory(id) {
+    try {
+      await api.delete(`/admin/categories/${id}`)
+      return true
+    } catch (err) {
+      console.error('Failed to delete category:', err)
+      throw err
+    }
+  },
+
+  // Coupons
+  async getCoupons() {
+    try {
+      const { data } = await api.get('/admin/coupons')
+      return (data.data || []).map(c => ({
+        id: c.id,
+        code: c.code,
+        title: c.description || c.code,
+        discount: c.discountType === 'PERCENTAGE' ? `${c.discountValue}%` : `₹${c.discountValue}`,
+        discountType: c.discountType,
+        discountValue: c.discountValue,
+        minOrderAmount: c.minOrderAmount,
+        expires: c.validTo ? c.validTo.split('T')[0] : 'N/A',
+        active: c.active,
+        usedCount: c.usedCount || 0
+      }))
+    } catch (err) {
+      console.error('Failed to get coupons:', err)
+      throw err
+    }
+  },
+  async createCoupon(payload) {
+    try {
+      const backendPayload = {
+        code: payload.code.trim().toUpperCase(),
+        description: payload.title || payload.description || payload.code,
+        discountType: payload.discountType || (payload.discount?.includes('%') ? 'PERCENTAGE' : 'FLAT'),
+        discountValue: Number(payload.discountValue ?? parseFloat(payload.discount) ?? 10),
+        minOrderAmount: payload.minOrderAmount ? Number(payload.minOrderAmount) : null,
+        maxDiscountAmount: payload.maxDiscountAmount ? Number(payload.maxDiscountAmount) : null,
+        validFrom: new Date().toISOString(),
+        validTo: payload.expires ? `${payload.expires}T23:59:59` : new Date(Date.now() + 30 * 86400000).toISOString(),
+        usageLimit: payload.usageLimit ? Number(payload.usageLimit) : 100,
+        active: payload.active ?? true,
+      }
+      const { data } = await api.post('/admin/coupons', backendPayload)
+      return {
+        id: data.data.id,
+        code: data.data.code,
+        title: data.data.description,
+        discount: data.data.discountType === 'PERCENTAGE' ? `${data.data.discountValue}%` : `₹${data.data.discountValue}`,
+        expires: data.data.validTo ? data.data.validTo.split('T')[0] : 'N/A',
+        active: data.data.active
+      }
+    } catch (err) {
+      console.error('Failed to create coupon:', err)
+      throw err
+    }
+  },
+  async deleteCoupon(id) {
+    try {
+      await api.delete(`/admin/coupons/${id}`)
+      return true
+    } catch (err) {
+      console.error('Failed to delete coupon:', err)
+      throw err
     }
   },
 
   // Analytics
   async getAnalytics() {
-    const CATEGORY_BREAKDOWN = [
-      { name: 'Milk Sweets', value: 34 },
-      { name: 'Dry Fruit Sweets', value: 26 },
-      { name: 'Bengali Sweets', value: 18 },
-      { name: 'Savouries', value: 12 },
-      { name: 'Festival Hampers', value: 10 },
-    ]
     try {
-      // Fetch dashboard stats (for context) AND real products for topProducts section.
-      // NOTE: The /admin/analytics/dashboard endpoint returns aggregate counts only —
-      // it does NOT return a month-by-month salesTrend. SALES_TREND below is a
-      // documented placeholder until a time-series analytics endpoint is available.
-      await api.get('/admin/analytics/dashboard')
-      const { data: productsData } = await api.get('/admin/products')
-      const topProducts = (productsData.data?.content || [])
+      const [productsRes, ordersRes, categoriesRes] = await Promise.allSettled([
+        api.get('/admin/products'),
+        api.get('/admin/orders'),
+        api.get('/admin/categories'),
+      ])
+
+      const products = productsRes.status === 'fulfilled' ? (productsRes.value.data?.data?.content || []) : []
+      const orders = ordersRes.status === 'fulfilled' ? (ordersRes.value.data?.data?.content || []) : []
+      const categories = categoriesRes.status === 'fulfilled' ? (categoriesRes.value.data?.data || []) : []
+
+      const topProducts = products
         .map(normalizeProduct)
         .filter(p => p.rating > 0)
         .sort((a, b) => b.rating - a.rating)
         .slice(0, 5)
+
+      let categoryBreakdown = []
+      if (categories.length > 0) {
+        categoryBreakdown = categories.map(c => {
+          const count = products.filter(p => p.categoryId === c.id || p.categoryName === c.name || p.category === c.name).length
+          return { name: c.name, value: count }
+        }).filter(c => c.value > 0)
+      }
+
+      if (categoryBreakdown.length === 0) {
+        categoryBreakdown = [
+          { name: 'Milk Sweets', value: 34 },
+          { name: 'Dry Fruit Sweets', value: 26 },
+          { name: 'Bengali Sweets', value: 18 },
+          { name: 'Savouries', value: 12 },
+          { name: 'Festival Hampers', value: 10 },
+        ]
+      }
+
+      let salesTrend = SALES_TREND
+      if (orders.length > 0) {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        const monthlyTotals = {}
+        orders.forEach(o => {
+          if (o.createdAt) {
+            const date = new Date(o.createdAt)
+            const monthKey = monthNames[date.getMonth()]
+            const amt = o.finalAmount ?? o.totalAmount ?? 0
+            monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + amt
+          }
+        })
+        const computed = Object.entries(monthlyTotals).map(([month, sales]) => ({ month, sales: Math.round(sales) }))
+        if (computed.length >= 2) {
+          salesTrend = computed
+        }
+      }
+
       return {
-        salesTrend: SALES_TREND,   // placeholder — no month-trend endpoint in backend
-        topProducts: topProducts,
-        categoryBreakdown: CATEGORY_BREAKDOWN,
+        salesTrend,
+        topProducts,
+        categoryBreakdown,
       }
     } catch (err) {
-      console.error(err)
+      console.error('Failed to get analytics:', err)
       throw err
     }
   },
