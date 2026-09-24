@@ -26,20 +26,23 @@ export const productService = {
         )
         if (found) {
           const { data } = await api.get(`/products/category/${found.id}`, { params: { size: 200, page: 0 } })
-          return (data.data.content || []).map(normalizeProduct)
+          const items = Array.isArray(data?.data?.content) ? data.data.content : (Array.isArray(data?.data) ? data.data : [])
+          return items.map(normalizeProduct)
         }
       }
       // If a search keyword is provided use the /products/search endpoint
       if (params.search) {
         const { data } = await api.get('/products/search', { params: { keyword: params.search, size: 200, page: 0 } })
-        return (data.data.content || []).map(normalizeProduct)
+        const items = Array.isArray(data?.data?.content) ? data.data.content : (Array.isArray(data?.data) ? data.data : [])
+        return items.map(normalizeProduct)
       }
       // Default: get all products — request a large page so none are hidden by pagination
       const { data } = await api.get('/products', { params: { size: 200, page: 0 } })
-      return (data.data.content || []).map(normalizeProduct)
+      const items = Array.isArray(data?.data?.content) ? data.data.content : (Array.isArray(data?.data) ? data.data : [])
+      return items.map(normalizeProduct)
     } catch (err) {
       console.error(err)
-      throw err
+      return []
     }
   },
 

@@ -18,6 +18,7 @@ import {
   Calendar,
   Zap,
   BookOpen,
+  Crown,
 } from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
@@ -197,10 +198,15 @@ export default function Home() {
   useEffect(() => {
     setLoading(true)
     productService.getAll().then((list) => {
-      const best = list.filter(p => p.bestseller)
-      setBestsellers(best.length > 0 ? best.slice(0, 4) : list.slice(0, 4))
-      setAllProducts(list.slice(0, 8))
-    }).catch(() => {})
+      const safeList = Array.isArray(list) ? list : []
+      const best = safeList.filter(p => p.bestseller)
+      setBestsellers(best.length > 0 ? best.slice(0, 4) : safeList.slice(0, 4))
+      setAllProducts(safeList.slice(0, 8))
+    }).catch((err) => {
+      console.warn('Could not load products:', err)
+      setBestsellers([])
+      setAllProducts([])
+    })
     .finally(() => setLoading(false))
   }, [])
 
