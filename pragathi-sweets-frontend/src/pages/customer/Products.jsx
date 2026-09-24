@@ -83,19 +83,19 @@ export default function Products() {
       <Navbar />
 
       {/* Streamlined Boutique Header */}
-      <section className="bg-gradient-to-r from-[#8B0000] via-[#700000] to-[#5C0000] text-white pt-10 pb-8 px-6 md:px-12 relative overflow-hidden select-none border-b border-[#B8860B]/30 shadow-sm">
+      <section className="bg-gradient-to-r from-[#5A1020] via-[#7A1F32] to-[#4A0D1A] text-white pt-10 pb-8 px-6 md:px-12 relative overflow-hidden select-none border-b border-[#C9A45C]/30 shadow-sm">
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="flex items-center gap-1.5 text-[9px] tracking-[0.25em] text-[#E6C687] font-bold uppercase mb-2">
+            <div className="flex items-center gap-1.5 text-[9px] tracking-[0.25em] text-[#C9A45C] font-bold uppercase mb-2">
               <Link to="/" className="hover:text-white transition-colors">Home</Link>
               <ChevronRight size={10} />
-              <span className="text-white/70">Collection</span>
+              <span className="text-white/70">Collections</span>
             </div>
-            <h1 className="font-display text-3xl md:text-4xl text-white font-bold leading-tight flex items-center gap-3">
-              Our Sweet <span className="italic font-normal text-[#E6C687]">Boutique</span>
+            <h1 className="font-serif text-3xl md:text-4xl text-white font-bold leading-tight flex items-center gap-3">
+              The Atelier <span className="italic font-normal text-[#C9A45C]">Collections</span>
             </h1>
             <p className="text-xs text-white/80 mt-1 max-w-lg leading-relaxed">
-              Handcrafted in small batches daily using pure A2 desi ghee, organic dry fruits, and heritage family recipes.
+              Curated drapes of pure handloom silk, hand-embroidered bridal lehengas, regal anarkalis, and occasion gowns.
             </p>
           </div>
 
@@ -110,7 +110,7 @@ export default function Products() {
                 }}
                 className={`text-[11px] font-bold tracking-wider px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
                   activeCategory === cat
-                    ? 'bg-[#E6C687] text-[#240F06] shadow-sm'
+                    ? 'bg-[#C9A45C] text-[#211D1E] shadow-sm'
                     : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
                 }`}
               >
@@ -127,12 +127,12 @@ export default function Products() {
           
           {/* 1. FILTER SIDEBAR (Desktop) */}
           <aside className="hidden lg:col-span-3 lg:block space-y-8 select-none">
-            <div className="flex items-center justify-between border-b border-[#B8860B]/20 pb-4">
-              <span className="font-display text-base tracking-wider text-[#8B0000] font-bold uppercase flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-[#C9A45C]/20 pb-4">
+              <span className="font-serif text-base tracking-wider text-[#5A1020] font-bold uppercase flex items-center gap-2">
                 <SlidersHorizontal size={15} /> Filters
               </span>
-              {(activeCategory !== 'All' || search || priceRange !== 2000) && (
-                <button onClick={clearFilters} className="text-[10px] tracking-wider text-[#B8860B] hover:text-[#8B0000] font-bold uppercase transition-colors">
+              {(activeCategory !== 'All' || search || priceRange !== 25000) && (
+                <button onClick={clearFilters} className="text-[10px] tracking-wider text-[#C9A45C] hover:text-[#5A1020] font-bold uppercase transition-colors">
                   Reset All
                 </button>
               )}
@@ -140,7 +140,7 @@ export default function Products() {
 
             {/* Category Selector */}
             <div className="space-y-4">
-              <h4 className="font-display text-sm tracking-widest text-[#8B0000] font-bold uppercase">Collections</h4>
+              <h4 className="font-serif text-sm tracking-widest text-[#5A1020] font-bold uppercase">Collections</h4>
               <div className="flex flex-col gap-1.5">
                 {['All', ...categories].map((cat) => (
                   <button
@@ -151,8 +151,8 @@ export default function Products() {
                     }}
                     className={`text-left text-xs tracking-wider py-2.5 px-4 rounded-xl transition-all ${
                       activeCategory === cat
-                        ? 'bg-[#8B0000] text-[#FFFDF8] font-bold shadow-md shadow-red-950/10'
-                        : 'text-[#3A2D23]/70 hover:text-[#8B0000] hover:bg-[#F5E6C8]/30'
+                        ? 'bg-[#5A1020] text-[#FAF7F2] font-bold shadow-md'
+                        : 'text-[#211D1E]/70 hover:text-[#5A1020] hover:bg-[#F2ECE4]'
                     }`}
                   >
                     {cat}
@@ -164,32 +164,32 @@ export default function Products() {
             {/* Price Filter */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h4 className="font-display text-sm tracking-widest text-[#8B0000] font-bold uppercase">Max Price</h4>
-                <span className="font-display text-sm text-[#B8860B] font-bold">₹{priceRange}</span>
+                <h4 className="font-serif text-sm tracking-widest text-[#5A1020] font-bold uppercase">Max Price</h4>
+                <span className="font-serif text-sm text-[#C9A45C] font-bold">₹{priceRange}</span>
               </div>
               <input
                 type="range"
-                min={200}
-                max={2000}
-                step={50}
+                min={500}
+                max={25000}
+                step={250}
                 value={priceRange}
                 onChange={(e) => setPriceRange(Number(e.target.value))}
-                className="w-full accent-[#8B0000]"
+                className="w-full accent-[#5A1020]"
               />
-              <div className="flex justify-between text-[10px] text-[#3A2D23]/40 font-body">
-                <span>₹200</span>
-                <span>₹2000</span>
+              <div className="flex justify-between text-[10px] text-[#211D1E]/50 font-sans">
+                <span>₹500</span>
+                <span>₹25,000</span>
               </div>
             </div>
 
             {/* Quality Guarantee badge */}
-            <div className="border border-[#B8860B]/15 rounded-2xl p-6 bg-white shadow-sm select-none">
-              <span className="text-[9px] text-[#B8860B] font-bold uppercase tracking-widest block">Boutique Promise</span>
-              <h5 className="font-display text-sm text-[#8B0000] mt-2 font-bold flex items-center gap-1.5">
-                <Award size={14} className="text-[#B8860B]" /> Guaranteed Freshness
+            <div className="border border-[#C9A45C]/20 rounded-2xl p-6 bg-white shadow-sm select-none">
+              <span className="text-[9px] text-[#C9A45C] font-bold uppercase tracking-widest block">Atelier Guarantee</span>
+              <h5 className="font-serif text-sm text-[#5A1020] mt-2 font-bold flex items-center gap-1.5">
+                <Award size={14} className="text-[#C9A45C]" /> Certified Pure Silk
               </h5>
-              <p className="text-[10px] text-[#3A2D23]/60 leading-relaxed mt-2">
-                All order batches are vacuum packed within 1 hour of preparation and shipped in insulated boxes.
+              <p className="text-[10px] text-[#211D1E]/60 leading-relaxed mt-2 font-sans">
+                Every ensemble is certified handloom silk, embroidered with genuine zardozi threads and tailored to perfection.
               </p>
             </div>
           </aside>
@@ -295,11 +295,11 @@ export default function Products() {
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <div className="text-center py-12 md:py-16 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
-                <p className="font-display text-lg italic text-[#8B0000] font-bold">No Confections Found</p>
-                <p className="text-xs text-[#3A2D23]/50 mt-1.5">Adjust your filters or try a different search keyword.</p>
+              <div className="text-center py-12 md:py-16 border border-dashed border-[#C9A45C]/30 rounded-3xl bg-white select-none shadow-sm">
+                <p className="font-serif text-lg italic text-[#5A1020] font-bold">No Silhouettes Found</p>
+                <p className="text-xs text-[#211D1E]/60 mt-1.5 font-sans">Adjust your filters or try a different search keyword.</p>
                 <button onClick={clearFilters} className="btn-primary mt-5">
-                  Show All Confections
+                  Show All Silhouettes
                 </button>
               </div>
             ) : (
@@ -321,20 +321,20 @@ export default function Products() {
                       <motion.div
                         layout
                         key={product.id}
-                        className="bg-white border border-[#B8860B]/10 hover:border-[#B8860B]/30 rounded-3xl p-5 flex flex-col sm:flex-row gap-6 hover:shadow-[0_16px_48px_rgba(184,134,11,0.08)] transition-all duration-400 relative group"
+                        className="bg-white border border-[#C9A45C]/15 hover:border-[#C9A45C]/40 rounded-3xl p-5 flex flex-col sm:flex-row gap-6 hover:shadow-[0_16px_48px_rgba(201,164,92,0.12)] transition-all duration-400 relative group"
                       >
                         {product.bestseller && (
-                          <span className="absolute top-4 left-4 z-10 bg-[#8B0000] text-white text-[7px] font-bold uppercase tracking-[0.25em] px-2.5 py-1 rounded-full shadow-md">
-                            ★ Bestseller
+                          <span className="absolute top-4 left-4 z-10 bg-[#5A1020] text-white text-[7.5px] font-bold uppercase tracking-[0.25em] px-2.5 py-1 rounded-full shadow-md">
+                            Atelier Edit
                           </span>
                         )}
 
-                        <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden shrink-0 bg-[#F5E6C8]/40 border border-[#B8860B]/10">
+                        <div className="w-full sm:w-36 h-48 rounded-2xl overflow-hidden shrink-0 bg-[#F2ECE4] border border-[#C9A45C]/15">
                           <Link to={`/products/${product.id}`} className="block h-full">
                             <ReliableImage
                               src={product.image}
                               alt={product.name}
-                              className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
                           </Link>
                         </div>
@@ -343,11 +343,11 @@ export default function Products() {
                           <div>
                             <div className="flex justify-between items-start gap-4">
                               <div>
-                                <span className="text-[9px] uppercase tracking-[0.25em] text-[#B8860B] font-bold">
+                                <span className="text-[9px] uppercase tracking-[0.25em] text-[#C9A45C] font-semibold">
                                   {product.category}
                                 </span>
                                 <Link to={`/products/${product.id}`}>
-                                  <h3 className="font-display text-base md:text-lg text-[#8B0000] font-bold mt-1 hover:text-[#B8860B] transition-colors leading-snug">
+                                  <h3 className="font-serif text-base md:text-lg text-[#5A1020] font-bold mt-1 hover:text-[#C9A45C] transition-colors leading-snug">
                                     {product.name}
                                   </h3>
                                 </Link>

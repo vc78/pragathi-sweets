@@ -7,11 +7,11 @@ import { productService } from '../../services/productService'
 import { Image, Sparkles } from 'lucide-react'
 
 const IMAGE_PRESETS = [
-  { label: 'Kaju Katli', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
-  { label: 'Motichoor Ladoo', url: '/images/pexels-divigraphy-8624624.jpg' },
-  { label: 'Rasgulla / Gulab Jamun', url: '/images/pexels-gaurav-kumar-1281378-18488316.jpg' },
-  { label: 'Spicy Mixture / Savouries', url: '/images/pexels-kailashkumarphotography-11887844.jpg' },
-  { label: 'Festival Gift Box', url: '/images/pexels-jonathanborba-19863265.jpg' },
+  { label: 'Kanjeevaram Silk Saree', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
+  { label: 'Bridal Heritage Lehenga', url: '/images/pexels-shanks-emperor-1524379304-28769884.jpg' },
+  { label: 'Handcrafted Anarkali', url: '/images/pexels-divigraphy-8624624.jpg' },
+  { label: 'Sculpted Cocktail Gown', url: '/images/pexels-divigraphy-14467844.jpg' },
+  { label: 'Royal Trousseau Keepsake', url: '/images/pexels-jonathanborba-19863265.jpg' },
 ]
 
 export default function EditProduct() {
@@ -26,8 +26,8 @@ export default function EditProduct() {
     category: '',
     price: '',
     discountPrice: '',
-    unit: 'kg',
-    stock: '50',
+    unit: 'piece',
+    stock: '25',
     description: '',
     image: '',
     sku: '',
@@ -45,7 +45,6 @@ export default function EditProduct() {
         setCategories(cats)
 
         if (prod) {
-          // Find matching category id
           const matchedCat = cats.find(c =>
             c.id === prod.categoryId ||
             c.name.toLowerCase() === (prod.category || prod.categoryName || '').toLowerCase()
@@ -57,21 +56,20 @@ export default function EditProduct() {
             category: matchedCat ? matchedCat.name : (prod.category || ''),
             price: prod.price ?? '',
             discountPrice: prod.discountPrice ?? '',
-            unit: prod.unit || 'kg',
-            stock: prod.stock ?? prod.stockQuantity ?? 50,
+            unit: prod.unit || 'piece',
+            stock: prod.stock ?? '25',
             description: prod.description || '',
-            image: prod.image || prod.imageUrl || '',
+            image: prod.image || IMAGE_PRESETS[0].url,
             sku: prod.sku || '',
           })
         }
       } catch (err) {
-        console.error('Failed to load product details:', err)
-        toast.error('Could not load confection details.')
+        console.error('Failed to load product data:', err)
+        toast.error('Could not load silhouette details.')
       } finally {
         setLoading(false)
       }
     }
-
     loadData()
   }, [id])
 
@@ -92,11 +90,19 @@ export default function EditProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name.trim()) {
-      toast.error('Product name is required.')
+      toast.error('Please specify a silhouette name.')
+      return
+    }
+    if (!form.categoryId) {
+      toast.error('Please select a valid category.')
       return
     }
     if (Number(form.price) <= 0) {
       toast.error('Price must be greater than 0.')
+      return
+    }
+    if (Number(form.stock) < 0) {
+      toast.error('Stock quantity cannot be negative.')
       return
     }
 
@@ -114,13 +120,13 @@ export default function EditProduct() {
         image: form.image,
         sku: form.sku.trim() || undefined,
       })
-      toast.success('Product updated successfully in boutique catalogue!', {
-        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      toast.success('Silhouette updated successfully!', {
+        style: { background: '#5A1020', color: '#FAF7F2', borderRadius: '12px' }
       })
       navigate('/admin/products')
     } catch (err) {
       console.error(err)
-      toast.error(err?.response?.data?.message || 'Could not update product.')
+      toast.error(err?.response?.data?.message || 'Could not update silhouette. Please verify fields.')
     } finally {
       setSaving(false)
     }
@@ -129,8 +135,8 @@ export default function EditProduct() {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="py-24 text-center text-xs text-[#3A2D23]/50 animate-pulse font-body">
-          Retrieving confection data from boutique repository...
+        <div className="py-24 text-center text-xs text-[#211D1E]/50 animate-pulse font-body">
+          Retrieving silhouette data from AGVIA atelier repository...
         </div>
       </AdminLayout>
     )
@@ -139,27 +145,27 @@ export default function EditProduct() {
   return (
     <AdminLayout>
       <div className="mb-8 select-none font-body">
-        <h2 className="font-display text-3xl font-bold text-[#8B0000]">Edit Confection #{id}</h2>
-        <p className="text-xs text-[#3A2D23]/50 mt-1">Update details, pricing, and stock of this boutique confection.</p>
+        <h2 className="font-serif text-3xl font-bold text-[#5A1020]">Edit Silhouette #{id}</h2>
+        <p className="text-xs text-[#211D1E]/60 mt-1">Update details, pricing, and stock of this atelier garment.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-body">
-        <form onSubmit={handleSubmit} className="lg:col-span-8 bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+        <form onSubmit={handleSubmit} className="lg:col-span-8 bg-white border border-[#C9A45C]/20 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Confection Title *</label>
+            <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Silhouette Title *</label>
             <input
               name="name"
               required
               value={form.name}
               onChange={handleChange}
               className="input-field"
-              placeholder="e.g. Royal Pistachio Kaju Katli"
+              placeholder="e.g. Royal Burgundy Kanjeevaram Silk Saree"
             />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Category *</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Couture Category *</label>
               <select
                 name="categoryId"
                 value={form.categoryId}
@@ -174,17 +180,17 @@ export default function EditProduct() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Unit Measure</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Unit / Packaging</label>
               <select name="unit" value={form.unit} onChange={handleChange} className="input-field bg-white cursor-pointer">
-                <option value="kg">Per kg</option>
-                <option value="500g">500g box</option>
-                <option value="box">Gift Box</option>
                 <option value="piece">Per Piece</option>
+                <option value="set">Per Set (Ensemble)</option>
+                <option value="saree">Per Saree with Blouse</option>
+                <option value="lehenga">Bridal Trousseau Box</option>
               </select>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Price (₹) *</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Price (₹) *</label>
               <input
                 name="price"
                 type="number"
@@ -194,12 +200,12 @@ export default function EditProduct() {
                 value={form.price}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="650"
+                placeholder="18500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Stock Quantity *</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Stock Quantity *</label>
               <input
                 name="stock"
                 type="number"
@@ -208,12 +214,12 @@ export default function EditProduct() {
                 value={form.stock}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="50"
+                placeholder="25"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Special Offer Price (₹)</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Special Offer Price (₹)</label>
               <input
                 name="discountPrice"
                 type="number"
@@ -222,90 +228,86 @@ export default function EditProduct() {
                 value={form.discountPrice}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="Optional promotional price"
+                placeholder="15900 (Optional)"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">SKU Code</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">SKU Identifier</label>
               <input
                 name="sku"
                 value={form.sku}
                 onChange={handleChange}
-                className="input-field uppercase font-mono"
-                placeholder="e.g. PRG-KATLI-01"
+                className="input-field"
+                placeholder="AGV-SR-001 (Optional)"
               />
             </div>
           </div>
 
+          {/* Image Selection */}
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Image Source</label>
-              <span className="text-[10px] text-[#3A2D23]/50">Choose a luxury preset or enter a custom URL</span>
-            </div>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {IMAGE_PRESETS.map((p, i) => (
+            <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Garment Image URL *</label>
+            <input
+              name="image"
+              required
+              value={form.image}
+              onChange={handleChange}
+              className="input-field"
+              placeholder="https://... or /images/..."
+            />
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-[9px] text-[#211D1E]/40 font-bold uppercase tracking-wider">Presets:</span>
+              {IMAGE_PRESETS.map((p) => (
                 <button
-                  key={i}
+                  key={p.label}
                   type="button"
                   onClick={() => setForm(prev => ({ ...prev, image: p.url }))}
-                  className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all ${
+                  className={`text-[9px] px-2.5 py-1 rounded-full border transition-all ${
                     form.image === p.url
-                      ? 'bg-[#8B0000] text-white border-[#8B0000]'
-                      : 'bg-[#B8860B]/5 hover:bg-[#B8860B]/15 border-[#B8860B]/20 text-[#3A2D23]'
+                      ? 'bg-[#5A1020] text-white border-[#5A1020]'
+                      : 'bg-white text-[#211D1E]/70 border-[#C9A45C]/30 hover:border-[#5A1020]'
                   }`}
                 >
                   {p.label}
                 </button>
               ))}
             </div>
-            <input
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              className="input-field text-xs font-mono"
-              placeholder="/images/... or https://..."
-            />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Description & Heritage</label>
+          {/* Description */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">
+              Couture Description & Fabric Details
+            </label>
             <textarea
               name="description"
               rows={4}
               value={form.description}
               onChange={handleChange}
               className="input-field"
-              placeholder="Detail the ingredients and process..."
+              placeholder="Detail the handloom weave, pure mulberry silk, zardozi embroidery, silhouette drape, and styling notes..."
             />
           </div>
 
-          <div className="pt-2 flex gap-4">
+          <div className="pt-2">
             <button
               type="submit"
               disabled={saving}
-              className="btn-primary disabled:opacity-60 text-xs font-bold tracking-widest uppercase"
+              className="btn-primary w-full sm:w-auto disabled:opacity-60 text-xs font-bold tracking-widest uppercase"
             >
-              {saving ? 'Updating...' : 'Save Changes'}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/admin/products')}
-              className="btn-outline text-xs font-bold tracking-widest uppercase"
-            >
-              Cancel
+              {saving ? 'Saving Updates...' : 'Save Silhouette Changes'}
             </button>
           </div>
         </form>
 
         {/* Live Preview Panel */}
         <div className="lg:col-span-4 select-none">
-          <div className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 shadow-sm space-y-4 sticky top-28">
-            <h3 className="font-display text-sm tracking-widest uppercase font-bold text-[#8B0000] flex items-center gap-1.5 border-b border-[#B8860B]/10 pb-3">
-              <Sparkles size={14} className="text-[#B8860B]" /> Live Storefront Preview
+          <div className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 shadow-sm space-y-4 sticky top-28">
+            <h3 className="font-serif text-sm tracking-widest uppercase font-bold text-[#5A1020] flex items-center gap-1.5 border-b border-[#C9A45C]/15 pb-3">
+              <Sparkles size={14} className="text-[#C9A45C]" /> Storefront Preview
             </h3>
 
-            <div className="rounded-2xl overflow-hidden bg-[#F5E6C8]/40 border border-[#B8860B]/10 h-44 flex items-center justify-center relative">
+            <div className="rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#C9A45C]/15 h-56 flex items-center justify-center relative">
               {form.image ? (
                 <img
                   src={form.image}
@@ -314,48 +316,41 @@ export default function EditProduct() {
                   onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
                 />
               ) : (
-                <div className="text-center text-[#3A2D23]/40 flex flex-col items-center">
+                <div className="text-center text-[#211D1E]/40 flex flex-col items-center">
                   <Image size={24} className="mb-1" />
                   <span className="text-[10px]">No image selected</span>
                 </div>
               )}
               {form.discountPrice && Number(form.discountPrice) < Number(form.price) && (
-                <span className="absolute top-2 left-2 bg-[#8B0000] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">
+                <span className="absolute top-2 left-2 bg-[#5A1020] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">
                   OFFER
                 </span>
               )}
             </div>
 
             <div className="space-y-1">
-              <span className="text-[9px] tracking-widest uppercase font-bold text-[#B8860B] block">
-                {form.category || 'Category'}
+              <span className="text-[9px] font-bold text-[#C9A45C] tracking-widest uppercase">
+                {form.category || 'Couture Line'}
               </span>
-              <h4 className="font-display text-base font-bold text-[#8B0000] truncate">
-                {form.name || 'Confection Title'}
+              <h4 className="font-serif font-bold text-base text-[#5A1020] line-clamp-1">
+                {form.name || 'Silhouette Name'}
               </h4>
-              <p className="text-[11px] text-[#3A2D23]/60 line-clamp-2">
-                {form.description || 'Crafted with premium ingredients...'}
-              </p>
-            </div>
-
-            <div className="flex items-baseline justify-between pt-2 border-t border-[#B8860B]/10">
-              <div>
-                <span className="font-display text-lg font-bold text-[#8B0000]">
-                  ₹{form.discountPrice ? form.discountPrice : (form.price || '0')}
+              <div className="flex items-baseline gap-2 pt-1">
+                <span className="text-lg font-bold text-[#5A1020]">
+                  ₹{form.discountPrice ? Number(form.discountPrice).toLocaleString('en-IN') : (Number(form.price) || 0).toLocaleString('en-IN')}
                 </span>
                 {form.discountPrice && (
-                  <span className="text-xs text-[#3A2D23]/40 line-through ml-1.5">
-                    ₹{form.price}
+                  <span className="text-xs text-[#211D1E]/40 line-through">
+                    ₹{Number(form.price || 0).toLocaleString('en-IN')}
                   </span>
                 )}
-                <span className="text-[10px] text-[#3A2D23]/50 ml-1">/ {form.unit}</span>
+                <span className="text-[10px] text-[#211D1E]/50">/ {form.unit}</span>
               </div>
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                Number(form.stock) > 10 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-              }`}>
-                {Number(form.stock) > 10 ? `${form.stock} in stock` : 'Low Stock'}
-              </span>
             </div>
+
+            <p className="text-[11px] text-[#211D1E]/70 line-clamp-3 leading-relaxed border-t border-[#C9A45C]/10 pt-3">
+              {form.description || 'Silhouette craftsmanship notes and fabric drape will appear here.'}
+            </p>
           </div>
         </div>
       </div>

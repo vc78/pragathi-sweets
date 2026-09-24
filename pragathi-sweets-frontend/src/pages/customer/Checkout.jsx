@@ -200,8 +200,8 @@ export default function Checkout() {
         key: rpOrder.razorpayKeyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: rpOrder.amountInPaise,
         currency: rpOrder.currency,
-        name: 'Pragathi Sweets',
-        description: 'Sweet box order',
+        name: "AGVIA Women's Wear Boutique",
+        description: 'Bespoke Luxury Order',
         order_id: rpOrder.razorpayOrderId,
         handler: async (response) => {
           try {
@@ -251,7 +251,7 @@ export default function Checkout() {
                   </span>
                 </div>
               ),
-              { duration: 5000, style: { background: '#166534', color: '#FFFDF8', borderRadius: '12px' } }
+              { duration: 5000, style: { background: '#166534', color: '#FAF7F2', borderRadius: '12px' } }
             )
             navigate('/orders', {
               state: {
@@ -268,7 +268,7 @@ export default function Checkout() {
           }
         },
         prefill: { name: address.name, contact: address.phone },
-        theme: { color: '#8B0000' },
+        theme: { color: '#5A1020' },
         modal: { ondismiss: () => setPlacing(false) },
       }
       const rzp = new window.Razorpay(options)
@@ -283,12 +283,12 @@ export default function Checkout() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FFFDF8] flex flex-col justify-between font-body">
+      <div className="min-h-screen bg-[#FAF7F2] flex flex-col justify-between font-sans">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center py-20 select-none">
-          <p className="font-display text-lg italic text-[#8B0000] font-bold">Your selection box is empty.</p>
-          <p className="text-xs text-[#3A2D23]/50 mt-2 mb-6">Add some confections to proceed.</p>
-          <Link to="/products" className="btn-primary">Explore Boutique</Link>
+          <p className="font-serif text-lg italic text-[#5A1020] font-bold">Your wardrobe bag is empty.</p>
+          <p className="text-xs text-[#211D1E]/60 mt-2 mb-6 font-sans">Add your favorite silhouettes to proceed.</p>
+          <Link to="/products" className="btn-primary">Explore Collections</Link>
         </div>
         <Footer />
       </div>
@@ -296,19 +296,19 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-sans">
       <Navbar />
 
       <div className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16">
-        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-6 select-none">
+        <h1 className="font-serif text-3xl md:text-5xl text-[#5A1020] font-bold mb-6 select-none">
           Secure Checkout
         </h1>
 
         {!isAuthenticated && (
-          <div className="bg-[#B8860B]/10 border border-[#B8860B]/20 rounded-2xl p-4 mb-8 flex flex-wrap items-center justify-between gap-3 select-none">
+          <div className="bg-[#C9A45C]/10 border border-[#C9A45C]/25 rounded-2xl p-4 mb-8 flex flex-wrap items-center justify-between gap-3 select-none">
             <div>
-              <span className="font-bold text-xs text-[#8B0000] block">Sign in to complete your luxury order</span>
-              <span className="text-[11px] text-[#3A2D23]/60">Link this purchase to your account for live dispatch tracking and saved addresses.</span>
+              <span className="font-bold text-xs text-[#5A1020] block">Sign in to complete your bespoke purchase</span>
+              <span className="text-[11px] text-[#211D1E]/70 font-sans">Link this order to your account for live atelier tracking and concierge support.</span>
             </div>
             <Link
               to="/login"
@@ -324,16 +324,16 @@ export default function Checkout() {
         <div className="flex items-center gap-4 mb-12 select-none">
           <button
             onClick={() => setActiveStep(1)}
-            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors ${activeStep === 1 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
+            className={`font-serif text-xs tracking-widest uppercase font-bold transition-colors ${activeStep === 1 ? 'text-[#5A1020] border-b-2 border-[#5A1020] pb-1' : 'text-[#211D1E]/40'
               }`}
           >
-            1. Shipping Address
+            1. Delivery Address
           </button>
-          <ChevronRight size={14} className="text-[#3A2D23]/35" />
+          <ChevronRight size={14} className="text-[#211D1E]/30" />
           <button
             disabled={!address.name || !address.phone || !address.line1 || !address.city || !address.pincode}
             onClick={() => setActiveStep(2)}
-            className={`font-display text-xs tracking-widest uppercase font-bold transition-colors disabled:opacity-50 ${activeStep === 2 ? 'text-[#8B0000] border-b-2 border-[#8B0000] pb-1' : 'text-[#3A2D23]/40'
+            className={`font-serif text-xs tracking-widest uppercase font-bold transition-colors disabled:opacity-50 ${activeStep === 2 ? 'text-[#5A1020] border-b-2 border-[#5A1020] pb-1' : 'text-[#211D1E]/40'
               }`}
           >
             2. Payment Method
@@ -349,32 +349,32 @@ export default function Checkout() {
               <motion.div
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
+                className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
               >
-                <h2 className="font-display text-xl text-[#8B0000] font-bold pb-4 border-b border-[#B8860B]/10 flex items-center gap-2">
-                  <Truck size={18} className="text-[#B8860B]" /> Delivery Details
+                <h2 className="font-serif text-xl text-[#5A1020] font-bold pb-4 border-b border-[#C9A45C]/15 flex items-center gap-2">
+                  <Truck size={18} className="text-[#C9A45C]" /> Atelier Delivery Details
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">Recipient Name</span>
+                    <span className="text-[9px] tracking-widest uppercase text-[#C9A45C] font-bold block">Recipient Full Name</span>
                     <input name="name" value={address.name} onChange={handleChange} placeholder="Enter full name" required className="input-field" />
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">Contact Phone</span>
-                    <input name="phone" value={address.phone} onChange={handleChange} placeholder="Enter phone number" required className="input-field" />
+                    <span className="text-[9px] tracking-widest uppercase text-[#C9A45C] font-bold block">Contact Phone</span>
+                    <input name="phone" value={address.phone} onChange={handleChange} placeholder="Enter mobile number" required className="input-field" />
                   </div>
                   <div className="sm:col-span-2 space-y-2">
-                    <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">Street Address</span>
-                    <input name="line1" value={address.line1} onChange={handleChange} placeholder="Flat, house number, street name" required className="input-field" />
+                    <span className="text-[9px] tracking-widest uppercase text-[#C9A45C] font-bold block">Street Address</span>
+                    <input name="line1" value={address.line1} onChange={handleChange} placeholder="Flat, villa or apartment, street name" required className="input-field" />
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">City</span>
+                    <span className="text-[9px] tracking-widest uppercase text-[#C9A45C] font-bold block">City</span>
                     <input name="city" value={address.city} onChange={handleChange} placeholder="Hyderabad" required className="input-field" />
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[9px] tracking-widest uppercase text-[#B8860B] font-bold block">Postal Code / Pincode</span>
-                    <input name="pincode" value={address.pincode} onChange={handleChange} placeholder="500095" required className="input-field" />
+                    <span className="text-[9px] tracking-widest uppercase text-[#C9A45C] font-bold block">Postal Code / Pincode</span>
+                    <input name="pincode" value={address.pincode} onChange={handleChange} placeholder="500033" required className="input-field" />
                   </div>
                 </div>
 
@@ -382,9 +382,9 @@ export default function Checkout() {
                 <div className="flex items-start gap-3 bg-[#25D366]/8 border border-[#25D366]/25 rounded-2xl p-4">
                   <MessageCircle size={20} className="text-[#25D366] mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs font-bold text-[#1a7a43]">📱 WhatsApp Confirmation</p>
-                    <p className="text-[11px] text-[#3A2D23]/70 mt-0.5 leading-relaxed">
-                      A professional order confirmation with your full order summary will be sent to your WhatsApp on the contact number above.
+                    <p className="text-xs font-bold text-[#1a7a43]">📱 WhatsApp Dispatch Updates</p>
+                    <p className="text-[11px] text-[#211D1E]/70 mt-0.5 leading-relaxed font-sans">
+                      A bespoke digital order receipt and tracking updates will be dispatched to your WhatsApp number.
                     </p>
                   </div>
                 </div>
@@ -409,43 +409,43 @@ export default function Checkout() {
               <motion.div
                 initial={{ opacity: 0, x: 15 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-8 shadow-sm space-y-6 select-none"
+                className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 md:p-8 shadow-sm space-y-6 select-none"
               >
-                <h2 className="font-display text-xl text-[#8B0000] font-bold pb-4 border-b border-[#B8860B]/10 flex items-center gap-2">
-                  <CreditCard size={18} className="text-[#B8860B]" /> Payment Verification
+                <h2 className="font-serif text-xl text-[#5A1020] font-bold pb-4 border-b border-[#C9A45C]/15 flex items-center gap-2">
+                  <CreditCard size={18} className="text-[#C9A45C]" /> Payment Method
                 </h2>
 
                 <div className="space-y-4">
-                  <label className="flex items-center gap-4 border border-[#B8860B]/20 hover:border-[#B8860B]/40 rounded-2xl p-5 cursor-pointer transition-all has-[input:checked]:border-[#8B0000] has-[input:checked]:bg-[#8B0000]/[0.02]">
+                  <label className="flex items-center gap-4 border border-[#C9A45C]/20 hover:border-[#C9A45C]/50 rounded-2xl p-5 cursor-pointer transition-all has-[input:checked]:border-[#5A1020] has-[input:checked]:bg-[#5A1020]/[0.02]">
                     <input
                       type="radio"
                       name="pm"
                       checked={paymentMethod === 'razorpay'}
                       onChange={() => setPaymentMethod('razorpay')}
-                      className="accent-[#8B0000] shrink-0"
+                      className="accent-[#5A1020] shrink-0"
                     />
                     <div className="flex-1">
-                      <span className="font-display font-bold text-sm text-[#8B0000] block">Online Payment (Cards / UPI / Netbanking)</span>
-                      <span className="text-[10px] text-[#3A2D23]/50 mt-1 block">Pay securely via Razorpay gateway. Same-day dispatch.</span>
+                      <span className="font-serif font-bold text-sm text-[#5A1020] block">Online Payment (Cards / UPI / Netbanking)</span>
+                      <span className="text-[10px] text-[#211D1E]/60 mt-1 block font-sans">Pay securely via Razorpay gateway with instant dispatch.</span>
                     </div>
                   </label>
 
-                  <label className="flex items-center gap-4 border border-[#B8860B]/20 hover:border-[#B8860B]/40 rounded-2xl p-5 cursor-pointer transition-all has-[input:checked]:border-[#8B0000] has-[input:checked]:bg-[#8B0000]/[0.02]">
+                  <label className="flex items-center gap-4 border border-[#C9A45C]/20 hover:border-[#C9A45C]/50 rounded-2xl p-5 cursor-pointer transition-all has-[input:checked]:border-[#5A1020] has-[input:checked]:bg-[#5A1020]/[0.02]">
                     <input
                       type="radio"
                       name="pm"
                       checked={paymentMethod === 'cod'}
                       onChange={() => setPaymentMethod('cod')}
-                      className="accent-[#8B0000] shrink-0"
+                      className="accent-[#5A1020] shrink-0"
                     />
                     <div className="flex-1">
-                      <span className="font-display font-bold text-sm text-[#8B0000] block">Cash on Delivery (COD)</span>
-                      <span className="text-[10px] text-[#3A2D23]/50 mt-1 block">Pay in cash or digital scanning at your doorstep.</span>
+                      <span className="font-serif font-bold text-sm text-[#5A1020] block">Cash on Delivery (COD)</span>
+                      <span className="text-[10px] text-[#211D1E]/60 mt-1 block font-sans">Pay upon arrival of your atelier garment parcel.</span>
                     </div>
                   </label>
                 </div>
 
-                <div className="flex justify-between pt-6 border-t border-[#B8860B]/10">
+                <div className="flex justify-between pt-6 border-t border-[#C9A45C]/15">
                   <button
                     type="button"
                     onClick={() => setActiveStep(1)}
@@ -458,19 +458,19 @@ export default function Checkout() {
                     disabled={placing}
                     className="btn-primary !py-3 !px-8 disabled:opacity-60 text-xs font-bold tracking-widest"
                   >
-                    {placing ? 'Authorizing Payment...' : 'Authorize & Place Order'}
+                    {placing ? 'Authorizing...' : 'Authorize & Place Order'}
                   </button>
                 </div>
               </motion.div>
             )}
 
             {/* Delivery Timeline info */}
-            <div className="border border-[#B8860B]/15 rounded-2xl p-5 bg-white flex gap-4 select-none">
-              <Truck size={20} className="text-[#B8860B] mt-0.5 shrink-0" />
+            <div className="border border-[#C9A45C]/20 rounded-2xl p-5 bg-white flex gap-4 select-none">
+              <Truck size={20} className="text-[#C9A45C] mt-0.5 shrink-0" />
               <div>
-                <h4 className="font-display text-sm text-[#8B0000] font-bold">Estimated Delivery Schedule</h4>
-                <p className="text-[10px] text-[#3A2D23]/50 leading-relaxed mt-1">
-                  Orders placed before 2:00 PM are delivered between 4:00 PM - 8:00 PM today. Orders placed after 2:00 PM will arrive tomorrow morning.
+                <h4 className="font-serif text-sm text-[#5A1020] font-bold">Atelier White-Glove Dispatch</h4>
+                <p className="text-[10px] text-[#211D1E]/60 leading-relaxed mt-1 font-sans">
+                  All bespoke garments are pressed, wrapped in muslin bags, and securely packaged in our signature keepsake boxes for express delivery in 3-5 business days.
                 </p>
               </div>
             </div>
@@ -478,49 +478,49 @@ export default function Checkout() {
 
           {/* Right Column: Order summary box */}
           <div className="lg:col-span-4 select-none">
-            <div className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 shadow-sm space-y-6 sticky top-28">
-              <h2 className="font-display text-lg tracking-wider text-[#8B0000] font-bold uppercase pb-4 border-b border-[#B8860B]/10">
-                Summary Box
+            <div className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 shadow-sm space-y-6 sticky top-28">
+              <h2 className="font-serif text-lg tracking-wider text-[#5A1020] font-bold uppercase pb-4 border-b border-[#C9A45C]/15">
+                Wardrobe Summary
               </h2>
 
               <div className="space-y-4 max-h-48 overflow-y-auto pr-2">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 justify-between items-center text-xs text-[#3A2D23]/70">
-                    <span className="font-bold truncate max-w-[150px]">{item.name} <strong className="text-[#B8860B] font-normal">× {item.qty}</strong></span>
-                    <span className="font-display text-[#8B0000] font-bold">₹{item.price * item.qty}</span>
+                  <div key={item.id} className="flex gap-3 justify-between items-center text-xs text-[#211D1E]/70 font-sans">
+                    <span className="font-bold truncate max-w-[150px]">{item.name} <strong className="text-[#C9A45C] font-normal">× {item.qty}</strong></span>
+                    <span className="font-serif text-[#5A1020] font-bold">₹{item.price * item.qty}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-[#B8860B]/10 pt-4 space-y-3 text-xs text-[#3A2D23]/60">
+              <div className="border-t border-[#C9A45C]/15 pt-4 space-y-3 text-xs text-[#211D1E]/70 font-sans">
                 <div className="flex justify-between">
-                  <span>Selection Subtotal</span>
-                  <span className="font-bold text-[#3A2D23]">₹{subtotal}</span>
+                  <span>Subtotal</span>
+                  <span className="font-bold text-[#211D1E]">₹{subtotal}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Delivery Packaging</span>
-                  <span className="font-bold text-[#3A2D23]">
-                    {deliveryFee === 0 ? <span className="text-green-700 font-bold">FREE</span> : `₹${deliveryFee}`}
+                  <span>Atelier Delivery</span>
+                  <span className="font-bold text-[#211D1E]">
+                    {deliveryFee === 0 ? <span className="text-green-800 font-bold">COMPLIMENTARY</span> : `₹${deliveryFee}`}
                   </span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-green-700 font-bold">
-                    <span>Applied Discount {couponCode ? `(${couponCode})` : ''}</span>
+                  <div className="flex justify-between text-green-800 font-bold">
+                    <span>Privilege Code {couponCode ? `(${couponCode})` : ''}</span>
                     <span>-₹{discount}</span>
                   </div>
                 )}
-                <div className="border-t border-[#B8860B]/10 pt-4 flex justify-between font-display text-base font-bold text-[#8B0000]">
-                  <span>Grand Total</span>
+                <div className="border-t border-[#C9A45C]/15 pt-4 flex justify-between font-serif text-base font-bold text-[#5A1020]">
+                  <span>Total Amount</span>
                   <span>₹{total}</span>
                 </div>
               </div>
 
               {/* In-Checkout Coupon Code Section */}
-              <div className="border-t border-[#B8860B]/10 pt-4">
+              <div className="border-t border-[#C9A45C]/15 pt-4">
                 {couponCode ? (
                   <div className="bg-green-50 border border-green-200/70 rounded-xl p-3 flex items-center justify-between text-xs text-green-800">
-                    <span className="flex items-center gap-1.5 font-bold">
-                      <Ticket size={14} className="text-green-600" />
+                    <span className="flex items-center gap-1.5 font-bold font-sans">
+                      <Ticket size={14} className="text-green-700" />
                       {couponCode} (-₹{discount})
                     </span>
                     <button
@@ -533,14 +533,14 @@ export default function Checkout() {
                   </div>
                 ) : (
                   <div className="space-y-1.5">
-                    <span className="text-[10px] text-[#3A2D23]/60 uppercase tracking-wider font-bold block">Have a promo code?</span>
+                    <span className="text-[10px] text-[#211D1E]/60 uppercase tracking-wider font-bold block font-sans">Have a privilege code?</span>
                     <div className="flex gap-2">
                       <input
                         type="text"
                         placeholder="ENTER CODE"
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value)}
-                        className="input-field !py-2 !text-xs uppercase !rounded-xl !border-[#B8860B]/20"
+                        className="input-field !py-2 !text-xs uppercase !rounded-xl !border-[#C9A45C]/30 bg-[#FAF7F2]"
                       />
                       <button
                         type="button"
@@ -555,8 +555,8 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center gap-1.5 text-[9px] text-[#3A2D23]/40 font-bold border-t border-[#B8860B]/5 pt-4">
-                <ShieldCheck size={14} className="text-[#B8860B]" /> Zero-contact sanitized luxury delivery
+              <div className="flex items-center justify-center gap-1.5 text-[9px] text-[#211D1E]/50 font-semibold border-t border-[#C9A45C]/10 pt-4 font-sans">
+                <ShieldCheck size={14} className="text-[#C9A45C]" /> Insured express courier with tamper-proof seal
               </div>
             </div>
           </div>

@@ -15,11 +15,11 @@ import toast from 'react-hot-toast'
 
 // Steps mapping
 const ORDER_STEPS = [
-  { id: 'CONFIRMED', title: 'Order Confirmed', desc: 'Received & transmitted to the kitchen', icon: CheckCircle2 },
-  { id: 'PROCESSING', title: 'Master Kitchen Preparation', desc: 'Crafted fresh with pure desi ghee', icon: ChefHat },
-  { id: 'PACKAGED', title: 'Quality Checked & Sealed', desc: 'Packed in food-grade aroma-lock boxes', icon: Box },
-  { id: 'SHIPPED', title: 'Dispatched for Delivery', desc: 'In transit with delivery partner', icon: Truck },
-  { id: 'DELIVERED', title: 'Successfully Delivered', desc: 'Enjoy your authentic fresh sweets!', icon: Sparkles }
+  { id: 'CONFIRMED', title: 'Order Confirmed', desc: 'Received & transmitted to the atelier', icon: CheckCircle2 },
+  { id: 'PROCESSING', title: 'Atelier Tailoring & Quality Inspection', desc: 'Handcrafted with meticulous precision', icon: ChefHat },
+  { id: 'PACKAGED', title: 'Heirloom Keepsake Packaging', desc: 'Sealed in acid-free tissue inside luxury AGVIA box', icon: Box },
+  { id: 'SHIPPED', title: 'Dispatched with Insured Courier', desc: 'In transit with premium express delivery partner', icon: Truck },
+  { id: 'DELIVERED', title: 'Successfully Delivered', desc: 'Enjoy your timeless AGVIA couture ensemble!', icon: Sparkles }
 ]
 
 function getStepIndex(status = '') {
@@ -139,30 +139,30 @@ export default function TrackOrder() {
     if (!trackingOrder) return
     const orderNum = trackingOrder.orderNumber || trackingOrder.id
     const text = encodeURIComponent(
-      `Hello Pragathi Sweets Support! 👋\nI am tracking my order *#${orderNum}* (Status: ${trackingOrder.status}). Could you please share an update on the delivery schedule?\n\nThank you!`
+      `Hello AGVIA Concierge! 👋\nI am tracking my atelier order *#${orderNum}* (Status: ${trackingOrder.status}). Could you please share an update on the courier dispatch schedule?\n\nThank you!`
     )
     const storeRaw = (BUSINESS?.contact?.whatsappRaw || '919032306961').replace(/\D/g, '')
     window.open(`https://api.whatsapp.com/send?phone=${storeRaw}&text=${text}`, '_blank', 'noopener,noreferrer')
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-body flex flex-col justify-between selection:bg-[#C9A45C]/30">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
         {/* Title Header */}
         <div className="text-center space-y-3 mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-[#8B0000] border border-[#B8860B]/20 flex items-center justify-center mx-auto shadow-sm">
+          <div className="w-16 h-16 rounded-2xl bg-[#5A1020]/10 text-[#5A1020] border border-[#C9A45C]/30 flex items-center justify-center mx-auto shadow-sm">
             <Compass size={32} />
           </div>
-          <span className="text-[10px] tracking-[0.3em] font-bold text-[#B8860B] uppercase block">
-            Real-Time Order Monitoring
+          <span className="text-[10px] tracking-[0.3em] font-bold text-[#C9A45C] uppercase block">
+            Real-Time Atelier Monitoring
           </span>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#8B0000]">
-            Track Your Fresh Sweets
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#5A1020]">
+            Track Your Atelier Order
           </h1>
-          <p className="text-xs text-[#3A2D23]/70 max-w-md mx-auto leading-relaxed">
-            Enter your order reference code (e.g. <span className="font-mono font-bold text-[#8B0000]">PS-2026...</span>) to view live artisanal preparation and delivery status.
+          <p className="text-xs text-[#211D1E]/70 max-w-md mx-auto leading-relaxed">
+            Enter your order reference code (e.g. <span className="font-mono font-bold text-[#5A1020]">AGV-2026...</span>) to view live handcraft preparation and express courier status.
           </p>
         </div>
 
@@ -174,10 +174,10 @@ export default function TrackOrder() {
               <input
                 type="text"
                 required
-                placeholder="ENTER ORDER NO (e.g. PS-2026... or #101)"
+                placeholder="ENTER ORDER NO (e.g. AGV-2026... or #101)"
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-white border border-[#B8860B]/30 rounded-2xl text-xs font-mono uppercase tracking-wider text-[#3A2D23] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8B0000]/20 focus:border-[#8B0000] shadow-sm transition-all"
+                className="w-full pl-11 pr-4 py-3.5 bg-white border border-[#C9A45C]/30 rounded-2xl text-xs font-mono uppercase tracking-wider text-[#211D1E] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5A1020]/20 focus:border-[#5A1020] shadow-sm transition-all"
               />
             </div>
             <button

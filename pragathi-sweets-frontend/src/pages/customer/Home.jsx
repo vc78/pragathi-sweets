@@ -32,84 +32,80 @@ import { ProductGridSkeleton } from '../../components/common/SkeletonLoaders'
 // ── Hero Slides ────────────────────────────────────────────
 const HERO_SLIDES = [
   {
+    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg',
+    tag: 'Signature Handloom Edit',
+    title: 'Kanjeevaram Silks',
+    subtitle: 'Woven with certified pure gold zari threads on heirloom mulberry silk',
+    cta: '/products?category=Sarees',
+    accent: '#C9A45C',
+  },
+  {
+    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
+    tag: 'Bridal Couture',
+    title: 'Royal Trousseau Lehengas',
+    subtitle: 'Lavish hand-embroidered zardozi and heritage gota patti masterpieces',
+    cta: '/products?category=Lehengas',
+    accent: '#5A1020',
+  },
+  {
     image: '/images/pexels-divigraphy-8624624.jpg',
-    tag: 'Signature Collection',
-    title: 'Kaju Katli',
-    subtitle: 'Diamond-cut cashew fudge, dusted in silver varq',
-    cta: '/products?category=Dry+Fruit+Sweets',
-    accent: '#B8860B',
+    tag: 'Festive Occasion Wear',
+    title: 'Handcrafted Anarkalis',
+    subtitle: 'Flowing regal kalis adorned with fine mirror-work and delicate thread embroidery',
+    cta: '/products?category=Anarkalis+%26+Kurtas',
+    accent: '#7A1F32',
   },
   {
     image: '/images/pexels-divigraphy-14467844.jpg',
-    tag: 'Bestseller',
-    title: 'Gulab Jamun',
-    subtitle: 'Rose-scented milk dumplings, fried golden',
-    cta: '/products?category=Milk+Sweets',
-    accent: '#8B0000',
-  },
-  {
-    image: '/images/pexels-gaurav-kumar-1281378-18488310.jpg',
-    tag: 'Artisanal',
-    title: 'Rasgulla',
-    subtitle: 'Spongy chhena spheres in light cardamom syrup',
-    cta: '/products?category=Bengali+Sweets',
-    accent: '#2D1B69',
-  },
-  {
-    image: '/images/pexels-towfiqu-barbhuiya-3440682-11484120.jpg',
-    tag: 'Gift Ready',
-    title: 'Festival Hampers',
-    subtitle: 'Six-sweet heritage curation in a keepsake box',
-    cta: '/products?category=Festival+Hampers',
-    accent: '#B8860B',
+    tag: 'Contemporary Evening Edit',
+    title: 'Sculpted Cocktail Gowns',
+    subtitle: 'Effortless luxury draping crafted for grand receptions and soirée galas',
+    cta: '/products?category=Dresses+%26+Gowns',
+    accent: '#C9A45C',
   },
 ]
 
 // ── Trust Badges ───────────────────────────────────────────
 const TRUST = [
-  { icon: ShieldCheck, label: 'No Preservatives', sub: 'Pure & Natural' },
-  { icon: Flame, label: 'Desi Ghee Only', sub: 'Authentic Taste' },
-  { icon: Clock, label: 'Made Fresh Daily', sub: 'Morning Batches' },
-  { icon: Gift, label: 'Gift Packaging', sub: 'Complimentary' },
+  { icon: ShieldCheck, label: 'Pure Handloom Silk', sub: 'Silk Mark Certified' },
+  { icon: Sparkles, label: 'Zardozi Handcraft', sub: 'Master Atelier Embroidery' },
+  { icon: Clock, label: 'Made-to-Measure', sub: 'Bespoke Custom Fitting' },
+  { icon: Gift, label: 'Luxury Keepsake Box', sub: 'Complimentary Trousseau Wrap' },
 ]
 
 // ── Testimonials ───────────────────────────────────────────
 const TESTIMONIALS = [
   {
-    name: 'Ananya Rao', city: 'Hyderabad', rating: 5,
-    quote: "Best kaju katli I've ever had outside Rajasthan. The silver varq finish is exquisite.",
+    name: 'Radhika Reddy', city: 'Hyderabad', rating: 5,
+    quote: "My wedding reception lehenga from AGVIA drew endless compliments. The zardozi intricacy and bespoke drape were completely unmatched.",
     avatar: '/images/pexels-yankrukov-8819577.jpg',
   },
   {
-    name: 'Sneha Iyer', city: 'Bengaluru', rating: 5,
-    quote: "Their Diwali hampers are simply stunning. Every sweet inside is layered with genuine craftsmanship.",
+    name: 'Meera Nambiar', city: 'Bengaluru', rating: 5,
+    quote: "The pure Kanjeevaram saree I received feels like an heirloom. The weight of the silk and real gold zari border are extraordinary.",
     avatar: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
   },
   {
-    name: 'Vikram Singh', city: 'Mumbai', rating: 5,
-    quote: "I send Pragathi boxes as corporate gifts. The presentation and quality always impress every client.",
+    name: 'Pooja Singhania', city: 'Mumbai', rating: 5,
+    quote: "AGVIA's concierge team assisted me with made-to-measure blouse styling and dispatch. The velvet keepsake packaging was royal.",
     avatar: '/images/pexels-kailashkumarphotography-11887844.jpg',
   },
 ]
 
 // ── Marquee Items ─────────────────────────────────────
 const MARQUEE_ITEMS = [
-  { emoji: '🍮', label: 'Kaju Katli' },
-  { emoji: '🍬', label: 'Besan Laddu' },
-  { emoji: '🍓', label: 'Gulab Jamun' },
-  { emoji: '🍞', label: 'Mysore Pak' },
-  { emoji: '🍫', label: 'Chocolate Barfi' },
-  { emoji: '⭐', label: 'Rasgulla' },
-  { emoji: '🍯', label: 'Motichoor Laddu' },
-  { emoji: '🍑', label: 'Coconut Burfi' },
-  { emoji: '🍭', label: 'Pista Roll' },
-  { emoji: '🌰', label: 'Anjeer Barfi' },
-  { emoji: '🥝', label: 'Til Chikki' },
-  { emoji: '🍪', label: 'Gajar Halwa' },
-  { emoji: '🌸', label: 'Dry Fruit Sweets' },
-  { emoji: '🏆', label: 'Festival Hampers' },
-  { emoji: '✨', label: 'Andhra Specials' },
-  { emoji: '👑', label: 'Ghee Sweets' },
+  { emoji: '✨', label: 'Pure Kanjeevarams' },
+  { emoji: '👑', label: 'Bridal Lehengas' },
+  { emoji: '🌸', label: 'Silk Anarkalis' },
+  { emoji: '💎', label: 'Banarasi Georgettes' },
+  { emoji: '🪡', label: 'Zardozi Kurtas' },
+  { emoji: '👗', label: 'Cocktail Gowns' },
+  { emoji: '✨', label: 'Organza Sarees' },
+  { emoji: '🌹', label: 'Chanderi Suits' },
+  { emoji: '🎀', label: 'Velvet Dupattas' },
+  { emoji: '⭐', label: 'Handloom Cottons' },
+  { emoji: '👑', label: 'Trousseau Edits' },
+  { emoji: '💎', label: 'Made-to-Measure' },
 ]
 
 // ── Section Header with Strict Spacing Hierarchy ───────────
@@ -371,9 +367,9 @@ export default function Home() {
       <section className="section">
         <div className="container-luxury">
           <SectionHeader
-            tag="Our Craft"
-            title="Bestselling Sweets"
-            subtitle="Handcrafted in small batches each morning. Every piece tells a story of heritage and devotion."
+            tag="The Signature Edit"
+            title="Bestselling Silhouettes"
+            subtitle="Each silhouette is hand-loomed and embroidered by master artisans. Certified pure silks and bespoke couture."
           />
           {loading && bestsellers.length === 0 ? (
             <ProductGridSkeleton count={4} />
@@ -407,9 +403,9 @@ export default function Home() {
       <section className="section">
         <div className="container-luxury">
           <SectionHeader
-            tag="Full Collection"
-            title="Every Sweet, Perfected"
-            subtitle="From everyday indulgence to grand occasion gifting — every product is an art form."
+            tag="The Atelier Edit"
+            title="Every Drape, Perfected"
+            subtitle="From heirloom bridal drapes to contemporary soirée gowns — crafted for moments that endure."
           />
           {allProducts.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
@@ -426,53 +422,53 @@ export default function Home() {
               ))}
             </div>
           )}
-          {/* Shop All Products CTA button - strictly 16-24px from products, 32-56px to next section */}
+          {/* Shop All Products CTA button */}
           <div className="section-cta">
             <Link to="/products" className="btn-primary">
-              Shop All Products <ArrowRight size={14} />
+              Shop All Silhouettes <ArrowRight size={14} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ══ GIFT HAMPERS PROMO ════════════════════════════════════ */}
+      {/* ══ BRIDAL TROUSSEAU PROMO ════════════════════════════════ */}
       <section className="container-luxury my-4 md:my-6">
         <div className="rounded-3xl overflow-hidden relative shadow-lg">
           <img
-            src="/images/pexels-jonathanborba-19863265.jpg"
-            alt="Festival Hampers"
+            src="/images/pexels-shanks-emperor-1524379304-28769884.jpg"
+            alt="Bridal Trousseau Curation"
             loading="lazy"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/95 via-[#8B0000]/75 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#5A1020]/95 via-[#5A1020]/75 to-transparent" />
           <div className="relative z-10 p-8 sm:p-12 md:p-14 max-w-xl">
-            <span className="section-eyebrow text-[#E6C687]">✦ Gift Curation</span>
-            <h2 className="font-display text-3xl md:text-4xl text-white font-bold leading-tight mb-3">
-              Festival Hampers,<br />Elevated.
+            <span className="section-eyebrow text-[#C9A45C]">✦ Bespoke Trousseau Curation</span>
+            <h2 className="font-serif text-3xl md:text-4xl text-white font-bold leading-tight mb-3">
+              Bridal Trousseau,<br />Elevated.
             </h2>
-            <p className="font-body text-xs md:text-sm text-white/80 mb-6 leading-relaxed max-w-md">
-              Six handpicked sweets in a handcrafted keepsake box. A gift as memorable as the occasion itself.
+            <p className="font-sans text-xs md:text-sm text-white/80 mb-6 leading-relaxed max-w-md">
+              Handpicked heirloom silks and hand-embroidered zardozi ensembles delivered in a custom velvet keepsake box. Includes bespoke made-to-measure tailoring.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <Link to="/products?category=Festival+Hampers" className="inline-flex items-center gap-2 bg-[#E6C687] text-[#3A1F0F] font-bold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:bg-white transition-colors shadow">
-                Explore Hampers <Gift size={13} />
+              <Link to="/products?category=Lehengas" className="inline-flex items-center gap-2 bg-[#C9A45C] text-[#211D1E] font-bold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:bg-white transition-colors shadow">
+                Explore Trousseau <Crown size={13} />
               </Link>
-              <Link to="/products" className="inline-flex items-center gap-2 border border-white/40 text-white font-semibold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:border-[#E6C687] hover:text-[#E6C687] transition-all">
-                Custom Orders
+              <Link to="/products?category=Sarees" className="inline-flex items-center gap-2 border border-white/40 text-white font-semibold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:border-[#C9A45C] hover:text-[#C9A45C] transition-all">
+                Heirloom Sarees
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ TESTIMONIALS (HAPPY CUSTOMERS) ════════════════════════ */}
+      {/* ══ TESTIMONIALS (PATRON EXPERIENCES) ═════════════════════ */}
       <section className="section">
         <div className="container-luxury">
           <SectionHeader
-            tag="Happy Customers"
-            title="Voices of Delight"
-            subtitle="From families to corporates — the taste of Pragathi stays with you."
+            tag="Patron Experiences"
+            title="Voices of Elegance"
+            subtitle="From royal wedding galas to intimate soirees — draped in timeless AGVIA grace."
           />
           <div className="grid md:grid-cols-3 gap-5">
             {TESTIMONIALS.map((t, i) => (
@@ -482,23 +478,23 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-7 hover:shadow-[0_12px_40px_rgba(184,134,11,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+                className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 md:p-7 hover:shadow-[0_12px_40px_rgba(201,164,92,0.12)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex gap-1 mb-3.5">
                     {[...Array(t.rating)].map((_, s) => (
-                      <Star key={s} size={13} className="text-[#B8860B] fill-[#B8860B]" />
+                      <Star key={s} size={13} className="text-[#C9A45C] fill-[#C9A45C]" />
                     ))}
                   </div>
-                  <p className="font-body text-xs md:text-sm text-[#3A2D23]/70 leading-relaxed italic mb-5">
+                  <p className="font-sans text-xs md:text-sm text-[#211D1E]/80 leading-relaxed italic mb-5">
                     "{t.quote}"
                   </p>
                 </div>
-                <div className="flex items-center gap-3 pt-4 border-t border-[#B8860B]/10">
-                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover border-2 border-[#B8860B]/20 shrink-0" />
+                <div className="flex items-center gap-3 pt-4 border-t border-[#C9A45C]/15">
+                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover border-2 border-[#C9A45C]/30 shrink-0" />
                   <div>
-                    <p className="font-display text-xs md:text-sm font-bold text-[#8B0000]">{t.name}</p>
-                    <p className="font-body text-[10px] text-[#3A2D23]/50 tracking-wider">{t.city}</p>
+                    <p className="font-serif text-xs md:text-sm font-bold text-[#5A1020]">{t.name}</p>
+                    <p className="font-sans text-[10px] text-[#211D1E]/60 tracking-wider">{t.city}</p>
                   </div>
                 </div>
               </motion.div>
@@ -507,25 +503,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ PRAGATHI CIRCLE & VIP PRIVILEGES ════════════════════════ */}
+      {/* ══ AGVIA ATELIER CIRCLE & VIP PRIVILEGES ════════════════════════ */}
       <section className="container-luxury my-4 md:my-6 mb-12 md:mb-16">
-        <div className="rounded-3xl bg-[#8B0000] overflow-hidden relative py-10 md:py-14 px-6 md:px-12 shadow-2xl border border-[#B8860B]/30">
+        <div className="rounded-3xl bg-[#5A1020] overflow-hidden relative py-10 md:py-14 px-6 md:px-12 shadow-2xl border border-[#C9A45C]/30">
           <div className="absolute inset-0 opacity-10 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#B8860B]/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B8860B]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9A45C]/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C9A45C]/15 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 max-w-2xl mx-auto text-center">
-            <span className="section-eyebrow text-[#E6C687]">
-              ✦ EXCLUSIVE ACCESS ✦
+            <span className="section-eyebrow text-[#C9A45C]">
+              ✦ VIP ATELIER PRIVILEGES ✦
             </span>
 
             {!circleMember ? (
               <div>
-                <h2 className="font-display text-2xl md:text-4xl text-white font-bold mb-2.5 tracking-tight">
-                  Join the Pragathi Circle
+                <h2 className="font-serif text-2xl md:text-4xl text-white font-bold mb-2.5 tracking-tight">
+                  Join the AGVIA Atelier Circle
                 </h2>
-                <p className="font-body text-xs md:text-sm text-white/80 mb-6 max-w-lg mx-auto leading-relaxed">
-                  First access to seasonal confections, heritage family recipes, and private luxury gifting privileges.
+                <p className="font-sans text-xs md:text-sm text-white/80 mb-6 max-w-lg mx-auto leading-relaxed">
+                  First access to seasonal bridal drops, bespoke made-to-measure previews, and private concierge styling privileges.
                 </p>
 
                 <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row max-w-md mx-auto shadow-xl rounded-full bg-white/10 p-1 border border-white/20 backdrop-blur-md">
@@ -535,16 +531,16 @@ export default function Home() {
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="Your email address"
-                    className="flex-1 bg-transparent text-white placeholder-white/50 text-xs md:text-sm tracking-wide font-body px-5 py-3 focus:outline-none"
+                    className="flex-1 bg-transparent text-white placeholder-white/50 text-xs md:text-sm tracking-wide font-sans px-5 py-3 focus:outline-none"
                   />
                   <button
                     type="submit"
                     disabled={subscribing}
-                    className="bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold px-7 py-3 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shrink-0 shadow-md active:scale-95 disabled:opacity-70 mt-2 sm:mt-0 flex items-center justify-center gap-2"
+                    className="bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold px-7 py-3 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shrink-0 shadow-md active:scale-95 disabled:opacity-70 mt-2 sm:mt-0 flex items-center justify-center gap-2"
                   >
                     {subscribing ? (
                       <>
-                        <div className="w-3.5 h-3.5 border-2 border-[#3A1F0F] border-t-transparent rounded-full animate-spin" />
+                        <div className="w-3.5 h-3.5 border-2 border-[#211D1E] border-t-transparent rounded-full animate-spin" />
                         <span>Joining...</span>
                       </>
                     ) : (
@@ -552,8 +548,8 @@ export default function Home() {
                     )}
                   </button>
                 </form>
-                <p className="text-[10px] text-[#E6C687]/70 mt-3 tracking-wide">
-                  Instant 15% Welcome Confectionery Credit unlocked immediately upon enrollment.
+                <p className="text-[10px] text-[#C9A45C]/80 mt-3 tracking-wide">
+                  Instant 15% Welcome Couture Privilege Credit unlocked immediately upon enrollment.
                 </p>
               </div>
             ) : (
@@ -563,34 +559,34 @@ export default function Home() {
                 transition={{ duration: 0.4 }}
                 className="space-y-4"
               >
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E6C687]/15 border border-[#E6C687]/40 text-[#E6C687] text-xs font-semibold tracking-wider uppercase">
-                  <Sparkles size={13} className="text-[#E6C687]" />
-                  <span>Pragathi Circle VIP Member</span>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C9A45C]/15 border border-[#C9A45C]/40 text-[#C9A45C] text-xs font-semibold tracking-wider uppercase">
+                  <Sparkles size={13} className="text-[#C9A45C]" />
+                  <span>AGVIA Atelier VIP Member</span>
                 </div>
 
-                <h2 className="font-display text-2xl md:text-3xl text-white font-bold tracking-tight">
-                  Welcome to the Inner Circle
+                <h2 className="font-serif text-2xl md:text-3xl text-white font-bold tracking-tight">
+                  Welcome to the AGVIA Atelier
                 </h2>
 
                 <p className="text-xs text-white/85 max-w-lg mx-auto">
-                  Privileges activated for <span className="font-bold text-[#E6C687]">{circleMember.email}</span>. Use your personal promo code below for your next confectionery order.
+                  Privileges activated for <span className="font-bold text-[#C9A45C]">{circleMember.email}</span>. Use your personal promo code below for your next couture purchase.
                 </p>
 
                 {/* Special Voucher Card */}
-                <div className="bg-gradient-to-r from-[#2A1117] via-[#3D141F] to-[#2A1117] border-2 border-dashed border-[#E6C687]/60 rounded-2xl p-5 max-w-md mx-auto shadow-2xl relative overflow-hidden text-left">
+                <div className="bg-gradient-to-r from-[#2A0810] via-[#4A0D1A] to-[#2A0810] border-2 border-dashed border-[#C9A45C]/60 rounded-2xl p-5 max-w-md mx-auto shadow-2xl relative overflow-hidden text-left">
                   <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
                     <div>
-                      <span className="text-[9px] text-[#E6C687] tracking-[0.2em] uppercase font-bold block mb-0.5">
+                      <span className="text-[9px] text-[#C9A45C] tracking-[0.2em] uppercase font-bold block mb-0.5">
                         VIP WELCOME VOUCHER
                       </span>
                       <span className="font-mono text-xl md:text-2xl font-bold text-white tracking-widest">
-                        {circleMember.couponCode || 'CIRCLE15'}
+                        {circleMember.couponCode || 'AGVIA15'}
                       </span>
                     </div>
 
                     <button
                       onClick={handleCopyCode}
-                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 shrink-0"
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 shrink-0"
                     >
                       {copiedCode ? <Check size={13} className="text-green-700" /> : <Copy size={13} />}
                       <span>{copiedCode ? 'Copied!' : 'Copy Code'}</span>
@@ -598,7 +594,7 @@ export default function Home() {
                   </div>
 
                   <div className="pt-2.5 flex items-center justify-between text-[10px] text-white/70">
-                    <span className="flex items-center gap-1 text-[#E6C687]">
+                    <span className="flex items-center gap-1 text-[#C9A45C]">
                       <Calendar size={12} />
                       {circleMember.validTill
                         ? new Date(circleMember.validTill).toLocaleDateString('en-IN', {
@@ -608,21 +604,21 @@ export default function Home() {
                           })
                         : 'Active for 30 Days'}
                     </span>
-                    <span>Min spend ₹{circleMember.minOrderAmount || 499}</span>
+                    <span>Min spend ₹{circleMember.minOrderAmount || 1999}</span>
                   </div>
                 </div>
 
                 {/* Unlocked Exclusive Perks */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-left pt-1">
                   {[
-                    { icon: Ticket, title: '15% First Credit', desc: 'On orders over ₹499' },
-                    { icon: Gift, title: 'Gift Packaging', desc: 'Complimentary box & ribbon' },
-                    { icon: Zap, title: 'Priority Dispatch', desc: 'Same-day kitchen prep' },
-                    { icon: BookOpen, title: 'Heritage Menus', desc: 'Early festival batches' },
+                    { icon: Ticket, title: '15% First Privilege', desc: 'On orders over ₹1,999' },
+                    { icon: Gift, title: 'Keepsake Box', desc: 'Complimentary luxury wrap' },
+                    { icon: Zap, title: 'Express Dispatch', desc: 'White-glove courier delivery' },
+                    { icon: BookOpen, title: 'Atelier Styling', desc: 'Complimentary consultation' },
                   ].map((perk, idx) => (
                     <div key={idx} className="bg-white/10 backdrop-blur-sm border border-white/15 p-3 rounded-xl">
-                      <perk.icon size={15} className="text-[#E6C687] mb-1.5" />
-                      <h4 className="font-display font-bold text-[11px] text-white leading-tight mb-0.5">{perk.title}</h4>
+                      <perk.icon size={15} className="text-[#C9A45C] mb-1.5" />
+                      <h4 className="font-serif font-bold text-[11px] text-white leading-tight mb-0.5">{perk.title}</h4>
                       <p className="text-[10px] text-white/60 leading-tight">{perk.desc}</p>
                     </div>
                   ))}
@@ -632,7 +628,7 @@ export default function Home() {
                 <div className="pt-2 flex items-center justify-center gap-4">
                   <Link
                     to="/products"
-                    className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-widest uppercase transition-all shadow-md active:scale-95"
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold text-xs tracking-widest uppercase transition-all shadow-md active:scale-95"
                   >
                     <span>Shop & Redeem 15%</span>
                     <ArrowRight size={13} />

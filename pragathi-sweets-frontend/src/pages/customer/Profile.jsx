@@ -945,8 +945,8 @@ export default function Profile() {
                   <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-3xl p-6">
                     <ShoppingBag size={32} className="mx-auto text-gray-300 mb-2" />
                     <p className="text-sm font-bold text-gray-700">No recent orders found</p>
-                    <p className="text-xs text-gray-500 mt-1 mb-4">Your fresh artisanal sweet orders will appear here automatically.</p>
-                    <Link to="/products" className="btn-primary">Browse Sweets</Link>
+                    <p className="text-xs text-gray-500 mt-1 mb-4">Your handcrafted couture orders will appear here automatically.</p>
+                    <Link to="/products" className="btn-primary">Browse Collection</Link>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -1018,8 +1018,8 @@ export default function Profile() {
                   <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-3xl p-6">
                     <Heart size={32} className="mx-auto text-gray-300 mb-2" />
                     <p className="text-sm font-bold text-gray-700">Your wishlist is currently empty</p>
-                    <p className="text-xs text-gray-500 mt-1 mb-4">Tap the heart icon on any sweet to save it for later.</p>
-                    <Link to="/products" className="btn-primary">Explore Sweets</Link>
+                    <p className="text-xs text-gray-500 mt-1 mb-4">Tap the heart icon on any silhouette to save it for later.</p>
+                    <Link to="/products" className="btn-primary">Explore Collection</Link>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1135,12 +1135,12 @@ export default function Profile() {
 
                 <div className="divide-y divide-gray-100">
                   {[
-                    { key: 'orderUpdates', label: 'Order Confirmation & Receipts', desc: 'Real-time alerts whenever a new sweet order is confirmed.' },
-                    { key: 'deliveryAlerts', label: 'Doorstep Delivery Tracking', desc: 'SMS and push updates when sweets are out for delivery.' },
+                    { key: 'orderUpdates', label: 'Order Confirmation & Receipts', desc: 'Real-time alerts whenever a new couture order is confirmed.' },
+                    { key: 'deliveryAlerts', label: 'Doorstep Courier Tracking', desc: 'SMS and push updates when your parcel is out for delivery.' },
                     { key: 'whatsappUpdates', label: 'WhatsApp Concierge Receipts', desc: 'Formatted WhatsApp receipts and live dispatcher updates.' },
                     { key: 'smsNotifications', label: 'Critical SMS Alerts', desc: 'Essential OTPs and security alerts sent directly to your phone.' },
-                    { key: 'festivalSpecials', label: 'Festival Gift Box Early Access', desc: 'Exclusive Diwali, Rakhi, and New Year curation previews.' },
-                    { key: 'promotionalEmails', label: 'Weekly Sweet Confection Newsletters', desc: 'Curated recipes and weekend discount offers.' }
+                    { key: 'festivalSpecials', label: 'Runway Drops & Bridal Previews', desc: 'Exclusive bridal trousseau and festive collection previews.' },
+                    { key: 'promotionalEmails', label: 'The AGVIA Atelier Edit Newsletter', desc: 'Curated couture lookbooks and private salon invitations.' }
                   ].map(item => (
                     <div key={item.key} className="py-4 flex items-center justify-between gap-4">
                       <div>

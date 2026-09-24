@@ -3,27 +3,43 @@ import Footer from '../../components/customer/Footer'
 import { HelpCircle } from 'lucide-react'
 
 const FAQS = [
-  { q: "How long do the sweets stay fresh?", a: "Most of our milk sweets stay fresh for 3-5 days when refrigerated. Dry fruit sweets and savouries can be stored for up to 15-20 days in airtight containers." },
-  { q: "Do you ship outside Hyderabad?", a: "Yes, we ship to major metros across India via express air shipping. Same-day delivery is currently restricted to Hyderabad." },
-  { q: "Is the silver varq safe for consumption?", a: "Yes, we only use pure, premium food-grade vegetarian silver varq certified by safety standards." },
-  { q: "Can I customize a gift hamper?", a: "Absolutely! You can choose individual sweets and custom boxes on our site or contact support for corporate volumes." }
+  {
+    q: "Are your handloom sarees Silk Mark certified?",
+    a: "Yes, 100% of our pure Kanjeevaram, Banarasi, and Chanderi sarees carry authentic Silk Mark certification, woven on traditional Indian pit looms with certified gold/silver electroplated zari."
+  },
+  {
+    q: "Do you offer custom sizing and bespoke blouse tailoring?",
+    a: "Absolutely. All lehengas and anarkalis are crafted with generous 3-4 inch internal margins for effortless tailoring. We also offer complimentary made-to-measure blouse and silhouette tailoring upon request."
+  },
+  {
+    q: "What is your standard delivery timeline?",
+    a: "Ready-to-wear silhouettes are dispatched within 24-48 hours via premium insured courier (2-4 business days delivery across India). Bespoke bridal orders take 10-14 days for hand-embroidery and precision fitting."
+  },
+  {
+    q: "Can I schedule a private bridal styling consultation?",
+    a: "Yes! You can visit our Jubilee Hills atelier salon in Hyderabad or book a virtual 1-on-1 video styling consultation with our senior couturiers via WhatsApp concierge."
+  },
+  {
+    q: "How are the garments packaged for transit?",
+    a: "Every AGVIA ensemble is wrapped in breathable archival muslin, protected inside an acid-free gold-embossed keepsake trunk, and shipped in weather-sealed tamper-evident outer packaging."
+  }
 ]
 
 export default function Faq() {
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-body selection:bg-[#C9A45C]/30">
       <Navbar />
       <div className="max-w-4xl mx-auto px-6 pt-12 pb-24">
-        <span className="text-[9px] tracking-[0.3em] font-bold text-[#B8860B] uppercase block text-center mb-3">✦ Common Inquiries ✦</span>
-        <h1 className="font-display text-4xl md:text-5xl text-[#8B0000] font-bold text-center mb-12">Frequently Asked Questions</h1>
+        <span className="text-[9px] tracking-[0.3em] font-bold text-[#C9A45C] uppercase block text-center mb-3">✦ Atelier Assistance ✦</span>
+        <h1 className="font-serif text-4xl md:text-5xl text-[#5A1020] font-bold text-center mb-12">Frequently Asked Questions</h1>
         
         <div className="space-y-6">
           {FAQS.map((faq, idx) => (
-            <div key={idx} className="bg-white border border-[#B8860B]/10 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-display font-bold text-base text-[#8B0000] mb-2 flex items-center gap-2">
-                <HelpCircle size={16} className="text-[#B8860B]" /> {faq.q}
+            <div key={idx} className="bg-white border border-[#C9A45C]/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-serif font-bold text-base text-[#5A1020] mb-2 flex items-center gap-2">
+                <HelpCircle size={16} className="text-[#C9A45C] shrink-0" /> {faq.q}
               </h3>
-              <p className="text-xs text-[#3A2D23]/60 leading-relaxed pl-6">{faq.a}</p>
+              <p className="text-xs text-[#211D1E]/70 leading-relaxed pl-6 font-body">{faq.a}</p>
             </div>
           ))}
         </div>

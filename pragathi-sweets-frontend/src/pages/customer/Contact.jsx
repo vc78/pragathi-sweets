@@ -30,7 +30,7 @@ export default function Contact() {
 
     if (!isEmailJsConfigured()) {
       toast.error(
-        'EmailJS Public Key is not configured correctly in .env. "Pragathi sweets Mail" is the service name. Please get your Public Key from EmailJS Dashboard -> Account -> API Keys.',
+        'EmailJS Public Key is not configured correctly in .env. "AGVIA Boutique Mail" is the service name. Please get your Public Key from EmailJS Dashboard -> Account -> API Keys.',
         { duration: 7000 }
       )
       return
@@ -145,7 +145,7 @@ export default function Contact() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  placeholder="Corporate / Wedding Sweet Box Catering"
+                  placeholder="Bridal Consultation / Custom Saree Styling / Atelier Inquiries"
                   className="input-field"
                 />
               </div>
@@ -157,7 +157,7 @@ export default function Contact() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  placeholder="How can we assist you with festive gift boxes, custom packaging, or doorstep delivery?"
+                  placeholder="How can our atelier stylists assist you with bespoke sizing, bridal trousseau, or custom handloom selections?"
                   className="input-field"
                 />
               </div>

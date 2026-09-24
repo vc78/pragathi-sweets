@@ -6,11 +6,11 @@ import { adminService } from '../../services/adminService'
 import { Image, Sparkles, Loader2, Wand2 } from 'lucide-react'
 
 const IMAGE_PRESETS = [
-  { label: 'Kaju Katli', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
-  { label: 'Motichoor Ladoo', url: '/images/pexels-divigraphy-8624624.jpg' },
-  { label: 'Rasgulla / Gulab Jamun', url: '/images/pexels-gaurav-kumar-1281378-18488316.jpg' },
-  { label: 'Spicy Mixture / Savouries', url: '/images/pexels-kailashkumarphotography-11887844.jpg' },
-  { label: 'Festival Gift Box', url: '/images/pexels-jonathanborba-19863265.jpg' },
+  { label: 'Kanjeevaram Silk Saree', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
+  { label: 'Bridal Heritage Lehenga', url: '/images/pexels-shanks-emperor-1524379304-28769884.jpg' },
+  { label: 'Handcrafted Anarkali', url: '/images/pexels-divigraphy-8624624.jpg' },
+  { label: 'Sculpted Cocktail Gown', url: '/images/pexels-divigraphy-14467844.jpg' },
+  { label: 'Royal Trousseau Keepsake', url: '/images/pexels-jonathanborba-19863265.jpg' },
 ]
 
 export default function AddProduct() {
@@ -23,8 +23,8 @@ export default function AddProduct() {
     category: '',
     price: '',
     discountPrice: '',
-    unit: 'kg',
-    stock: '50',
+    unit: 'piece',
+    stock: '25',
     description: '',
     image: IMAGE_PRESETS[0].url,
     sku: '',
@@ -46,13 +46,12 @@ export default function AddProduct() {
       })
       .catch(err => {
         console.error('Failed to load categories:', err)
-        // Fallback default categories if backend had no categories yet
         const defaultCats = [
-          { id: 1, name: 'Dry Fruit Sweets' },
-          { id: 2, name: 'Milk Sweets' },
-          { id: 3, name: 'Bengali Sweets' },
-          { id: 4, name: 'Savouries' },
-          { id: 5, name: 'Festival Hampers' }
+          { id: 1, name: 'Sarees' },
+          { id: 2, name: 'Lehengas' },
+          { id: 3, name: 'Anarkalis & Kurtas' },
+          { id: 4, name: 'Dresses & Gowns' },
+          { id: 5, name: 'Wedding & Festive Edit' }
         ]
         setCategories(defaultCats)
         setForm(prev => ({ ...prev, categoryId: 1, category: defaultCats[0].name }))
@@ -77,11 +76,11 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name.trim()) {
-      toast.error('Please specify a product name.')
+      toast.error('Please specify a silhouette name.')
       return
     }
     if (!form.categoryId) {
-      toast.error('Please select a valid category.')
+      toast.error('Please select a valid couture category.')
       return
     }
     if (Number(form.price) <= 0) {
@@ -107,13 +106,13 @@ export default function AddProduct() {
         image: form.image,
         sku: form.sku.trim() || undefined,
       })
-      toast.success('Product added successfully to boutique catalogue!', {
-        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      toast.success('Silhouette added successfully to atelier catalogue!', {
+        style: { background: '#5A1020', color: '#FAF7F2', borderRadius: '12px' }
       })
       navigate('/admin/products')
     } catch (err) {
       console.error(err)
-      toast.error(err?.response?.data?.message || 'Could not add product. Please verify fields.')
+      toast.error(err?.response?.data?.message || 'Could not add silhouette. Please verify fields.')
     } finally {
       setSaving(false)
     }
@@ -121,7 +120,7 @@ export default function AddProduct() {
 
   const handleAiGenerate = async () => {
     if (!form.name.trim()) {
-      toast.error('Enter a product name first so AI can generate its content.')
+      toast.error('Enter a silhouette name first so AI can generate its description.')
       return
     }
     setAiGenerating(true)
@@ -129,16 +128,16 @@ export default function AddProduct() {
       const selectedCat = categories.find(c => String(c.id) === String(form.categoryId))
       const result = await adminService.generateAiProductContent({
         name: form.name.trim(),
-        category: selectedCat?.name || form.category || '',
+        category: selectedCat?.name || form.category || 'Women Fashion Couture',
         price: form.price ? `₹${form.price}` : '',
-        weight: form.unit || '',
-        ingredients: '',
-        characteristics: '',
+        weight: form.unit || 'piece',
+        ingredients: 'Handloom Mulberry Silk, Metallic Zari, Zardozi Embroidery',
+        characteristics: 'Bespoke tailoring, regal drape, Silk Mark certified, artisanal craftsmanship',
       })
       if (result?.description) {
         setForm(prev => ({ ...prev, description: result.description }))
-        toast.success('AI description applied! Review and edit before saving.', {
-          style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        toast.success('AI couture description applied! Review and edit before saving.', {
+          style: { background: '#5A1020', color: '#FAF7F2', borderRadius: '12px' }
         })
       } else {
         toast.error('AI did not return a description. Try again.')
@@ -153,28 +152,28 @@ export default function AddProduct() {
   return (
     <AdminLayout>
       <div className="mb-8 select-none font-body">
-        <h2 className="font-display text-3xl font-bold text-[#8B0000]">Add New Confection</h2>
-        <p className="text-xs text-[#3A2D23]/50 mt-1">Introduce a new handcrafted luxury confection to the boutique catalogue.</p>
+        <h2 className="font-serif text-3xl font-bold text-[#5A1020]">Add New Silhouette</h2>
+        <p className="text-xs text-[#211D1E]/60 mt-1">Introduce a new handcrafted luxury ensemble to the AGVIA atelier collection.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-body">
-        <form onSubmit={handleSubmit} className="lg:col-span-8 bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+        <form onSubmit={handleSubmit} className="lg:col-span-8 bg-white border border-[#C9A45C]/20 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Confection Title *</label>
+            <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Silhouette Title *</label>
             <input
               name="name"
               required
               value={form.name}
               onChange={handleChange}
               className="input-field"
-              placeholder="e.g. Royal Pistachio Kaju Katli"
+              placeholder="e.g. Royal Burgundy Kanjeevaram Silk Saree"
             />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">
-                Category * {loadingCats && '(Loading...)'}
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">
+                Couture Category * {loadingCats && '(Loading...)'}
               </label>
               <select
                 name="categoryId"
@@ -190,17 +189,17 @@ export default function AddProduct() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Unit Measure</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Unit / Packaging</label>
               <select name="unit" value={form.unit} onChange={handleChange} className="input-field bg-white cursor-pointer">
-                <option value="kg">Per kg</option>
-                <option value="500g">500g box</option>
-                <option value="box">Gift Box</option>
                 <option value="piece">Per Piece</option>
+                <option value="set">Per Set (Ensemble)</option>
+                <option value="saree">Per Saree with Blouse</option>
+                <option value="lehenga">Bridal Trousseau Box</option>
               </select>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Price (₹) *</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Price (₹) *</label>
               <input
                 name="price"
                 type="number"
@@ -210,12 +209,12 @@ export default function AddProduct() {
                 value={form.price}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="650"
+                placeholder="18500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Stock Quantity *</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Stock Quantity *</label>
               <input
                 name="stock"
                 type="number"
@@ -224,12 +223,12 @@ export default function AddProduct() {
                 value={form.stock}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="50"
+                placeholder="25"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Special Offer Price (₹)</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Special Offer Price (₹)</label>
               <input
                 name="discountPrice"
                 type="number"
@@ -238,64 +237,66 @@ export default function AddProduct() {
                 value={form.discountPrice}
                 onChange={handleChange}
                 className="input-field"
-                placeholder="Optional promotional price"
+                placeholder="15900 (Optional)"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">SKU Code</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">SKU Identifier</label>
               <input
                 name="sku"
                 value={form.sku}
                 onChange={handleChange}
-                className="input-field uppercase font-mono"
-                placeholder="e.g. PRG-KATLI-01"
+                className="input-field"
+                placeholder="AGV-SR-001 (Optional)"
               />
             </div>
           </div>
 
+          {/* Image Selection */}
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Image Source</label>
-              <span className="text-[10px] text-[#3A2D23]/50">Choose a luxury preset or enter a custom URL</span>
-            </div>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {IMAGE_PRESETS.map((p, i) => (
+            <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">Garment Image URL *</label>
+            <input
+              name="image"
+              required
+              value={form.image}
+              onChange={handleChange}
+              className="input-field"
+              placeholder="https://... or /images/..."
+            />
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-[9px] text-[#211D1E]/40 font-bold uppercase tracking-wider">Presets:</span>
+              {IMAGE_PRESETS.map((p) => (
                 <button
-                  key={i}
+                  key={p.label}
                   type="button"
                   onClick={() => setForm(prev => ({ ...prev, image: p.url }))}
-                  className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition-all ${
+                  className={`text-[9px] px-2.5 py-1 rounded-full border transition-all ${
                     form.image === p.url
-                      ? 'bg-[#8B0000] text-white border-[#8B0000]'
-                      : 'bg-[#B8860B]/5 hover:bg-[#B8860B]/15 border-[#B8860B]/20 text-[#3A2D23]'
+                      ? 'bg-[#5A1020] text-white border-[#5A1020]'
+                      : 'bg-white text-[#211D1E]/70 border-[#C9A45C]/30 hover:border-[#5A1020]'
                   }`}
                 >
                   {p.label}
                 </button>
               ))}
             </div>
-            <input
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              className="input-field text-xs font-mono"
-              placeholder="/images/... or https://..."
-            />
           </div>
 
+          {/* Description & AI Generator */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Description & Heritage</label>
+              <label className="text-[10px] font-bold text-[#C9A45C] tracking-widest uppercase block select-none">
+                Couture Description & Fabric Details
+              </label>
               <button
                 type="button"
                 onClick={handleAiGenerate}
                 disabled={aiGenerating}
-                className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-[#B8860B]/40 text-[#B8860B] hover:bg-[#B8860B] hover:text-white transition-all disabled:opacity-50 select-none"
+                className="inline-flex items-center gap-1.5 text-[9px] font-bold text-[#5A1020] hover:text-[#C9A45C] uppercase tracking-wider transition-colors disabled:opacity-50"
               >
-                {aiGenerating
-                  ? <><Loader2 size={11} className="animate-spin" /> Generating...</>
-                  : <><Wand2 size={11} /> Generate with AI</>}
+                {aiGenerating ? <Loader2 size={11} className="animate-spin" /> : <Wand2 size={11} />}
+                Generate with AI
               </button>
             </div>
             <textarea
@@ -304,9 +305,9 @@ export default function AddProduct() {
               value={form.description}
               onChange={handleChange}
               className="input-field"
-              placeholder="Detail the pure A2 ghee, organic dry fruits, traditional simmering process, and taste profile..."
+              placeholder="Detail the handloom weave, pure mulberry silk, zardozi embroidery, silhouette drape, and styling notes..."
             />
-            <p className="text-[9px] text-[#3A2D23]/40">AI-generated content is a starting point — always review before publishing.</p>
+            <p className="text-[9px] text-[#211D1E]/50">AI-generated content is a starting point — review before publishing.</p>
           </div>
 
           <div className="pt-2">
@@ -315,19 +316,19 @@ export default function AddProduct() {
               disabled={saving}
               className="btn-primary w-full sm:w-auto disabled:opacity-60 text-xs font-bold tracking-widest uppercase"
             >
-              {saving ? 'Registering Confection...' : 'Publish Sweet to Catalogue'}
+              {saving ? 'Registering Silhouette...' : 'Publish Silhouette to Atelier'}
             </button>
           </div>
         </form>
 
         {/* Live Preview Panel */}
         <div className="lg:col-span-4 select-none">
-          <div className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 shadow-sm space-y-4 sticky top-28">
-            <h3 className="font-display text-sm tracking-widest uppercase font-bold text-[#8B0000] flex items-center gap-1.5 border-b border-[#B8860B]/10 pb-3">
-              <Sparkles size={14} className="text-[#B8860B]" /> Live Storefront Preview
+          <div className="bg-white border border-[#C9A45C]/20 rounded-3xl p-6 shadow-sm space-y-4 sticky top-28">
+            <h3 className="font-serif text-sm tracking-widest uppercase font-bold text-[#5A1020] flex items-center gap-1.5 border-b border-[#C9A45C]/15 pb-3">
+              <Sparkles size={14} className="text-[#C9A45C]" /> Live Boutique Preview
             </h3>
 
-            <div className="rounded-2xl overflow-hidden bg-[#F5E6C8]/40 border border-[#B8860B]/10 h-44 flex items-center justify-center relative">
+            <div className="rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#C9A45C]/15 h-56 flex items-center justify-center relative">
               {form.image ? (
                 <img
                   src={form.image}
@@ -336,48 +337,41 @@ export default function AddProduct() {
                   onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
                 />
               ) : (
-                <div className="text-center text-[#3A2D23]/40 flex flex-col items-center">
+                <div className="text-center text-[#211D1E]/40 flex flex-col items-center">
                   <Image size={24} className="mb-1" />
                   <span className="text-[10px]">No image selected</span>
                 </div>
               )}
               {form.discountPrice && Number(form.discountPrice) < Number(form.price) && (
-                <span className="absolute top-2 left-2 bg-[#8B0000] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">
+                <span className="absolute top-2 left-2 bg-[#5A1020] text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">
                   OFFER
                 </span>
               )}
             </div>
 
             <div className="space-y-1">
-              <span className="text-[9px] tracking-widest uppercase font-bold text-[#B8860B] block">
-                {form.category || 'Category'}
+              <span className="text-[9px] font-bold text-[#C9A45C] tracking-widest uppercase">
+                {form.category || 'Couture Line'}
               </span>
-              <h4 className="font-display text-base font-bold text-[#8B0000] truncate">
-                {form.name || 'Confection Title'}
+              <h4 className="font-serif font-bold text-base text-[#5A1020] line-clamp-1">
+                {form.name || 'Silhouette Name'}
               </h4>
-              <p className="text-[11px] text-[#3A2D23]/60 line-clamp-2">
-                {form.description || 'Crafted with premium ingredients...'}
-              </p>
-            </div>
-
-            <div className="flex items-baseline justify-between pt-2 border-t border-[#B8860B]/10">
-              <div>
-                <span className="font-display text-lg font-bold text-[#8B0000]">
-                  ₹{form.discountPrice ? form.discountPrice : (form.price || '0')}
+              <div className="flex items-baseline gap-2 pt-1">
+                <span className="text-lg font-bold text-[#5A1020]">
+                  ₹{form.discountPrice ? Number(form.discountPrice).toLocaleString('en-IN') : (Number(form.price) || 0).toLocaleString('en-IN')}
                 </span>
                 {form.discountPrice && (
-                  <span className="text-xs text-[#3A2D23]/40 line-through ml-1.5">
-                    ₹{form.price}
+                  <span className="text-xs text-[#211D1E]/40 line-through">
+                    ₹{Number(form.price || 0).toLocaleString('en-IN')}
                   </span>
                 )}
-                <span className="text-[10px] text-[#3A2D23]/50 ml-1">/ {form.unit}</span>
+                <span className="text-[10px] text-[#211D1E]/50">/ {form.unit}</span>
               </div>
-              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                Number(form.stock) > 10 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
-              }`}>
-                {Number(form.stock) > 10 ? `${form.stock} in stock` : 'Low Stock'}
-              </span>
             </div>
+
+            <p className="text-[11px] text-[#211D1E]/70 line-clamp-3 leading-relaxed border-t border-[#C9A45C]/10 pt-3">
+              {form.description || 'Silhouette craftsmanship notes and fabric drape will appear here.'}
+            </p>
           </div>
         </div>
       </div>

@@ -8,100 +8,100 @@ import toast from 'react-hot-toast'
 
 const FEATURED_CONFECTIONS = [
   {
-    id: 17,
-    name: 'Kalakand Supreme',
-    category: 'Milk Sweets',
-    badge: 'Slow Cooked',
-    tag: 'Whole Milk & Cardamom',
-    price: 520,
-    unit: 'kg',
+    id: 1,
+    name: 'Kanjeevaram Gold Zari Saree',
+    category: 'Sarees',
+    badge: 'Pure Mulberry Silk',
+    tag: 'Hand-loomed with Real Gold Zari',
+    price: 14500,
+    unit: 'piece',
     rating: 4.9,
     reviews: 45,
-    image: '/images/pexels-divigraphy-14467844.jpg'
+    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
   },
   {
-    id: 20,
-    name: 'Angoori Rasmalai',
-    category: 'Bengali Sweets',
-    badge: 'Chilled Rabri',
-    tag: 'Pistachio & Saffron',
-    price: 550,
-    unit: 'box',
-    rating: 4.9,
+    id: 2,
+    name: 'Heritage Crimson Bridal Lehenga',
+    category: 'Lehengas',
+    badge: 'Masterpiece',
+    tag: 'Intricate Zardozi & Dabka',
+    price: 38500,
+    unit: 'set',
+    rating: 5.0,
     reviews: 52,
-    image: '/images/pexels-gaurav-kumar-1281378-18488316.jpg'
+    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg'
   },
   {
-    id: 14,
-    name: 'Pure Ghee Motichoor Ladoo',
-    category: 'Desi Ghee',
-    badge: 'A2 Desi Ghee',
-    tag: 'Organic Gram Pearls',
-    price: 480,
-    unit: 'kg',
-    rating: 4.8,
+    id: 3,
+    name: 'Handcrafted Raw Silk Anarkali',
+    category: 'Anarkalis & Kurtas',
+    badge: 'Atelier Exclusive',
+    tag: 'Fine Gota Patti & Cutdana',
+    price: 9800,
+    unit: 'set',
+    rating: 4.9,
     reviews: 38,
     image: '/images/pexels-divigraphy-8624624.jpg'
   },
   {
-    id: 11,
-    name: 'Anjeer Dry Fruit Barfi',
-    category: 'Dry Fruit Sweets',
-    badge: 'Zero Added Sugar',
-    tag: 'Turkish Figs & Almonds',
-    price: 720,
-    unit: 'kg',
+    id: 4,
+    name: 'Draped Emerald Evening Gown',
+    category: 'Dresses & Gowns',
+    badge: 'Runway Edit',
+    tag: 'Sculpted Georgette Silhouette',
+    price: 12500,
+    unit: 'piece',
     rating: 4.8,
     reviews: 29,
-    image: '/images/pexels-mehranb-86649.jpg'
+    image: '/images/pexels-divigraphy-14467844.jpg'
   },
   {
-    id: 18,
-    name: 'Kesar Peda',
-    category: 'Milk Sweets',
-    badge: 'Kashmiri Saffron',
-    tag: 'Slivered Almond Garnish',
-    price: 480,
-    unit: 'kg',
-    rating: 4.7,
-    reviews: 18,
-    image: '/images/pexels-divigraphy-8624624.jpg'
-  },
-  {
-    id: 22,
-    name: 'Baked Gulab Jamun',
-    category: 'Bengali Sweets',
-    badge: 'Oven Finished',
-    tag: 'Rose Cardamom Elixir',
-    price: 480,
-    unit: 'box',
+    id: 5,
+    name: 'Banarasi Organza Tissue Saree',
+    category: 'Sarees',
+    badge: 'Handwoven',
+    tag: 'Antique Floral Kadwa Weave',
+    price: 11200,
+    unit: 'piece',
     rating: 4.9,
-    reviews: 48,
-    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg'
+    reviews: 22,
+    image: '/images/pexels-gaurav-kumar-1281378-18488310.jpg'
   },
   {
-    id: 12,
-    name: 'Badam Katli',
-    category: 'Dry Fruit Sweets',
-    badge: 'Silver Varq',
-    tag: 'Blanched California Almonds',
-    price: 690,
-    unit: 'kg',
-    rating: 4.7,
+    id: 6,
+    name: 'Pastel Velvet Trousseau Kurta Set',
+    category: 'Anarkalis & Kurtas',
+    badge: 'Festive Edit',
+    tag: 'Micro-pearl & Resham Work',
+    price: 8400,
+    unit: 'set',
+    rating: 4.8,
+    reviews: 31,
+    image: '/images/pexels-towfiqu-barbhuiya-3440682-11484120.jpg'
+  },
+  {
+    id: 7,
+    name: 'Bespoke Royal Velvet Cape Set',
+    category: 'Wedding Edit',
+    badge: 'Boutique Edition',
+    tag: 'Hand-appliquéd Borders',
+    price: 16900,
+    unit: 'set',
+    rating: 4.9,
     reviews: 19,
-    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
+    image: '/images/pexels-mehranb-86649.jpg'
   },
   {
-    id: 40,
-    name: 'Shahi Dry Fruit Platter',
-    category: 'Festival Hampers',
-    badge: 'Royal Gift Box',
-    tag: 'Afghan Raisins & Cashews',
-    price: 1499,
-    unit: 'box',
-    rating: 5.0,
+    id: 8,
+    name: 'Champagne Sequin Cocktail Gown',
+    category: 'Dresses & Gowns',
+    badge: 'Couture Edit',
+    tag: 'Ombré Hand-beaded Tulle',
+    price: 15800,
+    unit: 'piece',
+    rating: 4.8,
     reviews: 39,
-    image: '/images/pexels-mehranb-86649.jpg'
+    image: '/images/pexels-jonathanborba-19863265.jpg'
   }
 ]
 
@@ -139,27 +139,27 @@ export default function InteractiveItemsReel({ items }) {
   }
 
   return (
-    <section className="relative overflow-hidden py-16 md:py-24 bg-gradient-to-b from-[#240F06] via-[#35160A] to-[#1E0B04] text-white">
+    <section className="relative overflow-hidden py-16 md:py-24 bg-gradient-to-b from-[#2A0810] via-[#3D0C17] to-[#1F040A] text-white">
       {/* Ambient decorative glowing accents */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#B8860B]/15 filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[#8B0000]/25 filter blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#C9A45C]/15 filter blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[#5A1020]/30 filter blur-[120px] pointer-events-none" />
       
       {/* Decorative top and bottom gold border shimmer */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E6C687]/40 to-transparent" />
-      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E6C687]/40 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C9A45C]/40 to-transparent" />
+      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#C9A45C]/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 mb-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6C687]/10 border border-[#E6C687]/25 text-[#E6C687] text-[10px] font-bold uppercase tracking-[0.25em] mb-3 backdrop-blur-sm">
-              <Sparkles size={11} className="text-[#E6C687]" />
-              Artisanal Showcase in Motion
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A45C]/15 border border-[#C9A45C]/30 text-[#C9A45C] text-[10px] font-bold uppercase tracking-[0.25em] mb-3 backdrop-blur-sm font-sans">
+              <Sparkles size={11} className="text-[#C9A45C]" />
+              Haute Couture Showcase in Motion
             </div>
-            <h2 className="font-display text-3xl md:text-5xl text-white font-bold leading-tight">
-              Master Confections <span className="italic font-normal text-[#E6C687]">Live Reel</span>
+            <h2 className="font-serif text-3xl md:text-5xl text-white font-bold leading-tight">
+              Curated Couture <span className="italic font-normal text-[#C9A45C]">Live Reel</span>
             </h2>
-            <p className="font-body text-xs md:text-sm text-white/70 mt-2 max-w-lg leading-relaxed">
-              Continuous stream of small-batch confections crafted daily. Hover over any piece to freeze motion, inspect details, or quick-add directly.
+            <p className="font-sans text-xs md:text-sm text-white/70 mt-2 max-w-lg leading-relaxed">
+              Continuous showcase of handcrafted sarees, bridal lehengas, and evening gowns from the AGVIA atelier. Hover over any silhouette to pause motion.
             </p>
           </div>
 
@@ -167,7 +167,7 @@ export default function InteractiveItemsReel({ items }) {
           <div className="flex items-center gap-3 self-start md:self-auto">
             <button
               onClick={() => setIsPaused(!isPaused)}
-              className="px-4 py-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-[11px] font-bold tracking-wider uppercase transition-all backdrop-blur-sm"
+              className="px-4 py-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-[11px] font-bold tracking-wider uppercase transition-all backdrop-blur-sm font-sans"
               title="Toggle Auto Scroll"
             >
               {isPaused ? '▶ Resume Motion' : '⏸ Pause Motion'}
@@ -175,14 +175,14 @@ export default function InteractiveItemsReel({ items }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={scrollLeft}
-                className="w-10 h-10 rounded-full border border-white/20 bg-white/5 hover:bg-[#E6C687] hover:text-[#240F06] hover:border-[#E6C687] text-white flex items-center justify-center transition-all shadow-sm"
+                className="w-10 h-10 rounded-full border border-white/20 bg-white/5 hover:bg-[#C9A45C] hover:text-[#211D1E] hover:border-[#C9A45C] text-white flex items-center justify-center transition-all shadow-sm"
                 aria-label="Scroll previous"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={scrollRight}
-                className="w-10 h-10 rounded-full border border-white/20 bg-white/5 hover:bg-[#E6C687] hover:text-[#240F06] hover:border-[#E6C687] text-white flex items-center justify-center transition-all shadow-sm"
+                className="w-10 h-10 rounded-full border border-white/20 bg-white/5 hover:bg-[#C9A45C] hover:text-[#211D1E] hover:border-[#C9A45C] text-white flex items-center justify-center transition-all shadow-sm"
                 aria-label="Scroll next"
               >
                 <ChevronRight size={16} />

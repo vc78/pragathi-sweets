@@ -14,39 +14,39 @@ import ReliableImage from '../common/ReliableImage'
 
 const MEGA_MENU_CATEGORIES = [
   {
-    label: 'Milk Sweets',
-    icon: '🥛',
-    desc: 'Creamy handcrafted classics',
-    image: '/images/pexels-divigraphy-8624624.jpg',
-    path: '/products?category=Milk+Sweets',
-  },
-  {
-    label: 'Dry Fruit Sweets',
-    icon: '🌰',
-    desc: 'Premium nut confections',
+    label: 'Sarees',
+    icon: '✨',
+    desc: 'Pure Silk, Organza & Zardozi Drapes',
     image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg',
-    path: '/products?category=Dry+Fruit+Sweets',
+    path: '/products?category=Sarees',
   },
   {
-    label: 'Bengali Sweets',
-    icon: '🍮',
-    desc: 'Artisanal Eastern delights',
-    image: '/images/pexels-gaurav-kumar-1281378-18488316.jpg',
-    path: '/products?category=Bengali+Sweets',
+    label: 'Lehengas',
+    icon: '👑',
+    desc: 'Bridal & Festive Embroidered Sets',
+    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
+    path: '/products?category=Lehengas',
   },
   {
-    label: 'Savouries',
-    icon: '🫙',
-    desc: 'Crunchy spiced blends',
-    image: '/images/pexels-kailashkumarphotography-11887844.jpg',
-    path: '/products?category=Savouries',
+    label: 'Anarkalis & Kurtas',
+    icon: '🌸',
+    desc: 'Graceful Flowing Handcrafted Silhouettes',
+    image: '/images/pexels-divigraphy-8624624.jpg',
+    path: '/products?category=Anarkalis+%26+Kurtas',
   },
   {
-    label: 'Festival Hampers',
-    icon: '🎁',
-    desc: 'Curated gifting boxes',
-    image: '/images/pexels-jonathanborba-19863265.jpg',
-    path: '/products?category=Festival+Hampers',
+    label: 'Dresses & Gowns',
+    icon: '👗',
+    desc: 'Contemporary Luxury Indo-Western Couture',
+    image: '/images/pexels-divigraphy-14467844.jpg',
+    path: '/products?category=Dresses+%26+Gowns',
+  },
+  {
+    label: 'Wedding & Festive Edit',
+    icon: '💎',
+    desc: 'Curated Bridal Trousseau & Celebration Edits',
+    image: '/images/pexels-mehranb-86649.jpg',
+    path: '/products?category=Wedding+Edit',
   },
 ]
 
@@ -121,15 +121,20 @@ export default function Navbar() {
         <div className={`max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between transition-all duration-500 ${scrolled ? 'py-3' : 'py-4'}`}>
 
           {/* Logo */}
-          <Link to="/" className="flex flex-col items-start select-none group shrink-0">
-            <motion.span
-              className="font-display text-2xl md:text-3xl tracking-[0.15em] font-bold uppercase text-[#8B0000] leading-none group-hover:text-[#B8860B] transition-colors duration-300"
-            >
-              PRAGATHI
-            </motion.span>
-            <span className="font-body text-[8px] tracking-[0.42em] uppercase text-[#B8860B] font-semibold mt-0.5 pl-[1px]">
-              SWEETS & SAVOURIES
-            </span>
+          <Link to="/" className="flex items-center gap-3 select-none group shrink-0">
+            <img
+              src="/images/agvia-logo.png"
+              alt="AGVIA"
+              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="flex flex-col items-start">
+              <span className="font-serif text-xl md:text-2xl tracking-[0.2em] font-bold uppercase text-[#5A1020] leading-none group-hover:text-[#C9A45C] transition-colors duration-300">
+                AGVIA
+              </span>
+              <span className="font-sans text-[7.5px] md:text-[8px] tracking-[0.32em] uppercase text-[#C9A45C] font-semibold mt-1">
+                WOMEN'S WEAR BOUTIQUE
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -204,11 +209,11 @@ export default function Navbar() {
                               View All Products <ArrowRight size={14} />
                             </Link>
                             <span className="text-[#3A2D23]/30">|</span>
-                            <span className="flex items-center gap-2 text-xs text-[#3A2D23]/50">
-                              <Gift size={12} /> Festival Hampers Available
+                            <span className="flex items-center gap-2 text-xs text-[#211D1E]/60">
+                              <Crown size={12} className="text-[#C9A45C]" /> Bridal Trousseau Styling Consultations
                             </span>
-                            <span className="flex items-center gap-2 text-xs text-[#3A2D23]/50">
-                              <Cake size={12} /> Wedding Orders — Custom Quotes
+                            <span className="flex items-center gap-2 text-xs text-[#211D1E]/60">
+                              <Star size={12} className="text-[#C9A45C]" /> Bespoke Made-to-Measure Couture
                             </span>
                           </div>
                         </div>
@@ -305,30 +310,30 @@ export default function Navbar() {
               <X size={26} />
             </button>
             <div className="max-w-3xl mx-auto w-full">
-              <p className="font-display text-sm italic text-[#E6C687]/70 mb-5 text-center tracking-widest uppercase">
-                What are you craving today?
+              <p className="font-serif text-sm italic text-[#C9A45C]/90 mb-5 text-center tracking-widest uppercase">
+                Search our luxury fashion collections
               </p>
               <form onSubmit={handleSearchSubmit} className="relative">
                 <input
                   autoFocus
                   type="text"
-                  placeholder="Search sweets, hampers, gifts..."
+                  placeholder="Search sarees, lehengas, anarkalis, gowns..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-b-2 border-[#B8860B]/40 py-5 text-2xl md:text-4xl text-white font-display placeholder-white/20 focus:outline-none focus:border-[#E6C687] tracking-wide transition-all"
+                  className="w-full bg-transparent border-b-2 border-[#C9A45C]/40 py-5 text-2xl md:text-4xl text-white font-serif placeholder-white/20 focus:outline-none focus:border-[#C9A45C] tracking-wide transition-all"
                 />
-                <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 text-[#B8860B] hover:text-[#E6C687] p-2 transition-colors">
+                <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 text-[#C9A45C] hover:text-white p-2 transition-colors">
                   <ArrowRight size={28} />
                 </button>
               </form>
               <div className="flex gap-3 flex-wrap mt-6">
-                <span className="text-xs text-white/30 py-1 tracking-widest uppercase">Popular:</span>
-                {['Kaju Katli', 'Ladoo', 'Gift Box', 'Mysore Pak', 'Rasgulla'].map((term) => (
+                <span className="text-xs text-white/40 py-1 tracking-widest uppercase">Trending:</span>
+                {['Silk Sarees', 'Bridal Lehengas', 'Zardozi Anarkalis', 'Cocktail Gowns', 'Velvet Dupattas'].map((term) => (
                   <button
                     key={term}
                     type="button"
                     onClick={() => { setSearchQuery(term); navigate(`/products?search=${encodeURIComponent(term)}`); setSearchOpen(false) }}
-                    className="text-xs text-[#E6C687]/75 hover:text-[#E6C687] border border-[#B8860B]/30 hover:border-[#B8860B] px-3 py-1.5 rounded-full transition-all"
+                    className="text-xs text-[#C9A45C] hover:text-white border border-[#C9A45C]/40 hover:border-[#C9A45C] px-3.5 py-1.5 rounded-full transition-all"
                   >
                     {term}
                   </button>
@@ -391,8 +396,8 @@ export default function Navbar() {
                 )}
               </div>
 
-              <div className="px-6 py-4 border-t border-gold/10 text-center text-[9px] text-[#3A2D23]/30 tracking-widest uppercase">
-                Pragathi Sweets © {new Date().getFullYear()}
+              <div className="px-6 py-4 border-t border-gold/10 text-center text-[9px] text-[#211D1E]/40 tracking-widest uppercase">
+                AGVIA Women's Wear Boutique © {new Date().getFullYear()}
               </div>
             </motion.div>
           </>
@@ -407,42 +412,42 @@ export default function Navbar() {
             <motion.div
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.38, ease: 'easeOut' }}
-              className="fixed inset-y-0 right-0 z-[60] w-full max-w-md bg-[#FFFDF8] flex flex-col"
+              className="fixed inset-y-0 right-0 z-[60] w-full max-w-md bg-[#FAF7F2] flex flex-col"
             >
               {/* Header */}
-              <div className="px-6 py-4 border-b border-gold/15 flex justify-between items-center bg-[#F5E6C8]/30">
+              <div className="px-6 py-4 border-b border-gold/15 flex justify-between items-center bg-[#F2ECE4]">
                 <div className="flex items-center gap-2">
-                  <ShoppingCart size={17} className="text-[#8B0000]" />
-                  <span className="font-display text-base font-bold uppercase tracking-wider text-[#8B0000]">Your Cart</span>
-                  {count > 0 && <span className="text-xs text-[#3A2D23]/50 font-body">({count} items)</span>}
+                  <ShoppingCart size={17} className="text-[#5A1020]" />
+                  <span className="font-serif text-base font-bold uppercase tracking-wider text-[#5A1020]">Your Shopping Bag</span>
+                  {count > 0 && <span className="text-xs text-[#211D1E]/50 font-sans">({count} pieces)</span>}
                 </div>
-                <button onClick={() => setCartDrawerOpen(false)} className="p-2 text-[#3A2D23]/50 hover:text-[#8B0000] transition-colors"><X size={18} /></button>
+                <button onClick={() => setCartDrawerOpen(false)} className="p-2 text-[#211D1E]/50 hover:text-[#5A1020] transition-colors"><X size={18} /></button>
               </div>
 
               {/* Items */}
               <div className="flex-1 overflow-y-auto p-5 space-y-3">
                 {items.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center gap-4">
-                    <Package size={48} className="text-[#B8860B]/20" />
-                    <p className="text-sm text-[#3A2D23]/50 font-body italic">Your box awaits its first treasure.</p>
-                    <Link to="/products" onClick={() => setCartDrawerOpen(false)} className="btn-outline">Explore Sweets</Link>
+                    <Package size={48} className="text-[#C9A45C]/30" />
+                    <p className="text-sm text-[#211D1E]/50 font-serif italic">Your bespoke wardrobe bag awaits its first silhouette.</p>
+                    <Link to="/products" onClick={() => setCartDrawerOpen(false)} className="btn-outline">Explore Boutique</Link>
                   </div>
                 ) : (
                   items.map((item) => (
                     <motion.div layout key={item.id} className="flex gap-4 p-4 border border-gold/15 rounded-2xl bg-white hover:border-gold/30 transition-all">
-                      <ReliableImage src={item.image} alt={item.name} className="w-16 h-16 rounded-xl border border-gold/10 shrink-0" />
+                      <ReliableImage src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-xl border border-gold/10 shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="font-display text-sm font-bold text-[#8B0000] truncate">{item.name}</p>
-                        <p className="text-[11px] text-[#3A2D23]/40 mt-0.5 font-body">₹{item.price} / {item.unit}</p>
+                        <p className="font-serif text-sm font-bold text-[#5A1020] truncate">{item.name}</p>
+                        <p className="text-[11px] text-[#211D1E]/50 mt-0.5 font-sans">₹{item.price} {item.size ? `• Size: ${item.size}` : ''}</p>
                         <div className="flex items-center border border-gold/30 rounded-full w-fit mt-2 bg-white overflow-hidden">
-                          <button onClick={() => updateQty(item.id, item.qty - 1)} className="px-2.5 py-1 hover:bg-[#F5E6C8] text-[#3A2D23]/60 transition-colors"><Minus size={10} /></button>
-                          <span className="px-2.5 text-xs font-bold text-[#3A2D23]">{item.qty}</span>
-                          <button onClick={() => updateQty(item.id, item.qty + 1)} className="px-2.5 py-1 hover:bg-[#F5E6C8] text-[#3A2D23]/60 transition-colors"><Plus size={10} /></button>
+                          <button onClick={() => updateQty(item.id, item.qty - 1)} className="px-2.5 py-1 hover:bg-[#F2ECE4] text-[#211D1E]/60 transition-colors"><Minus size={10} /></button>
+                          <span className="px-2.5 text-xs font-bold text-[#211D1E]">{item.qty}</span>
+                          <button onClick={() => updateQty(item.id, item.qty + 1)} className="px-2.5 py-1 hover:bg-[#F2ECE4] text-[#211D1E]/60 transition-colors"><Plus size={10} /></button>
                         </div>
                       </div>
                       <div className="flex flex-col items-end justify-between">
-                        <span className="font-display font-bold text-sm text-[#8B0000]">₹{item.price * item.qty}</span>
-                        <button onClick={() => removeFromCart(item.id)} className="text-[#3A2D23]/25 hover:text-red-600 transition-colors p-1"><Trash2 size={13} /></button>
+                        <span className="font-serif font-bold text-sm text-[#5A1020]">₹{item.price * item.qty}</span>
+                        <button onClick={() => removeFromCart(item.id)} className="text-[#211D1E]/30 hover:text-red-600 transition-colors p-1"><Trash2 size={13} /></button>
                       </div>
                     </motion.div>
                   ))
@@ -451,36 +456,36 @@ export default function Navbar() {
 
               {/* Footer */}
               {items.length > 0 && (
-                <div className="p-5 border-t border-gold/15 bg-[#F5E6C8]/20 space-y-3">
-                  <div className="flex justify-between text-xs text-[#3A2D23]/60 font-body">
+                <div className="p-5 border-t border-gold/15 bg-[#F2ECE4] space-y-3">
+                  <div className="flex justify-between text-xs text-[#211D1E]/70 font-sans">
                     <span>Subtotal</span>
-                    <span className="font-semibold text-[#3A2D23]">₹{subtotal}</span>
+                    <span className="font-semibold text-[#211D1E]">₹{subtotal}</span>
                   </div>
-                  <div className="flex justify-between text-xs text-[#3A2D23]/60 font-body">
-                    <span>Delivery</span>
-                    <span className="text-green-700 font-semibold">{subtotal >= 999 ? 'FREE' : '₹50'}</span>
+                  <div className="flex justify-between text-xs text-[#211D1E]/70 font-sans">
+                    <span>Couture Delivery</span>
+                    <span className="text-green-800 font-semibold">{subtotal >= 1999 ? 'COMPLIMENTARY' : '₹150'}</span>
                   </div>
-                  {subtotal < 999 && (
-                    <div className="w-full bg-[#F5E6C8] rounded-full h-1.5 overflow-hidden">
+                  {subtotal < 1999 && (
+                    <div className="w-full bg-[#E4D8D2] rounded-full h-1.5 overflow-hidden">
                       <motion.div
-                        className="h-full bg-[#B8860B] rounded-full"
+                        className="h-full bg-[#C9A45C] rounded-full"
                         initial={{ width: 0 }}
-                        animate={{ width: `${Math.min((subtotal / 999) * 100, 100)}%` }}
+                        animate={{ width: `${Math.min((subtotal / 1999) * 100, 100)}%` }}
                         transition={{ duration: 0.6, ease: 'easeOut' }}
                       />
                     </div>
                   )}
-                  {subtotal < 999 && (
-                    <p className="text-[10px] text-[#3A2D23]/50 font-body">Add ₹{999 - subtotal} more for free delivery</p>
+                  {subtotal < 1999 && (
+                    <p className="text-[10px] text-[#211D1E]/60 font-sans">Add ₹{1999 - subtotal} more for complimentary delivery</p>
                   )}
-                  <div className="border-t border-gold/10 pt-3 flex justify-between font-display text-sm font-bold text-[#8B0000]">
-                    <span>Total</span>
-                    <span>₹{subtotal >= 999 ? subtotal : subtotal + 50}</span>
+                  <div className="border-t border-gold/15 pt-3 flex justify-between font-serif text-sm font-bold text-[#5A1020]">
+                    <span>Estimated Total</span>
+                    <span>₹{subtotal >= 1999 ? subtotal : subtotal + 150}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-3 pt-1">
-                    <Link to="/cart" onClick={() => setCartDrawerOpen(false)} className="btn-outline !py-3 !px-2 text-[10px] text-center">View Cart</Link>
+                    <Link to="/cart" onClick={() => setCartDrawerOpen(false)} className="btn-outline !py-3 !px-2 text-[10px] text-center">View Bag</Link>
                     <Link to="/checkout" onClick={() => setCartDrawerOpen(false)} className="btn-primary !py-3 !px-2 text-[10px] text-center flex items-center justify-center gap-1">
-                      Checkout <ArrowRight size={12} />
+                      Proceed to Checkout <ArrowRight size={12} />
                     </Link>
                   </div>
                 </div>

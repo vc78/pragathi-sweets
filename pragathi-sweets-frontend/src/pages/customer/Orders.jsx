@@ -515,18 +515,18 @@ export default function Orders() {
                                   </button>
                                   <button
                                     onClick={() => {
-                                      const text = encodeURIComponent(`Hello Pragathi Sweets, I would like support regarding my order #${o.orderNumber || o.id}.`)
+                                      const text = encodeURIComponent(`Hello AGVIA Concierge, I would like assistance regarding my atelier order #${o.orderNumber || o.id}.`)
                                       window.open(`https://wa.me/${BUSINESS.contact.whatsappRaw}?text=${text}`, '_blank')
                                     }}
                                     className="btn-outline !py-2 !px-4 text-[10px] flex items-center gap-1.5 font-bold"
                                   >
-                                    <HelpCircle size={12} /> Support
+                                    <HelpCircle size={12} /> Atelier Support
                                   </button>
                                   <Link
                                     to="/products"
                                     className="btn-primary !py-2 !px-4 text-[10px] flex items-center gap-1.5 font-bold"
                                   >
-                                    <RotateCcw size={12} /> Reorder Sweets
+                                    <RotateCcw size={12} /> Explore Collection
                                   </Link>
                                 </div>
 

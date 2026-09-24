@@ -86,7 +86,7 @@ export default function Customers() {
         <div>
           <h2 className="font-display text-3xl font-light text-maroon-dark">Loyal Clients</h2>
           <p className="font-body text-xs text-charcoal/50 mt-1">
-            Register of sweet storefront clients, lifetime purchases, and account details.
+            Register of AGVIA atelier patrons, lifetime wardrobe purchases, and account details.
           </p>
         </div>
         <div className="flex flex-col items-end gap-1">

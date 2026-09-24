@@ -1,43 +1,43 @@
-// Authoritative Single Source of Truth for Pragathi Sweets business information
+// Authoritative Single Source of Truth for AGVIA business information
 export const BUSINESS = {
-  name: 'Pragathi Sweets & Savouries',
-  shortName: 'Pragathi Sweets',
-  tagline: 'Handcrafted Heritage Confections Since 1994',
-  establishedYear: 1994,
-  description: 'Creating heritage confections in small, artisanal batches since 1994. Built on purity, ghee, and generation-old secret recipes.',
+  name: "AGVIA Women's Wear Boutique",
+  shortName: 'AGVIA',
+  tagline: "WOMEN'S WEAR BOUTIQUE",
+  establishedYear: 2018,
+  description: 'Curating bespoke bridal lehengas, pure handloom silk sarees, handcrafted zardozi anarkalis, and timeless occasion wear for the discerning woman.',
   
   contact: {
-    phone: '+91 98490 12345',
-    phoneRaw: '+919849012345',
-    whatsapp: '+91 98490 12345',
-    whatsappRaw: '919849012345',
-    email: 'info@pragathisweets.com',
-    supportEmail: 'support@pragathisweets.com',
-    hours: '9:00 AM - 9:00 PM IST',
-    openDays: 'Monday - Sunday (All 7 Days)',
+    phone: '+91 98490 24888',
+    phoneRaw: '+919849024888',
+    whatsapp: '+91 98490 24888',
+    whatsappRaw: '919849024888',
+    email: 'concierge@agvia.in',
+    supportEmail: 'care@agvia.in',
+    hours: '10:30 AM - 8:30 PM IST',
+    openDays: 'Monday - Sunday (7 Days)',
   },
 
   location: {
-    street: 'Station Road, Koti',
+    street: 'Road No. 36, Jubilee Hills',
     city: 'Hyderabad',
     state: 'Telangana',
-    postalCode: '500095',
+    postalCode: '500033',
     country: 'India',
-    fullAddress: 'Koti, Hyderabad, Telangana 500095, India',
-    googleMapsUrl: 'https://maps.google.com/?q=Pragathi+Sweets+Hyderabad',
+    fullAddress: 'Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033, India',
+    googleMapsUrl: 'https://maps.google.com/?q=AGVIA+Boutique+Hyderabad',
   },
 
   social: {
-    instagram: 'https://instagram.com/pragathisweets',
-    facebook: 'https://facebook.com/pragathisweets',
-    twitter: 'https://twitter.com/pragathisweets',
+    instagram: 'https://instagram.com/agviaboutique',
+    facebook: 'https://facebook.com/agviaboutique',
+    twitter: 'https://twitter.com/agviaboutique',
   },
 
   seo: {
-    siteUrl: 'https://pragathisweets.com',
-    defaultTitle: 'Pragathi Sweets — Handcrafted Pure Ghee Sweets & Festival Hampers',
-    titleTemplate: '%s | Pragathi Sweets',
-    defaultDescription: 'Order fresh, authentic Indian sweets made with pure desi ghee. Kaju Katli, Gulab Jamun, Motichoor Ladoo, and luxury festival hampers delivered fresh.',
-    keywords: 'Pragathi Sweets, Indian sweets, pure desi ghee, Kaju Katli, Gulab Jamun, festival hampers, Hyderabad sweets, luxury mithai',
+    siteUrl: 'https://agvia.in',
+    defaultTitle: "AGVIA | Women's Wear Boutique — Luxury Sarees, Lehengas & Couture",
+    titleTemplate: "%s | AGVIA Women's Wear Boutique",
+    defaultDescription: "Discover AGVIA — Luxury Indian fashion boutique featuring pure silk sarees, handcrafted bridal lehengas, bespoke anarkalis, and contemporary occasion couture.",
+    keywords: "AGVIA, AGVIA boutique, luxury sarees, bridal lehenga, designer anarkali, Indian couture, wedding wear, women's designer fashion, handloom silk",
   }
 }

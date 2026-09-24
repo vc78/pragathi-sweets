@@ -3,16 +3,17 @@ import Footer from '../../components/customer/Footer'
 
 export default function Terms() {
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-body selection:bg-[#C9A45C]/30">
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 pt-12 pb-24">
-        <h1 className="font-display text-4xl text-[#8B0000] font-bold mb-8 text-center">Terms of Service</h1>
-        <div className="prose prose-stone text-xs leading-relaxed text-[#3A2D23]/70 space-y-6">
+        <span className="text-[9px] tracking-[0.3em] font-bold text-[#C9A45C] uppercase block text-center mb-3">✦ Legal & Policies ✦</span>
+        <h1 className="font-serif text-4xl text-[#5A1020] font-bold mb-8 text-center">Terms of Service</h1>
+        <div className="prose prose-stone text-xs leading-relaxed text-[#211D1E]/70 space-y-6">
           <p>
-            By accessing or ordering from Pragathi Sweets, you agree to our terms. All prices listed are in Indian Rupees (INR) and are inclusive of standard local taxes unless specified.
+            By accessing or ordering from AGVIA Women's Wear Boutique, you agree to our terms. All prices listed are in Indian Rupees (INR) and are inclusive of standard applicable GST and luxury handloom cess unless specified.
           </p>
           <p>
-            We prepare morning batches starting at 6 AM. We reserve the right to cancel orders or adjust items selection depending on ingredient stocks or dispatch constraints.
+            Each handcrafted garment and handloom weave is subject to subtle variations in zari sheen and embroidery texture, which testify to authentic artisanal craftsmanship. We reserve the right to modify availability and delivery timelines for custom made-to-measure orders.
           </p>
         </div>
       </div>

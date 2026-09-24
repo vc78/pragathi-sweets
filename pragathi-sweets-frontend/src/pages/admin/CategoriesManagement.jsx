@@ -141,7 +141,7 @@ export default function CategoriesManagement() {
               <label className="text-[10px] font-bold text-[#B8860B] uppercase tracking-wider block">Description</label>
               <textarea
                 rows={3}
-                placeholder="Brief summary of sweet assortment..."
+                placeholder="Brief summary of couture silhouette, fabrics, and styling..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="input-field"

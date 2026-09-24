@@ -1,37 +1,37 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSearchParams, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { 
-  CheckCircle2, ShoppingBag, ArrowRight, MessageSquare, 
-  Copy, ExternalLink, Crown, Sparkles, Package, MapPin, Phone
-} from 'lucide-react'
+import { CheckCircle2, MessageSquare, Copy, ExternalLink, ShoppingBag, ArrowRight, Package, Crown } from 'lucide-react'
+import toast from 'react-hot-toast'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
-import { orderService } from '../../services/orderService'
-import toast from 'react-hot-toast'
+import api from '../../services/api'
 
 export default function PaymentSuccess() {
+  const [searchParams] = useSearchParams()
   const location = useLocation()
-  const orderId = location.state?.orderId || "PS-MOCK-101"
+  const orderId = searchParams.get('orderId') || searchParams.get('id') || 'AGV-' + Math.floor(100000 + Math.random() * 900000)
+  
   const [whatsappMsg, setWhatsappMsg] = useState('')
-  const [copied, setCopied] = useState(false)
   const [loadingMsg, setLoadingMsg] = useState(true)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    async function loadPreview() {
-      try {
-        const preview = await orderService.getWhatsAppPreview(orderId)
-        if (preview) {
-          setWhatsappMsg(preview)
-        }
-      } catch (err) {
-        console.warn('Could not load WhatsApp preview:', err)
-      } finally {
-        setLoadingMsg(false)
-      }
-    }
+    window.scrollTo(0, 0)
+    // Fetch formatted WhatsApp message from backend
     if (orderId) {
-      loadPreview()
+      api.get(`/orders/${orderId}/whatsapp-message`)
+        .then(res => {
+          if (res.data?.success && res.data?.whatsappMessage) {
+            setWhatsappMsg(res.data.whatsappMessage)
+          }
+        })
+        .catch(err => {
+          console.warn('Could not fetch auto WhatsApp receipt, using formatted template', err)
+        })
+        .finally(() => setLoadingMsg(false))
+    } else {
+      setLoadingMsg(false)
     }
   }, [orderId])
 
@@ -41,14 +41,14 @@ export default function PaymentSuccess() {
     setCopied(true)
     toast.success('WhatsApp receipt copied to clipboard!', {
       icon: '📋',
-      style: { background: '#075E54', color: '#FFFDF8', borderRadius: '12px' }
+      style: { background: '#075E54', color: '#FAF7F2', borderRadius: '12px' }
     })
     setTimeout(() => setCopied(false), 2500)
   }
 
   const shareOnWhatsApp = () => {
     const text = encodeURIComponent(
-      whatsappMsg || `Hello Pragathi Sweets! Here is my confirmed order receipt #${orderId}. Please update me on delivery dispatch.`
+      whatsappMsg || `Hello AGVIA Atelier Support! Here is my confirmed order receipt #${orderId}. Please update me on courier dispatch.`
     )
     const phone = location.state?.customerPhone || location.state?.phone || ''
     const cleanPhone = phone ? phone.replace(/\D/g, '') : ''
@@ -57,7 +57,7 @@ export default function PaymentSuccess() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-body flex flex-col justify-between selection:bg-[#C9A45C]/30">
       <Navbar />
 
       <main className="max-w-3xl mx-auto px-6 py-14 w-full">
@@ -71,14 +71,14 @@ export default function PaymentSuccess() {
           <div className="w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center mx-auto shadow-md">
             <CheckCircle2 size={44} />
           </div>
-          <span className="text-[10px] tracking-[0.3em] font-bold text-[#B8860B] uppercase block">
-            Payment & Order Confirmed
+          <span className="text-[10px] tracking-[0.3em] font-bold text-[#C9A45C] uppercase block">
+            Payment & Couture Order Confirmed
           </span>
-          <h1 className="font-display text-3xl md:text-5xl font-bold text-[#8B0000]">
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#5A1020]">
             Thank You for Your Order!
           </h1>
-          <p className="text-sm text-[#3A2D23]/70 max-w-lg mx-auto leading-relaxed">
-            Your transaction has been securely authorized. Order <strong className="text-[#8B0000] font-mono">#{orderId}</strong> has been transmitted to our master sweet-makers for instant preparation.
+          <p className="text-sm text-[#211D1E]/70 max-w-lg mx-auto leading-relaxed">
+            Your transaction has been securely authorized. Order <strong className="text-[#5A1020] font-mono">#{orderId}</strong> has been transmitted to our master atelier karigars for bespoke finishing and heirloom packaging.
           </p>
         </motion.div>
 
@@ -95,10 +95,10 @@ export default function PaymentSuccess() {
                 <MessageSquare size={22} className="text-[#25D366]" />
               </div>
               <div>
-                <h3 className="font-display text-base font-bold text-[#075E54]">
+                <h3 className="font-serif text-base font-bold text-[#075E54]">
                   WhatsApp Order Confirmation
                 </h3>
-                <p className="text-xs text-[#3A2D23]/60">
+                <p className="text-xs text-[#211D1E]/60">
                   Instant real-time receipt & dispatch updates sent directly to your phone.
                 </p>
               </div>
@@ -130,51 +130,51 @@ export default function PaymentSuccess() {
                   Generating your professional WhatsApp receipt...
                 </div>
               ) : (
-                `🎉 *PRAGATHI SWEETS* 🎉
+                `👑 *AGVIA — WOMEN'S WEAR BOUTIQUE* 👑
 ━━━━━━━━━━━━━━━━━━━━━━
-✅ *Order Confirmed!*
+✅ *Atelier Order Confirmed!*
 🔖 Order No: *${orderId}*
-📦 Status  : Scheduled for Fresh Prep
+📦 Status  : Scheduled for Handcrafted Inspection & Keepsake Packaging
 ⏰ Delivery: 2–4 Business Days
-📞 WhatsApp: +91 98490 12345
+📞 Concierge: +91 90323 06961
 ━━━━━━━━━━━━━━━━━━━━━━
-🙏 Thank you for choosing Pragathi Sweets!
-_Taste the Tradition_ 🍮`
+🙏 Thank you for choosing AGVIA!
+_Timeless Indian Luxury Couture_ 👗`
               )
             )}
           </div>
         </motion.div>
 
-        {/* VIP Membership Upsell */}
+        {/* Atelier Circle VIP Membership Upsell */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25, duration: 0.5 }}
-          className="bg-gradient-to-r from-[#1A0A0A] via-[#2A1117] to-[#3A1F0F] text-white rounded-3xl p-6 md:p-7 border border-[#B8860B]/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl mb-10"
+          className="bg-gradient-to-r from-[#2E050E] via-[#5A1020] to-[#2E050E] text-white rounded-3xl p-6 md:p-7 border border-[#C9A45C]/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl mb-10"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#B8860B]/20 border border-[#B8860B]/40 flex items-center justify-center shrink-0">
-              <Crown size={24} className="text-[#E6C687]" />
+            <div className="w-12 h-12 rounded-2xl bg-[#C9A45C]/20 border border-[#C9A45C]/40 flex items-center justify-center shrink-0">
+              <Crown size={24} className="text-[#C9A45C]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[9px] text-[#E6C687] font-bold tracking-widest uppercase">Pragathi Circle</span>
-                <span className="text-[8px] bg-[#E6C687]/20 text-[#E6C687] px-2 py-0.5 rounded-full font-bold">10% OFF NEXT ORDER</span>
+                <span className="text-[9px] text-[#C9A45C] font-bold tracking-widest uppercase">AGVIA Atelier Circle</span>
+                <span className="text-[8px] bg-[#C9A45C]/20 text-[#C9A45C] px-2 py-0.5 rounded-full font-bold">15% OFF NEXT ORDER</span>
               </div>
-              <h4 className="font-display text-lg font-bold text-white mt-0.5">
-                Join Pragathi Circle VIP for ₹299/yr
+              <h4 className="font-serif text-lg font-bold text-white mt-0.5">
+                Join Atelier Circle VIP for ₹499/yr
               </h4>
-              <p className="text-xs text-white/60">
-                Unlock lifetime free delivery, priority festival shipping, and complimentary gift packaging.
+              <p className="text-xs text-white/70">
+                Unlock complimentary made-to-measure fittings, priority bridal dispatch, and bespoke styling consultations.
               </p>
             </div>
           </div>
 
           <Link
             to="/subscription"
-            className="shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-[#B8860B] to-[#E6C687] text-[#1A0A0A] font-bold text-xs tracking-wider uppercase shadow hover:scale-105 transition-all"
+            className="shrink-0 px-6 py-3 rounded-full bg-gradient-to-r from-[#C9A45C] to-[#E8C7C3] text-[#2E050E] font-bold text-xs tracking-wider uppercase shadow hover:scale-105 transition-all font-sans"
           >
-            Explore VIP
+            Explore VIP Circle
           </Link>
         </motion.div>
 
@@ -182,19 +182,19 @@ _Taste the Tradition_ 🍮`
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link
             to="/orders"
-            className="py-3.5 px-5 rounded-2xl bg-[#8B0000] hover:bg-[#700000] text-white text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 shadow-md transition-all"
+            className="py-3.5 px-5 rounded-2xl bg-[#5A1020] hover:bg-[#400B16] text-[#FAF7F2] text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 shadow-md transition-all font-sans"
           >
             <ShoppingBag size={15} /> Track in Orders
           </Link>
           <Link
             to={`/track-order?id=${orderId}`}
-            className="py-3.5 px-5 rounded-2xl border border-[#B8860B]/40 hover:bg-[#F5E6C8]/30 text-[#8B0000] text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 transition-all"
+            className="py-3.5 px-5 rounded-2xl border border-[#C9A45C]/40 hover:bg-[#C9A45C]/10 text-[#5A1020] text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 transition-all font-sans"
           >
             <Package size={15} /> Live Order Status
           </Link>
           <Link
             to="/products"
-            className="py-3.5 px-5 rounded-2xl border border-gray-200 hover:border-gray-300 text-[#3A2D23]/80 hover:text-[#3A2D23] text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 transition-all"
+            className="py-3.5 px-5 rounded-2xl border border-gray-200 hover:border-[#C9A45C]/40 text-[#211D1E]/80 hover:text-[#5A1020] text-xs font-bold tracking-widest uppercase text-center flex items-center justify-center gap-2 transition-all font-sans"
           >
             Continue Shopping <ArrowRight size={14} />
           </Link>

@@ -24,24 +24,24 @@ function loadRazorpayScript() {
 }
 
 const PERKS = [
-  { icon: Ticket, title: '15% Lifetime Discount', desc: 'Every order, every time. No minimum cart required for VIP members.', color: '#B8860B' },
-  { icon: Gift, title: 'Royale Gift Packaging', desc: 'Complimentary premium keepsake box with silk ribbon and custom card on all orders.', color: '#8B0000' },
-  { icon: Zap, title: 'Priority Dispatch', desc: 'Guaranteed same-day kitchen prep even during peak festival rush.', color: '#5C1A2B' },
-  { icon: BookOpen, title: 'Exclusive Heritage Menus', desc: 'First invites to secret seasonal batches and regional festival tastings.', color: '#2D4A2D' },
-  { icon: Star, title: 'Birthday Sweet Box', desc: 'A complimentary 250g artisanal sweet box delivered on your birthday.', color: '#1A3A5C' },
-  { icon: MessageCircle, title: 'WhatsApp Concierge', desc: 'Dedicated WhatsApp order and support line — respond within 30 minutes.', color: '#075E54' },
+  { icon: Ticket, title: '15% Lifetime Privilege', desc: 'Every ensemble, every season. No minimum spend required for Atelier Circle members.', color: '#C9A45C' },
+  { icon: Gift, title: 'Heirloom Keepsake Trunk', desc: 'Complimentary luxury archival box with silk ribbon and handwritten calligraphed card on all orders.', color: '#5A1020' },
+  { icon: Zap, title: 'Priority Atelier Dispatch', desc: 'Guaranteed expedited bespoke alteration and rush courier delivery for weddings and galas.', color: '#5A1020' },
+  { icon: BookOpen, title: 'Private Collection Previews', desc: 'First access to limited-edition runway sarees, bridal trousseaus, and festive launches.', color: '#2D4A2D' },
+  { icon: Star, title: 'Anniversary Silk Keepsake', desc: 'A complimentary pure silk stole delivered on your birthday or wedding anniversary.', color: '#1A3A5C' },
+  { icon: MessageCircle, title: 'Personal Stylist Concierge', desc: 'Dedicated direct stylist assistance for drape advice, blouse customization, and sizing.', color: '#075E54' },
 ]
 
 const COMPARISON = [
-  { feature: 'Discount on All Orders', guest: false, vip: '15% Always' },
-  { feature: 'Free Delivery', guest: '₹999+ only', vip: 'All Orders' },
-  { feature: 'Gift Packaging', guest: '₹99 add-on', vip: 'Always Free' },
-  { feature: 'Priority Dispatch', guest: false, vip: true },
-  { feature: 'Birthday Sweet Box', guest: false, vip: true },
-  { feature: 'Heritage Secret Menus', guest: false, vip: true },
-  { feature: 'WhatsApp Concierge', guest: false, vip: true },
-  { feature: 'Exclusive VIP Coupon', guest: false, vip: true },
-  { feature: 'Early Festival Access', guest: false, vip: true },
+  { feature: 'Privilege on All Ensembles', guest: false, vip: '15% Always' },
+  { feature: 'Complimentary Insured Courier', guest: '₹2,500+ only', vip: 'All Orders' },
+  { feature: 'Heirloom Keepsake Trunk', guest: '₹299 add-on', vip: 'Always Free' },
+  { feature: 'Priority Atelier Dispatch', guest: false, vip: true },
+  { feature: 'Anniversary Silk Keepsake', guest: false, vip: true },
+  { feature: 'Private Collection Previews', guest: false, vip: true },
+  { feature: 'Personal Stylist Concierge', guest: false, vip: true },
+  { feature: 'Bespoke Size Tailoring', guest: 'Chargeable', vip: 'Complimentary' },
+  { feature: 'Early Festive Drop Access', guest: false, vip: true },
 ]
 
 export default function Subscription() {
@@ -74,7 +74,7 @@ export default function Subscription() {
 
   const handleSubscribe = async () => {
     if (!user) {
-      toast.error('Please log in to join Pragathi Circle VIP.', { style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' } })
+      toast.error('Please log in to join AGVIA Atelier Circle VIP.', { style: { background: '#5A1020', color: '#FAF7F2', borderRadius: '12px' } })
       navigate('/login?redirect=/subscription')
       return
     }
@@ -96,15 +96,15 @@ export default function Subscription() {
         key: order.razorpayKeyId,
         amount: Math.round(order.amount * 100),
         currency: 'INR',
-        name: 'Pragathi Sweets',
-        description: 'Pragathi Circle VIP Membership - Annual',
+        name: "AGVIA Women's Wear Boutique",
+        description: 'AGVIA Atelier Circle VIP Membership - Annual',
         order_id: order.razorpayOrderId,
         prefill: {
           name: user.name || '',
           email: user.email || '',
           contact: user.phone || ''
         },
-        theme: { color: '#8B0000' },
+        theme: { color: '#5A1020' },
         modal: {
           ondismiss: () => {
             setPurchasing(false)
@@ -186,7 +186,7 @@ export default function Subscription() {
             </h1>
 
             <p className="text-base md:text-lg text-white/65 leading-relaxed max-w-xl mx-auto mb-10">
-              One membership. Unlimited privileges. Join 10,000+ families who experience Pragathi Sweets like never before — exclusive savings, priority service, and royal treatment on every order.
+              One circle. Unlimited couture privileges. Join patrons across Hyderabad and beyond who experience AGVIA like never before — bespoke bridal styling, priority atelier dispatch, and celebratory privileges on every ensemble.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

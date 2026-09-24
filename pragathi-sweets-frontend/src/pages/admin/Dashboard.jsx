@@ -52,13 +52,13 @@ export default function Dashboard() {
     {
       key: 'id',
       label: 'Order ID',
-      render: (r) => <span className="font-mono font-bold text-xs text-[#8B0000]">{r.id}</span>
+      render: (r) => <span className="font-mono font-bold text-xs text-[#5A1020]">{r.id}</span>
     },
-    { key: 'customer', label: 'Customer' },
+    { key: 'customer', label: 'Patron' },
     {
       key: 'total',
       label: 'Total',
-      render: (r) => <span className="font-bold text-[#8B0000]">₹{Number(r.total).toLocaleString('en-IN')}</span>
+      render: (r) => <span className="font-bold text-[#5A1020]">₹{Number(r.total).toLocaleString('en-IN')}</span>
     },
     {
       key: 'status',
@@ -75,8 +75,8 @@ export default function Dashboard() {
     <AdminLayout>
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8 select-none font-body">
         <div>
-          <h2 className="font-display text-3xl font-bold text-[#8B0000]">Dashboard Overview</h2>
-          <p className="text-xs text-[#3A2D23]/50 mt-1">Real-time boutique metrics, customer activity, and recent order performance.</p>
+          <h2 className="font-serif text-3xl font-bold text-[#5A1020]">Atelier Overview</h2>
+          <p className="text-xs text-[#211D1E]/60 mt-1">Real-time boutique metrics, patron activity, and atelier order performance.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -102,13 +102,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="text-[10px] text-[#3A2D23]/40 font-mono mb-4 text-right select-none">
+      <div className="text-[10px] text-[#211D1E]/40 font-mono mb-4 text-right select-none">
         Metrics synchronized: {lastSyncTime.toLocaleTimeString()}
       </div>
 
       {loading ? (
-        <div className="py-20 text-center font-body text-xs text-[#3A2D23]/50 animate-pulse">
-          Retrieving live boutique metrics...
+        <div className="py-20 text-center font-body text-xs text-[#211D1E]/50 animate-pulse">
+          Retrieving live atelier metrics...
         </div>
       ) : error ? (
         <div className="py-20 text-center font-body text-sm text-red-600 font-semibold border border-red-200/20 bg-red-50/10 rounded-3xl p-6">
@@ -118,10 +118,10 @@ export default function Dashboard() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard label="Total Revenue" value={`₹${Number(stats.totalRevenue).toLocaleString('en-IN')}`} icon={IndianRupee} trend="+12% this month" />
-            <StatCard label="Total Orders" value={stats.totalOrders} icon={ShoppingBag} trend="Active sales" />
-            <StatCard label="Total Customers" value={stats.totalCustomers} icon={Users} trend="Loyal clientele" />
-            <StatCard label="Total Products" value={stats.totalProducts} icon={Package} trend="Live catalog confections" />
+            <StatCard label="Total Revenue" value={`₹${Number(stats.totalRevenue).toLocaleString('en-IN')}`} icon={IndianRupee} trend="+14% this month" />
+            <StatCard label="Atelier Orders" value={stats.totalOrders} icon={ShoppingBag} trend="Active couture bookings" />
+            <StatCard label="Registered Patrons" value={stats.totalCustomers} icon={Users} trend="Loyal clientele" />
+            <StatCard label="Active Silhouettes" value={stats.totalProducts} icon={Package} trend="Live atelier collection" />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
@@ -129,7 +129,7 @@ export default function Dashboard() {
               <SalesChart data={stats.salesTrend} />
             </div>
             <div>
-              <h3 className="font-display text-lg text-[#8B0000] font-bold mb-4 uppercase tracking-wider select-none">Recent Orders</h3>
+              <h3 className="font-serif text-lg text-[#5A1020] font-bold mb-4 uppercase tracking-wider select-none">Recent Orders</h3>
               <DataTable columns={columns} rows={stats.recentOrders} emptyMessage="No recent transactions." />
             </div>
           </div>
