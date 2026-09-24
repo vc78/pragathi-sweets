@@ -21,16 +21,16 @@ export default function Wishlist() {
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
       <Navbar />
-      <div className="max-w-5xl mx-auto px-6 pt-12 pb-24">
-        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-10 select-none">
+      <div className="container-luxury py-8 md:py-12">
+        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-6 select-none">
           Your Wishlist
         </h1>
 
         {items.length === 0 ? (
-          <div className="text-center py-24 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
-            <Heart size={40} className="text-[#B8860B]/30 mx-auto mb-4" />
+          <div className="text-center py-12 md:py-16 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
+            <Heart size={36} className="text-[#B8860B]/30 mx-auto mb-3" />
             <p className="font-display text-lg italic text-[#8B0000] font-bold">Your wishlist is empty.</p>
-            <p className="text-xs text-[#3A2D23]/50 mt-2 mb-8">Save your favorite confections for later.</p>
+            <p className="text-xs text-[#3A2D23]/50 mt-1.5 mb-6">Save your favorite confections for later.</p>
             <Link to="/products" className="btn-primary">Browse Boutique</Link>
           </div>
         ) : (

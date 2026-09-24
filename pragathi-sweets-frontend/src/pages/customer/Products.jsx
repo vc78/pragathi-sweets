@@ -82,30 +82,47 @@ export default function Products() {
     <div className="relative min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
       <Navbar />
 
-      {/* Hero Banner Header */}
-      <section className="bg-[#8B0000] text-white pt-24 pb-16 px-6 md:px-12 relative overflow-hidden select-none">
-        <div className="absolute inset-0 bg-black/20 z-0" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#B8860B]/20 filter blur-[90px]" />
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-[10px] tracking-[0.3em] text-amber-200 font-bold uppercase mb-4">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight size={10} />
-            <span className="text-white/50">Collection</span>
+      {/* Streamlined Boutique Header */}
+      <section className="bg-gradient-to-r from-[#8B0000] via-[#700000] to-[#5C0000] text-white pt-10 pb-8 px-6 md:px-12 relative overflow-hidden select-none border-b border-[#B8860B]/30 shadow-sm">
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-1.5 text-[9px] tracking-[0.25em] text-[#E6C687] font-bold uppercase mb-2">
+              <Link to="/" className="hover:text-white transition-colors">Home</Link>
+              <ChevronRight size={10} />
+              <span className="text-white/70">Collection</span>
+            </div>
+            <h1 className="font-display text-3xl md:text-4xl text-white font-bold leading-tight flex items-center gap-3">
+              Our Sweet <span className="italic font-normal text-[#E6C687]">Boutique</span>
+            </h1>
+            <p className="text-xs text-white/80 mt-1 max-w-lg leading-relaxed">
+              Handcrafted in small batches daily using pure A2 desi ghee, organic dry fruits, and heritage family recipes.
+            </p>
           </div>
 
-          <h1 className="font-display text-4xl md:text-6xl text-white font-bold leading-tight">
-            Our Sweet <span className="italic font-normal text-amber-200">Boutique</span>
-          </h1>
-          <p className="text-xs text-white/70 mt-3 max-w-md leading-relaxed tracking-wide">
-            Hand-rolled cashew sweets, saffron-simmered syrups, and premium festive hampers packaged to tell a generations-old story.
-          </p>
+          {/* Quick Category Badges in Header */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {['All', ...categories.slice(0, 5)].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  setActiveCategory(cat)
+                  setSearchParams(cat === 'All' ? {} : { category: cat })
+                }}
+                className={`text-[11px] font-bold tracking-wider px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
+                  activeCategory === cat
+                    ? 'bg-[#E6C687] text-[#240F06] shadow-sm'
+                    : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Main Listing Area */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
           {/* 1. FILTER SIDEBAR (Desktop) */}
@@ -278,10 +295,10 @@ export default function Products() {
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <div className="text-center py-24 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
+              <div className="text-center py-12 md:py-16 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
                 <p className="font-display text-lg italic text-[#8B0000] font-bold">No Confections Found</p>
-                <p className="text-xs text-[#3A2D23]/50 mt-2">Adjust your filters or try a different search keyword.</p>
-                <button onClick={clearFilters} className="btn-primary mt-6">
+                <p className="text-xs text-[#3A2D23]/50 mt-1.5">Adjust your filters or try a different search keyword.</p>
+                <button onClick={clearFilters} className="btn-primary mt-5">
                   Show All Confections
                 </button>
               </div>

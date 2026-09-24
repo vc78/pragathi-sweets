@@ -33,13 +33,13 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#1F1F1F] text-[#FFFDF8] pt-20 pb-10 border-t border-[#B8860B]/15 select-none relative z-10 font-body">
+    <footer className="bg-[#1F1F1F] text-[#FFFDF8] pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 border-t border-[#B8860B]/15 select-none relative z-10 font-body">
       
       {/* Decorative Subtle Gold Glow */}
       <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#8B0000]/10 filter blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-[#B8860B]/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 pb-10 md:pb-14 border-b border-[#B8860B]/10">
           
           {/* Brand Info */}
           <div className="lg:col-span-4 flex flex-col items-start">

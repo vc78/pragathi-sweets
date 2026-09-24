@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import AdminLayout from '../../components/admin/AdminLayout'
 import { adminService } from '../../services/adminService'
-import { Image, Sparkles } from 'lucide-react'
+import { Image, Sparkles, Loader2, Wand2 } from 'lucide-react'
 
 const IMAGE_PRESETS = [
   { label: 'Kaju Katli', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
@@ -30,6 +30,7 @@ export default function AddProduct() {
     sku: '',
   })
   const [saving, setSaving] = useState(false)
+  const [aiGenerating, setAiGenerating] = useState(false)
 
   useEffect(() => {
     adminService.getCategories()
@@ -115,6 +116,37 @@ export default function AddProduct() {
       toast.error(err?.response?.data?.message || 'Could not add product. Please verify fields.')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleAiGenerate = async () => {
+    if (!form.name.trim()) {
+      toast.error('Enter a product name first so AI can generate its content.')
+      return
+    }
+    setAiGenerating(true)
+    try {
+      const selectedCat = categories.find(c => String(c.id) === String(form.categoryId))
+      const result = await adminService.generateAiProductContent({
+        name: form.name.trim(),
+        category: selectedCat?.name || form.category || '',
+        price: form.price ? `₹${form.price}` : '',
+        weight: form.unit || '',
+        ingredients: '',
+        characteristics: '',
+      })
+      if (result?.description) {
+        setForm(prev => ({ ...prev, description: result.description }))
+        toast.success('AI description applied! Review and edit before saving.', {
+          style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        })
+      } else {
+        toast.error('AI did not return a description. Try again.')
+      }
+    } catch (err) {
+      toast.error('AI generation failed. Check your network or GEMINI_API_KEY.')
+    } finally {
+      setAiGenerating(false)
     }
   }
 
@@ -252,8 +284,20 @@ export default function AddProduct() {
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Description & Heritage</label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] font-bold text-[#B8860B] tracking-widest uppercase block select-none">Description & Heritage</label>
+              <button
+                type="button"
+                onClick={handleAiGenerate}
+                disabled={aiGenerating}
+                className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-[#B8860B]/40 text-[#B8860B] hover:bg-[#B8860B] hover:text-white transition-all disabled:opacity-50 select-none"
+              >
+                {aiGenerating
+                  ? <><Loader2 size={11} className="animate-spin" /> Generating...</>
+                  : <><Wand2 size={11} /> Generate with AI</>}
+              </button>
+            </div>
             <textarea
               name="description"
               rows={4}
@@ -262,6 +306,7 @@ export default function AddProduct() {
               className="input-field"
               placeholder="Detail the pure A2 ghee, organic dry fruits, traditional simmering process, and taste profile..."
             />
+            <p className="text-[9px] text-[#3A2D23]/40">AI-generated content is a starting point — always review before publishing.</p>
           </div>
 
           <div className="pt-2">

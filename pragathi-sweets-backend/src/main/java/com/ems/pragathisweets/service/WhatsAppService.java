@@ -95,6 +95,46 @@ public class WhatsAppService {
         send(normalisePhone(phone), message);
     }
 
+    /**
+     * Sends a direct OTP verification message to the customer's WhatsApp number.
+     */
+    public String sendOtp(String phone, String code) {
+        String cleanPhone = normalisePhone(phone);
+        String message = "🔐 *PRAGATHI SWEETS* — Verification Code\n\n"
+                + "Your 6-digit verification code is: *" + code + "*\n\n"
+                + "Valid for 10 minutes. Please do not share this OTP with anyone.\n"
+                + "Thank you for choosing Pragathi Sweets!";
+        
+        if (enabled && isConfigured()) {
+            send(cleanPhone, message);
+        }
+
+        String waUrl = buildDirectWhatsAppUrl(cleanPhone, message);
+        log.info("[WhatsApp OTP URL] Generated click-to-chat WhatsApp link for {}: {}", cleanPhone, waUrl);
+        return waUrl;
+    }
+
+    /**
+     * Checks if Twilio API credentials are fully configured.
+     */
+    public boolean isConfigured() {
+        return accountSid != null && !accountSid.isBlank() && authToken != null && !authToken.isBlank();
+    }
+
+    /**
+     * Builds a universal click-to-chat WhatsApp URL (works on mobile app and WhatsApp Web).
+     */
+    public String buildDirectWhatsAppUrl(String phone, String text) {
+        if (phone == null || phone.isBlank()) return "";
+        String cleanDigits = phone.replaceAll("[^0-9]", "");
+        if (cleanDigits.length() == 10) cleanDigits = "91" + cleanDigits;
+        try {
+            return "https://api.whatsapp.com/send?phone=" + cleanDigits + "&text=" + java.net.URLEncoder.encode(text, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            return "https://api.whatsapp.com/send?phone=" + cleanDigits;
+        }
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Message Templates
     // ─────────────────────────────────────────────────────────────────────────
@@ -202,6 +242,10 @@ public class WhatsAppService {
     // ─────────────────────────────────────────────────────────────────────────
 
     private void send(String toNumber, String message) {
+        if (accountSid == null || accountSid.isBlank() || authToken == null || authToken.isBlank()) {
+            log.info("[WhatsApp Direct Notification] Message generated for customer number {}. (Twilio credentials not configured in environment).\nMessage:\n{}", toNumber, message);
+            return;
+        }
         try {
             String url = TWILIO_API_BASE + "/Accounts/" + accountSid + "/Messages.json";
 

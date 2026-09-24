@@ -19,6 +19,7 @@ public class OrderResponse {
     private String orderNumber;
     private Long userId;
     private String userName;
+    private String userEmail;
     private List<OrderItemResponse> items;
     private BigDecimal totalAmount;
     private BigDecimal discountAmount;
@@ -30,5 +31,6 @@ public class OrderResponse {
     private String shippingAddress;
     private String contactPhone;
     private String notes;
+    private String notificationStatus;
     private LocalDateTime createdAt;
 }

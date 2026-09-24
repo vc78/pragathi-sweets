@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   ShoppingCart, Menu, X, User, Search, Heart, LogOut,
   ArrowRight, Trash2, Plus, Minus, Phone, MapPin, Clock,
-  ChevronDown, Gift, Star, Cake, Package
+  ChevronDown, Gift, Star, Cake, Package, Crown
 } from 'lucide-react'
 import { loggedOut } from '../../store/authSlice'
 import { useCart } from '../../hooks/useCart'
@@ -245,6 +245,9 @@ export default function Navbar() {
 
             {isAuthenticated ? (
               <div className="hidden md:flex items-center gap-4">
+                <Link to="/subscription" title="Pragathi Circle VIP" className="p-1.5 text-[#B8860B] hover:text-[#8B0000] transition-colors" >
+                  <Crown size={15} />
+                </Link>
                 <Link to="/profile" className="flex items-center gap-2 text-xs tracking-wider font-body text-[#3A2D23]/70 hover:text-[#8B0000] uppercase transition-colors">
                   <User size={15} className="text-[#B8860B]" />
                   {user?.name?.split(' ')[0]}

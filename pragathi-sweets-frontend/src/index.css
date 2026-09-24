@@ -2,19 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════════
+   PRAGATHI SWEETS DESIGN SYSTEM & RESPONSIVE VERTICAL RHYTHM TOKENS
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* 12-step Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 56px;
+  --space-11: 64px;
+  --space-12: 72px;
+
+  /* Responsive Page & Container Padding */
+  --page-padding-mobile: 16px;
+  --page-padding-tablet: 28px;
+  --page-padding-desktop: 40px;
+  --page-padding-wide: 56px;
+
+  /* Responsive Section Vertical Padding */
+  --section-padding-mobile: 36px;
+  --section-padding-tablet: 52px;
+  --section-padding-desktop: 68px;
+  --section-padding-max: 80px;
+
+  /* Content Max Widths */
+  --content-max-width: 1280px;
+  --content-max-width-wide: 1320px;
+  --text-max-width: 650px;
+  --hero-text-max-width: 720px;
+
+  /* Button Dimensions */
+  --btn-height-desktop: 48px;
+  --btn-height-mobile: 44px;
+}
+
+/* Global Box-Sizing & Body Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    min-height: 100%;
   }
   
   body {
     @apply bg-cream text-charcoal font-body antialiased overflow-x-hidden;
     background-color: #FFFDF8;
     color: #3A2D23;
+    min-height: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display text-maroon-dark tracking-wide font-semibold;
+    margin-top: 0;
   }
 
   /* Custom Premium Scrollbar */
@@ -35,25 +92,101 @@
 }
 
 @layer components {
+  /* ── Responsive Layout & Spacing Utilities ──────────────────── */
+  .container-luxury {
+    width: min(100% - 32px, var(--content-max-width));
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .container-luxury {
+      width: min(100% - 48px, var(--content-max-width));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-luxury {
+      width: min(100% - 64px, var(--content-max-width-wide));
+    }
+  }
+
+  /* Fluid Responsive Section Spacing */
+  .section {
+    padding-block: clamp(32px, 4vw, 72px);
+  }
+
+  .section--compact {
+    padding-block: clamp(20px, 2.5vw, 44px);
+  }
+
+  .section--hero {
+    padding-block: clamp(36px, 5vw, 80px);
+  }
+
+  /* Normalized Section Typography Hierarchy */
+  .section-header {
+    text-align: center;
+    margin-bottom: clamp(20px, 3vw, 36px);
+  }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body, inherit);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #B8860B;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: var(--font-display, serif);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    line-height: 1.15;
+    color: #8B0000;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .section-description {
+    font-family: var(--font-body, inherit);
+    font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+    color: rgba(58, 45, 35, 0.65);
+    max-width: var(--text-max-width);
+    margin-inline: auto;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* Section CTA Container */
+  .section-cta {
+    text-align: center;
+    margin-top: clamp(20px, 2.5vw, 32px);
+  }
+
   /* Premium buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-maroon text-cream font-semibold px-8 py-3.5 rounded-full border-2 border-maroon hover:bg-transparent hover:text-maroon transition-all duration-300 shadow-md hover:shadow-xl relative overflow-hidden tracking-widest text-xs uppercase;
+    @apply inline-flex items-center justify-center gap-2 bg-maroon text-cream font-semibold px-7 py-3 rounded-full border-2 border-maroon hover:bg-transparent hover:text-maroon transition-all duration-300 shadow-md hover:shadow-xl relative overflow-hidden tracking-widest text-xs uppercase;
+    min-height: var(--btn-height-desktop);
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-gold text-gold font-semibold px-8 py-3.5 rounded-full hover:bg-gold hover:text-chocolate transition-all duration-300 relative overflow-hidden tracking-widest text-xs uppercase;
+    @apply inline-flex items-center justify-center gap-2 border-2 border-gold text-gold font-semibold px-7 py-3 rounded-full hover:bg-gold hover:text-chocolate transition-all duration-300 relative overflow-hidden tracking-widest text-xs uppercase;
+    min-height: var(--btn-height-desktop);
   }
 
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 bg-gold text-chocolate font-bold px-8 py-3.5 rounded-full hover:bg-maroon hover:text-cream transition-all duration-300 tracking-widest text-xs uppercase;
+    @apply inline-flex items-center justify-center gap-2 bg-gold text-chocolate font-bold px-7 py-3 rounded-full hover:bg-maroon hover:text-cream transition-all duration-300 tracking-widest text-xs uppercase;
+    min-height: var(--btn-height-desktop);
   }
 
   .input-field {
-    @apply w-full px-5 py-4 rounded-xl border border-gold/30 bg-white/60 text-charcoal placeholder-charcoal/40 focus:outline-none focus:border-maroon focus:ring-2 focus:ring-maroon/10 transition-all duration-300 font-body text-sm;
+    @apply w-full px-4 py-3 rounded-xl border border-gold/30 bg-white/60 text-charcoal placeholder-charcoal/40 focus:outline-none focus:border-maroon focus:ring-2 focus:ring-maroon/10 transition-all duration-300 font-body text-sm;
   }
 
   .card-luxury {
-    @apply bg-white border border-gold/15 rounded-3xl p-8 shadow-card hover:shadow-luxury hover:border-gold/30 transition-all duration-500 bg-opacity-70 backdrop-blur-sm;
+    @apply bg-white border border-gold/15 rounded-3xl p-6 md:p-8 shadow-card hover:shadow-luxury hover:border-gold/30 transition-all duration-500 bg-opacity-70 backdrop-blur-sm;
   }
 
   /* Premium logo */
@@ -93,13 +226,13 @@
 /* Micro animations & floaters */
 @keyframes float {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(5deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
 @keyframes float-reverse {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(12px) rotate(-4deg); }
+  50% { transform: translateY(8px) rotate(-3deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 

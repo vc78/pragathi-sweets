@@ -23,5 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByStockQuantityLessThanEqualAndActiveTrue(Integer threshold);
 
+    List<Product> findByCategoryIdAndIdNotAndActiveTrue(Long categoryId, Long id, Pageable pageable);
+
     boolean existsBySkuIgnoreCase(String sku);
 }

@@ -25,17 +25,17 @@ export const productService = {
           (c) => c.name.toLowerCase() === params.category.toLowerCase()
         )
         if (found) {
-          const { data } = await api.get(`/products/category/${found.id}`)
+          const { data } = await api.get(`/products/category/${found.id}`, { params: { size: 200, page: 0 } })
           return (data.data.content || []).map(normalizeProduct)
         }
       }
       // If a search keyword is provided use the /products/search endpoint
       if (params.search) {
-        const { data } = await api.get('/products/search', { params: { keyword: params.search } })
+        const { data } = await api.get('/products/search', { params: { keyword: params.search, size: 200, page: 0 } })
         return (data.data.content || []).map(normalizeProduct)
       }
-      // Default: get all products
-      const { data } = await api.get('/products')
+      // Default: get all products — request a large page so none are hidden by pagination
+      const { data } = await api.get('/products', { params: { size: 200, page: 0 } })
       return (data.data.content || []).map(normalizeProduct)
     } catch (err) {
       console.error(err)
@@ -67,11 +67,12 @@ export const productService = {
   async getReviews(productId) {
     try {
       const { data } = await api.get(`/reviews/product/${productId}`)
-      return data.data.content.map(r => ({
+      return (data.data?.content || []).map(r => ({
         id: r.id,
-        customer: r.customerName || 'Customer Guest',
+        customer: r.customerName || r.userName || 'Valued Customer',
         rating: r.rating,
         comment: r.comment,
+        verified: r.verifiedPurchase ?? true,
         date: r.createdAt ? r.createdAt.split('T')[0] : 'N/A'
       }))
     } catch (err) {
@@ -87,16 +88,29 @@ export const productService = {
         rating: payload.rating,
         comment: payload.comment
       })
+      const r = data.data || {}
       return {
-        id: data.data.id,
-        customer: data.data.customerName || 'Customer Guest',
-        rating: data.data.rating,
-        comment: data.data.comment,
-        date: data.data.createdAt ? data.data.createdAt.split('T')[0] : new Date().toISOString().slice(0, 10)
+        id: r.id,
+        customer: r.customerName || r.userName || payload.customer || 'Valued Customer',
+        rating: r.rating,
+        comment: r.comment,
+        verified: r.verifiedPurchase ?? true,
+        date: r.createdAt ? r.createdAt.split('T')[0] : new Date().toISOString().slice(0, 10)
       }
     } catch (err) {
       if (err.response) throw err
       return { ...payload, id: Date.now() }
+    }
+  },
+
+  async getRelated(productId, limit = 4) {
+    try {
+      const { data } = await api.get(`/products/${productId}/related`, { params: { limit } })
+      return (data.data || []).map(normalizeProduct)
+    } catch {
+      // Fallback if backend endpoint is unavailable
+      const all = await this.getAll()
+      return all.filter((p) => String(p.id) !== String(productId)).slice(0, limit)
     }
   },
 }

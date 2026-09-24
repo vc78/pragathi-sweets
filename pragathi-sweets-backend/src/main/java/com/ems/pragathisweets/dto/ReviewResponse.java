@@ -18,6 +18,8 @@ public class ReviewResponse {
     private String productName;
     private Long userId;
     private String userName;
+    private String customerName;
+    private boolean verifiedPurchase;
     private Integer rating;
     private String comment;
     private LocalDateTime createdAt;

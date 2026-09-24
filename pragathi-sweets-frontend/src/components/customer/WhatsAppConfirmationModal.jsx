@@ -10,7 +10,8 @@ import {
   Phone,
   Sparkles,
   ShieldCheck,
-  CheckCheck
+  CheckCheck,
+  Store
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../../services/api'
@@ -110,18 +111,22 @@ export default function WhatsAppConfirmationModal({ isOpen, onClose, order, cust
     setTimeout(() => setCopied(false), 2500)
   }
 
-  const handleOpenWhatsApp = () => {
+  const handleSendToCustomer = () => {
     const rawDigits = (customPhone || '').replace(/[^\d]/g, '')
     const targetPhone = rawDigits.length === 10 ? `91${rawDigits}` : rawDigits
     const encoded = encodeURIComponent(messageText)
-    
-    // If phone number is available, open direct conversation with pre-filled message;
-    // Otherwise open standard WhatsApp share URL
     const url = targetPhone
       ? `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encoded}`
       : `https://api.whatsapp.com/send?text=${encoded}`
-
     window.open(url, '_blank', 'noopener,noreferrer')
+    toast.success('Opening WhatsApp to your phone…', { icon: '📱', style: { background: '#075E54', color: '#fff', borderRadius: '12px' } })
+  }
+
+  const handleSendToStore = () => {
+    const storeRaw = (BUSINESS?.contact?.whatsappRaw || '919849012345').replace(/[^\d]/g, '')
+    const encoded = encodeURIComponent(messageText)
+    window.open(`https://api.whatsapp.com/send?phone=${storeRaw}&text=${encoded}`, '_blank', 'noopener,noreferrer')
+    toast.success('Opening WhatsApp to Pragathi Sweets…', { icon: '🏪', style: { background: '#128C7E', color: '#fff', borderRadius: '12px' } })
   }
 
   return (
@@ -223,7 +228,7 @@ export default function WhatsAppConfirmationModal({ isOpen, onClose, order, cust
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <button
                 onClick={onClose}
                 className="flex-1 py-2.5 px-4 rounded-xl border border-gray-300 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
@@ -231,12 +236,20 @@ export default function WhatsAppConfirmationModal({ isOpen, onClose, order, cust
                 Done
               </button>
               <button
-                onClick={handleOpenWhatsApp}
+                onClick={handleSendToCustomer}
                 className="flex-[2] py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
               >
                 <Send size={14} />
-                <span>Open in WhatsApp</span>
+                <span>Send to My WhatsApp</span>
                 <ExternalLink size={12} className="opacity-75" />
+              </button>
+              <button
+                onClick={handleSendToStore}
+                className="flex-[2] py-2.5 px-4 rounded-xl bg-[#128C7E] hover:bg-[#0a7468] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                title="Send receipt to Pragathi Sweets kitchen & dispatch team"
+              >
+                <Store size={14} />
+                <span>Send to Pragathi Sweets</span>
               </button>
             </div>
           </div>

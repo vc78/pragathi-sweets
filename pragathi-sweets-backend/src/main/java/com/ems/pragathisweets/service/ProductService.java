@@ -53,6 +53,27 @@ public class ProductService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductResponse> getRelated(Long id, int limit) {
+        Product product = findEntity(id);
+        Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(0, limit);
+        List<Product> list;
+        if (categoryId != null) {
+            list = new java.util.ArrayList<>(productRepository.findByCategoryIdAndIdNotAndActiveTrue(categoryId, id, pageable));
+        } else {
+            list = new java.util.ArrayList<>();
+        }
+        if (list.size() < limit) {
+            List<Product> fallback = productRepository.findTop8ByActiveTrueOrderByAvgRatingDesc().stream()
+                    .filter(p -> !p.getId().equals(id) && list.stream().noneMatch(existing -> existing.getId().equals(p.getId())))
+                    .limit(limit - list.size())
+                    .toList();
+            list.addAll(fallback);
+        }
+        return list.stream().map(productMapper::toResponse).toList();
+    }
+
     @Transactional
     public ProductResponse create(ProductRequest request) {
         if (request.getSku() != null && !request.getSku().isBlank()

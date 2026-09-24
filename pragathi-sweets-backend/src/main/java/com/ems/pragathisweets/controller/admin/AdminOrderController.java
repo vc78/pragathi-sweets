@@ -44,6 +44,11 @@ public class AdminOrderController {
         return ResponseEntity.ok(ApiResponse.success(adminOrderService.getById(id)));
     }
 
+    @GetMapping("/{id}/notifications")
+    public ResponseEntity<ApiResponse<java.util.List<com.ems.pragathisweets.entity.OrderNotificationLog>>> getNotifications(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(adminOrderService.getOrderNotifications(id)));
+    }
+
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<OrderResponse>> updateStatus(@PathVariable Long id,
                                                                     @Valid @RequestBody OrderStatusRequest request) {

@@ -94,12 +94,15 @@ public class ReviewService {
     }
 
     private ReviewResponse toResponse(Review review) {
+        String name = review.getUser() != null ? review.getUser().getFullName() : "Customer";
         return ReviewResponse.builder()
                 .id(review.getId())
                 .productId(review.getProduct() != null ? review.getProduct().getId() : null)
                 .productName(review.getProduct() != null ? review.getProduct().getName() : null)
                 .userId(review.getUser() != null ? review.getUser().getId() : null)
-                .userName(review.getUser() != null ? review.getUser().getFullName() : null)
+                .userName(name)
+                .customerName(name)
+                .verifiedPurchase(true)
                 .rating(review.getRating())
                 .comment(review.getComment())
                 .createdAt(review.getCreatedAt())

@@ -32,6 +32,7 @@ public class OrderService {
     private final CouponService couponService;
     private final EmailService emailService;
     private final WhatsAppService whatsAppService;
+    private final OrderNotificationService orderNotificationService;
 
     @Transactional
     public OrderResponse checkout(Long userId, CheckoutRequest request) {
@@ -59,7 +60,8 @@ public class OrderService {
                 .user(user)
                 .paymentMethod(paymentMethod)
                 .paymentStatus(paymentMethod == PaymentMethod.COD ? PaymentStatus.PENDING : PaymentStatus.PENDING)
-                .status(OrderStatus.PENDING)
+                // COD orders are confirmed immediately; RAZORPAY orders stay PENDING until payment verification
+                .status(paymentMethod == PaymentMethod.COD ? OrderStatus.CONFIRMED : OrderStatus.PENDING)
                 .shippingAddress(request.getShippingAddress())
                 .contactPhone(request.getContactPhone())
                 .notes(request.getNotes())
@@ -117,14 +119,17 @@ public class OrderService {
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        emailService.sendOrderConfirmationEmail(user.getEmail(), saved.getOrderNumber(), saved.getFinalAmount().toString());
-
-        // WhatsApp confirmation – uses contactPhone from the order (preferred) or user profile phone
+        // WhatsApp and email confirmation – uses contactPhone from the order (preferred) or user profile phone
         String phone = (request.getContactPhone() != null && !request.getContactPhone().isBlank())
                 ? request.getContactPhone()
                 : user.getPhone();
         OrderResponse orderResponse = toResponse(saved);
-        whatsAppService.sendOrderConfirmation(orderResponse, user.getFullName(), phone);
+
+        // Only send order confirmation immediately for COD orders.
+        // Online payment (Razorpay) orders remain PENDING until backend signature verification.
+        if (saved.getPaymentMethod() == PaymentMethod.COD) {
+            orderNotificationService.sendOrderConfirmedNotifications(orderResponse, user.getEmail(), user.getFullName(), phone);
+        }
 
         return orderResponse;
     }
@@ -161,6 +166,30 @@ public class OrderService {
         return whatsAppService.buildOrderConfirmationMessage(response, order.getUser().getFullName());
     }
 
+    @Transactional(readOnly = true)
+    public OrderResponse trackOrder(String identifier) {
+        if (identifier == null || identifier.isBlank()) {
+            throw new IllegalArgumentException("Order reference is required");
+        }
+        String clean = identifier.trim();
+        java.util.Optional<Order> orderOpt = orderRepository.findByOrderNumber(clean);
+        if (orderOpt.isEmpty()) {
+            String alt = clean.startsWith("PS-") ? clean : "PS-" + clean;
+            orderOpt = orderRepository.findByOrderNumber(alt);
+        }
+        if (orderOpt.isEmpty() && clean.startsWith("#")) {
+            orderOpt = orderRepository.findByOrderNumber(clean.substring(1));
+        }
+        if (orderOpt.isEmpty()) {
+            try {
+                Long id = Long.parseLong(clean.replaceAll("[^0-9]", ""));
+                orderOpt = orderRepository.findById(id);
+            } catch (Exception ignored) {}
+        }
+        Order order = orderOpt.orElseThrow(() -> new ResourceNotFoundException("No order found with reference: " + identifier));
+        return toResponse(order);
+    }
+
     @Transactional
     public OrderResponse cancelOrder(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId)
@@ -184,11 +213,10 @@ public class OrderService {
 
         order.setStatus(OrderStatus.CANCELLED);
         Order saved = orderRepository.save(order);
-        emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order.getOrderNumber(), "CANCELLED");
-        // WhatsApp cancellation notice
         String cancelPhone = order.getContactPhone() != null ? order.getContactPhone() : order.getUser().getPhone();
-        whatsAppService.sendOrderStatusUpdate(order.getOrderNumber(), "CANCELLED", order.getUser().getFullName(), cancelPhone);
-        return toResponse(saved);
+        OrderResponse response = toResponse(saved);
+        orderNotificationService.sendOrderStatusNotification(response, "CANCELLED", order.getUser().getEmail(), order.getUser().getFullName(), cancelPhone, "Order cancelled by customer");
+        return response;
     }
 
     private String generateOrderNumber() {
@@ -208,11 +236,17 @@ public class OrderService {
                         .build())
                 .toList();
 
+        String notifStatus = "NOT_DISPATCHED";
+        try {
+            notifStatus = orderNotificationService.getLatestNotificationStatus(order.getId());
+        } catch (Exception ignored) {}
+
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
                 .userId(order.getUser().getId())
                 .userName(order.getUser().getFullName())
+                .userEmail(order.getUser().getEmail())
                 .items(items)
                 .totalAmount(order.getTotalAmount())
                 .discountAmount(order.getDiscountAmount())
@@ -224,6 +258,7 @@ public class OrderService {
                 .shippingAddress(order.getShippingAddress())
                 .contactPhone(order.getContactPhone())
                 .notes(order.getNotes())
+                .notificationStatus(notifStatus)
                 .createdAt(order.getCreatedAt())
                 .build();
     }

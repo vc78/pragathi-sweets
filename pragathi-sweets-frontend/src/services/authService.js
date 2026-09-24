@@ -90,4 +90,58 @@ export const authService = {
       throw err
     }
   },
+
+  async sendEmailOtp(newEmail) {
+    try {
+      const { data } = await api.post('/users/email/send-otp', { newEmail })
+      return data
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+
+  async verifyEmailOtp(newEmail, otp) {
+    try {
+      const { data } = await api.post('/users/email/verify-otp', { newEmail, otp })
+      return {
+        id: data.data.id,
+        name: data.data.fullName,
+        email: data.data.email,
+        phone: data.data.phone,
+        address: data.data.address,
+        role: data.data.role === 'ROLE_ADMIN' ? 'ADMIN' : 'CUSTOMER'
+      }
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+
+  async sendPhoneOtp(newPhone) {
+    try {
+      const { data } = await api.post('/users/phone/send-otp', { newPhone })
+      return data
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
+
+  async verifyPhoneOtp(newPhone, otp) {
+    try {
+      const { data } = await api.post('/users/phone/verify-otp', { newPhone, otp })
+      return {
+        id: data.data.id,
+        name: data.data.fullName,
+        email: data.data.email,
+        phone: data.data.phone,
+        address: data.data.address,
+        role: data.data.role === 'ROLE_ADMIN' ? 'ADMIN' : 'CUSTOMER'
+      }
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  },
 }

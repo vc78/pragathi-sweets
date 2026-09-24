@@ -25,7 +25,6 @@ import Footer from '../../components/customer/Footer'
 import { orderService } from '../../services/orderService'
 import ReliableImage from '../../components/common/ReliableImage'
 import { BUSINESS } from '../../constants/business'
-import WhatsAppConfirmationModal from '../../components/customer/WhatsAppConfirmationModal'
 
 const getStatusBadge = (status = '') => {
   switch (status.toUpperCase()) {
@@ -57,7 +56,6 @@ const getItemsList = (o) => {
 export default function Orders() {
   const [orders, setOrders] = useState([])
   const [expandedOrderId, setExpandedOrderId] = useState(null)
-  const [whatsAppModalOrder, setWhatsAppModalOrder] = useState(null)
   const { user } = useSelector((state) => state.auth)
   const location = useLocation()
 
@@ -71,11 +69,12 @@ export default function Orders() {
       orderService.getMyOrders()
         .then((data) => {
           if (!isMounted) return
-          const sorted = [...data].sort((a, b) => b.id.localeCompare(a.id))
+          const sorted = [...data].sort((a, b) => b.id - a.id)
           setOrders(sorted)
 
           if (location.state?.newOrderId && !expandedOrderId) {
-            setExpandedOrderId(location.state.newOrderId)
+            const newId = location.state.newOrderId
+            setExpandedOrderId(newId)
           }
         })
         .catch(console.error)
@@ -219,25 +218,14 @@ export default function Orders() {
                     <div className="flex items-center gap-2">
                       <h4 className="font-display font-bold text-sm text-[#075E54]">Order Placed Successfully!</h4>
                       <span className="text-[10px] bg-[#25D366]/20 text-[#075E54] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <MessageCircle size={10} /> WhatsApp Dispatched
+                        <MessageCircle size={10} /> Dispatched via WhatsApp & Email
                       </span>
                     </div>
                     <p className="text-xs text-[#3A2D23]/75 mt-0.5 font-normal">
-                      Order <span className="font-bold text-[#075E54]">#{location.state.newOrderId}</span> has been confirmed. Detailed receipt was sent to your phone.
+                      Order <span className="font-bold text-[#075E54]">#{location.state.newOrderId}</span> has been confirmed. Confirmation and invoice receipt have been sent directly to your WhatsApp number and registered email address.
                     </p>
                   </div>
                 </div>
-
-                <button
-                  onClick={() => {
-                    const matched = orders.find(o => o.id === location.state?.newOrderId || o.orderNumber === location.state?.newOrderId)
-                    setWhatsAppModalOrder(matched || { orderNumber: location.state.newOrderId, id: location.state.newOrderId, customer: user?.name, total: '...', items: [] })
-                  }}
-                  className="py-2 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex items-center gap-1.5 shadow transition-all hover:scale-[1.02]"
-                >
-                  <MessageCircle size={14} />
-                  <span>View WhatsApp Receipt</span>
-                </button>
               </motion.div>
             )}
 
@@ -559,15 +547,6 @@ export default function Orders() {
       </div>
 
       <Footer />
-
-      {/* Interactive WhatsApp Confirmation Preview Modal */}
-      <WhatsAppConfirmationModal
-        isOpen={!!whatsAppModalOrder}
-        onClose={() => setWhatsAppModalOrder(null)}
-        order={whatsAppModalOrder}
-        customerName={user?.name || whatsAppModalOrder?.customer}
-        defaultPhone={whatsAppModalOrder?.address?.phone || user?.phone}
-      />
     </div>
   )
 }

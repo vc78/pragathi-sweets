@@ -9,6 +9,8 @@ import { orderService } from '../../services/orderService'
 import { motion } from 'framer-motion'
 import { ShieldCheck, Truck, CreditCard, ChevronRight, Ticket, Sparkles, MessageCircle } from 'lucide-react'
 import api from '../../services/api'
+import { sendOrderConfirmationEmails } from '../../services/emailJsService'
+import { buildWhatsAppOrderMessage, openWhatsAppDirectly } from '../../utils/whatsappUtils'
 
 function loadRazorpayScript() {
   return new Promise((resolve) => {
@@ -97,18 +99,50 @@ export default function Checkout() {
         ...paymentInfo,
       })
       clearCart()
+
+      // Dispatch live confirmation emails via EmailJS (customer + store)
+      sendOrderConfirmationEmails({
+        order,
+        customerEmail: user?.email || address.email,
+        customerName: address.name || user?.name || user?.fullName,
+        phone: address.phone || user?.phone,
+        items,
+        total,
+        address
+      }).catch(err => console.warn('EmailJS order dispatch notice:', err))
+
+      // Directly dispatch WhatsApp receipt to customer's WhatsApp
+      const targetPhone = address.phone || user?.phone
+      const waReceipt = buildWhatsAppOrderMessage({
+        order,
+        customerName: address.name || user?.name || user?.fullName,
+        phone: targetPhone,
+        address,
+        items,
+        total
+      })
+      if (targetPhone) {
+        openWhatsAppDirectly(targetPhone, waReceipt)
+      }
+
       toast.success(
         () => (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <span style={{ fontWeight: 700 }}>🎉 Order Placed Successfully!</span>
             <span style={{ fontSize: '12px', opacity: 0.85 }}>
-              📱 WhatsApp confirmation sent to your phone.
+              📱 Confirmation receipt sent directly to your WhatsApp & email.
             </span>
           </div>
         ),
         { duration: 5000, style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' } }
       )
-      navigate('/orders', { state: { newOrderId: order.id } })
+      navigate('/orders', {
+        state: {
+          newOrderId: order.id,
+          orderDetails: order,
+          customerPhone: address.phone || user?.phone,
+        }
+      })
     } catch (err) {
       console.error('Order creation failed:', err)
       const msg = err?.response?.data?.message || err?.message || 'Could not place order. Please try again.'
@@ -182,18 +216,50 @@ export default function Checkout() {
               ...response,
             })
             clearCart()
+
+            // Dispatch live confirmation emails via EmailJS (customer + store)
+            sendOrderConfirmationEmails({
+              order,
+              customerEmail: user?.email || address.email,
+              customerName: address.name || user?.name || user?.fullName,
+              phone: address.phone || user?.phone,
+              items,
+              total,
+              address
+            }).catch(err => console.warn('EmailJS order dispatch notice:', err))
+
+            // Directly dispatch WhatsApp receipt to customer's WhatsApp
+            const targetPhone = address.phone || user?.phone
+            const waReceipt = buildWhatsAppOrderMessage({
+              order,
+              customerName: address.name || user?.name || user?.fullName,
+              phone: targetPhone,
+              address,
+              items,
+              total
+            })
+            if (targetPhone) {
+              openWhatsAppDirectly(targetPhone, waReceipt)
+            }
+
             toast.success(
               () => (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   <span style={{ fontWeight: 700 }}>🎉 Payment Successful! Order Confirmed.</span>
                   <span style={{ fontSize: '12px', opacity: 0.85 }}>
-                    📱 WhatsApp confirmation sent to your phone.
+                    📱 Confirmation receipt sent directly to your WhatsApp & email.
                   </span>
                 </div>
               ),
               { duration: 5000, style: { background: '#166534', color: '#FFFDF8', borderRadius: '12px' } }
             )
-            navigate('/orders', { state: { newOrderId: order.id } })
+            navigate('/orders', {
+              state: {
+                newOrderId: order.id,
+                orderDetails: order,
+                customerPhone: address.phone || user?.phone,
+              }
+            })
           } catch (err) {
             console.error('Payment verification failed:', err)
             toast.error(err?.response?.data?.message || 'Payment verification failed. Please contact support.')

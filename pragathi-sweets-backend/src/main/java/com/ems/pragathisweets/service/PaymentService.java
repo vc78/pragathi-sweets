@@ -32,6 +32,10 @@ public class PaymentService {
     private final RazorpayConfig razorpayConfig;
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
+    private final EmailService emailService;
+    private final WhatsAppService whatsAppService;
+    private final OrderService orderService;
+    private final OrderNotificationService orderNotificationService;
 
     private Order findOrderByIdOrNumber(String orderIdentifier) {
         if (orderIdentifier == null || orderIdentifier.isBlank()) {
@@ -129,6 +133,20 @@ public class PaymentService {
         order.setPaymentStatus(PaymentStatus.SUCCESS);
         order.setStatus(com.ems.pragathisweets.entity.OrderStatus.CONFIRMED);
         orderRepository.save(order);
+
+        String customerEmail = order.getUser() != null ? order.getUser().getEmail() : null;
+        String customerName = order.getUser() != null ? order.getUser().getFullName() : "Valued Customer";
+        String phone = (order.getContactPhone() != null && !order.getContactPhone().isBlank())
+                ? order.getContactPhone()
+                : (order.getUser() != null ? order.getUser().getPhone() : null);
+        com.ems.pragathisweets.dto.OrderResponse orderResponse = orderService.toResponse(order);
+
+        // Dispatch authoritative order confirmation to customer and admin notification
+        try {
+            orderNotificationService.sendOrderConfirmedNotifications(orderResponse, customerEmail, customerName, phone);
+        } catch (Exception ex) {
+            log.error("[PaymentService] Error requesting order confirmed notifications for {}: {}", order.getOrderNumber(), ex.getMessage());
+        }
     }
 
     @Transactional

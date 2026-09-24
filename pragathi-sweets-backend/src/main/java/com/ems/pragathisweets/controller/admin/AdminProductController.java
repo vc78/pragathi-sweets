@@ -48,6 +48,12 @@ public class AdminProductController {
         return ResponseEntity.ok(ApiResponse.success("Product updated", adminProductService.update(id, request)));
     }
 
+    @PostMapping("/ai-generate")
+    public ResponseEntity<ApiResponse<com.ems.pragathisweets.dto.admin.AiProductGenerateResponse>> generateAi(
+            @RequestBody com.ems.pragathisweets.dto.admin.AiProductGenerateRequest request) {
+        return ResponseEntity.ok(ApiResponse.success("AI content generated successfully", adminProductService.generateAiContent(request)));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         adminProductService.delete(id);

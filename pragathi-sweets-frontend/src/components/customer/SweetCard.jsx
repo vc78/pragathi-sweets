@@ -8,6 +8,16 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [adding, setAdding] = useState(false)
 
+  if (!product) return null
+
+  const categoryName = typeof product.category === 'object'
+    ? (product.category?.name || '')
+    : (product.category || product.categoryName || '')
+  const ratingVal = product.rating ?? product.avgRating ?? 4.8
+  const unitVal = product.unit || 'box'
+  const imgUrl = product.image || product.imageUrl
+  const isBestseller = product.bestseller ?? product.isBestseller ?? false
+
   const handleAdd = () => {
     const fn = onAdd || onAddToCart
     if (!fn) return
@@ -22,7 +32,7 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3] bg-[#F5E6C8]/40">
         {/* Badges */}
-        {product.bestseller && (
+        {isBestseller && (
           <span className="absolute top-3 left-3 z-10 bg-[#8B0000] text-white text-[7px] font-bold uppercase tracking-[0.25em] px-2.5 py-1 rounded-full shadow-md">
             ★ Bestseller
           </span>
@@ -38,7 +48,7 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
         {/* Photo */}
         <Link to={`/products/${product.id}`} className="block w-full h-full">
           <ReliableImage
-            src={product.image}
+            src={imgUrl}
             alt={product.name}
             className="w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
           />
@@ -68,9 +78,11 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
       {/* Content */}
       <div className="p-4 md:p-5 flex-1 flex flex-col justify-between">
         <div>
-          <p className="font-body text-[9px] uppercase tracking-[0.3em] text-[#B8860B] font-bold mb-1.5">
-            {product.category}
-          </p>
+          {categoryName && (
+            <p className="font-body text-[9px] uppercase tracking-[0.3em] text-[#B8860B] font-bold mb-1.5">
+              {categoryName}
+            </p>
+          )}
           <Link to={`/products/${product.id}`}>
             <h3 className="font-display text-sm md:text-base text-[#8B0000] font-bold hover:text-[#B8860B] transition-colors leading-snug">
               {product.name}
@@ -79,7 +91,7 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
           <div className="flex items-center gap-1.5 mt-2">
             <Star size={11} fill="#B8860B" className="text-[#B8860B]" />
             <span className="font-body text-[10px] text-[#3A2D23]/50">
-              {product.rating} · {product.category}
+              {ratingVal} {categoryName ? `· ${categoryName}` : ''}
             </span>
           </div>
           {product.description && (
@@ -92,7 +104,7 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
         <div className="flex items-center justify-between mt-4 pt-3.5 border-t border-[#B8860B]/10">
           <div>
             <span className="font-display text-base md:text-lg font-bold text-[#8B0000]">₹{product.price}</span>
-            <span className="text-[10px] text-[#3A2D23]/40 font-body ml-1">/{product.unit}</span>
+            <span className="text-[10px] text-[#3A2D23]/40 font-body ml-1">/{unitVal}</span>
           </div>
           <motion.button
             onClick={handleAdd}

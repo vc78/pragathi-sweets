@@ -54,6 +54,11 @@ public class OrderController {
         return ResponseEntity.ok(ApiResponse.success(orderService.getOrderWhatsAppMessage(principal.getId(), identifier)));
     }
 
+    @GetMapping("/track/{identifier}")
+    public ResponseEntity<ApiResponse<OrderResponse>> trackOrder(@PathVariable String identifier) {
+        return ResponseEntity.ok(ApiResponse.success("Order retrieved successfully", orderService.trackOrder(identifier)));
+    }
+
     @PostMapping("/{id}/cancel")
     public ResponseEntity<ApiResponse<OrderResponse>> cancelOrder(@AuthenticationPrincipal UserDetailsImpl principal,
                                                                    @PathVariable Long id) {

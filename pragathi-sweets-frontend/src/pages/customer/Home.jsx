@@ -17,12 +17,12 @@ import {
   Ticket,
   Calendar,
   Zap,
-  Award,
-  BookOpen
+  BookOpen,
 } from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
 import SweetCard from '../../components/customer/SweetCard'
+import InteractiveItemsReel from '../../components/customer/InteractiveItemsReel'
 import { productService } from '../../services/productService'
 import api from '../../services/api'
 import { useCart } from '../../hooks/useCart'
@@ -92,18 +92,38 @@ const TESTIMONIALS = [
   },
 ]
 
-// ── Section Header ─────────────────────────────────────────
+// ── Marquee Items ─────────────────────────────────────
+const MARQUEE_ITEMS = [
+  { emoji: '🍮', label: 'Kaju Katli' },
+  { emoji: '🍬', label: 'Besan Laddu' },
+  { emoji: '🍓', label: 'Gulab Jamun' },
+  { emoji: '🍞', label: 'Mysore Pak' },
+  { emoji: '🍫', label: 'Chocolate Barfi' },
+  { emoji: '⭐', label: 'Rasgulla' },
+  { emoji: '🍯', label: 'Motichoor Laddu' },
+  { emoji: '🍑', label: 'Coconut Burfi' },
+  { emoji: '🍭', label: 'Pista Roll' },
+  { emoji: '🌰', label: 'Anjeer Barfi' },
+  { emoji: '🥝', label: 'Til Chikki' },
+  { emoji: '🍪', label: 'Gajar Halwa' },
+  { emoji: '🌸', label: 'Dry Fruit Sweets' },
+  { emoji: '🏆', label: 'Festival Hampers' },
+  { emoji: '✨', label: 'Andhra Specials' },
+  { emoji: '👑', label: 'Ghee Sweets' },
+]
+
+// ── Section Header with Strict Spacing Hierarchy ───────────
 function SectionHeader({ tag, title, subtitle }) {
   return (
-    <div className="text-center mb-14">
-      <span className="inline-block text-[10px] tracking-[0.35em] font-semibold uppercase text-[#B8860B] mb-3 font-body">
+    <div className="section-header">
+      <span className="section-eyebrow">
         ✦ {tag} ✦
       </span>
-      <h2 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold leading-tight mb-4">
+      <h2 className="section-title">
         {title}
       </h2>
       {subtitle && (
-        <p className="font-body text-sm text-[#3A2D23]/60 max-w-xl mx-auto leading-relaxed">
+        <p className="section-description">
           {subtitle}
         </p>
       )}
@@ -114,7 +134,6 @@ function SectionHeader({ tag, title, subtitle }) {
 export default function Home() {
   const [bestsellers, setBestsellers] = useState([])
   const [allProducts, setAllProducts] = useState([])
-  const [giftHampers, setGiftHampers] = useState([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
 
@@ -174,11 +193,10 @@ export default function Home() {
   const [heroDir, setHeroDir] = useState(1)
   const heroTimer = useRef(null)
 
-
   // Scroll parallax
   const { scrollY } = useScroll()
-  const yText = useTransform(scrollY, [0, 500], [0, 80])
-  const yBg = useTransform(scrollY, [0, 600], [0, 120])
+  const yText = useTransform(scrollY, [0, 400], [0, 50])
+  const yBg = useTransform(scrollY, [0, 400], [0, 70])
 
   useEffect(() => {
     setLoading(true)
@@ -186,8 +204,6 @@ export default function Home() {
       const best = list.filter(p => p.bestseller)
       setBestsellers(best.length > 0 ? best.slice(0, 4) : list.slice(0, 4))
       setAllProducts(list.slice(0, 8))
-      const hampers = list.filter(p => p.category === 'Festival Hampers')
-      setGiftHampers(hampers.length > 0 ? hampers : list.slice(0, 3))
     }).catch(() => {})
     .finally(() => setLoading(false))
   }, [])
@@ -205,7 +221,6 @@ export default function Home() {
     return () => clearInterval(heroTimer.current)
   }, [])
 
-
   const gotoSlide = (idx) => {
     setHeroDir(idx > heroIdx ? 1 : -1)
     setHeroIdx(idx)
@@ -222,11 +237,11 @@ export default function Home() {
   const slide = HERO_SLIDES[heroIdx]
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] overflow-x-hidden">
+    <div className="min-h-full bg-[#FFFDF8] overflow-x-hidden">
       <Navbar />
 
       {/* ══ HERO ══════════════════════════════════════════════════ */}
-      <section className="relative h-[90vh] md:h-screen overflow-hidden">
+      <section className="relative min-h-[500px] md:min-h-[580px] lg:min-h-[640px] max-h-[760px] flex items-center overflow-hidden">
         {/* BG Image */}
         <AnimatePresence mode="sync">
           <motion.div
@@ -246,7 +261,7 @@ export default function Home() {
               style={{ y: yBg }}
             />
             {/* Layered overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
           </motion.div>
         </AnimatePresence>
@@ -254,31 +269,31 @@ export default function Home() {
         {/* Content */}
         <motion.div
           style={{ y: yText }}
-          className="relative z-10 h-full flex flex-col justify-center px-8 md:px-20 xl:px-32"
+          className="relative z-10 w-full container-luxury py-14 md:py-18"
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={heroIdx}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
               className="max-w-2xl"
             >
-              <span className="inline-block font-body text-[9px] tracking-[0.5em] uppercase font-bold text-[#E6C687] mb-5 border border-[#E6C687]/40 px-4 py-1.5 rounded-full">
+              <span className="inline-block font-body text-[9px] tracking-[0.45em] uppercase font-bold text-[#E6C687] mb-3.5 border border-[#E6C687]/40 px-3.5 py-1 rounded-full backdrop-blur-sm">
                 ✦ {slide.tag}
               </span>
-              <h1 className="font-display text-5xl sm:text-7xl xl:text-8xl font-bold text-white leading-[0.95] mb-5">
+              <h1 className="font-display text-4xl sm:text-6xl xl:text-7xl font-bold text-white leading-[1.02] mb-3.5">
                 {slide.title}
               </h1>
-              <p className="font-body text-sm md:text-base text-white/70 tracking-wider mb-10 max-w-lg leading-relaxed">
+              <p className="font-body text-xs sm:text-sm md:text-base text-white/80 tracking-wide mb-6 max-w-lg leading-relaxed">
                 {slide.subtitle}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to={slide.cta} className="inline-flex items-center gap-2.5 bg-[#8B0000] text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#a01010] transition-all duration-300 text-xs tracking-widest uppercase shadow-xl hover:shadow-red-900/30">
+              <div className="flex flex-wrap gap-3.5">
+                <Link to={slide.cta} className="btn-primary">
                   Shop Now <ArrowRight size={14} />
                 </Link>
-                <Link to="/products" className="inline-flex items-center gap-2.5 border-2 border-white/30 text-white font-semibold px-7 py-3.5 rounded-full hover:border-[#E6C687] hover:text-[#E6C687] transition-all duration-300 text-xs tracking-widest uppercase backdrop-blur-sm">
+                <Link to="/products" className="inline-flex items-center gap-2 border-2 border-white/40 text-white font-semibold px-7 py-3 rounded-full hover:border-[#E6C687] hover:text-[#E6C687] transition-all text-xs tracking-widest uppercase backdrop-blur-sm">
                   All Products
                 </Link>
               </div>
@@ -287,311 +302,304 @@ export default function Home() {
         </motion.div>
 
         {/* Arrows */}
-        <button onClick={prevSlide} className="absolute left-5 md:left-10 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-110 transition-all flex items-center justify-center backdrop-blur-sm">
+        <button onClick={prevSlide} aria-label="Previous Slide" className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-105 transition-all flex items-center justify-center backdrop-blur-sm">
           <ChevronLeft size={18} />
         </button>
-        <button onClick={nextSlide} className="absolute right-5 md:right-10 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-110 transition-all flex items-center justify-center backdrop-blur-sm">
+        <button onClick={nextSlide} aria-label="Next Slide" className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-105 transition-all flex items-center justify-center backdrop-blur-sm">
           <ChevronRight size={18} />
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2.5">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {HERO_SLIDES.map((_, i) => (
-            <button key={i} onClick={() => gotoSlide(i)} className={`transition-all duration-400 rounded-full ${i === heroIdx ? 'w-8 h-2 bg-[#E6C687]' : 'w-2 h-2 bg-white/30 hover:bg-white/60'}`} />
+            <button key={i} onClick={() => gotoSlide(i)} aria-label={`Slide ${i + 1}`} className={`transition-all duration-300 rounded-full ${i === heroIdx ? 'w-7 h-1.5 bg-[#E6C687]' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`} />
           ))}
         </div>
 
         {/* Slide counter */}
-        <div className="absolute bottom-8 right-10 z-20 font-display text-white/30 text-xs tracking-widest">
+        <div className="absolute bottom-6 right-8 z-20 font-display text-white/40 text-[11px] tracking-widest">
           {String(heroIdx + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}
         </div>
       </section>
 
       {/* ══ TRUST STRIP ═══════════════════════════════════════════ */}
-      <section className="bg-[#8B0000] text-white py-5 border-y border-[#B8860B]/20">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
+      <section className="bg-[#8B0000] text-white py-4 md:py-4.5 border-y border-[#B8860B]/20">
+        <div className="container-luxury grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0">
           {TRUST.map(({ icon: Icon, label, sub }, i) => (
             <div key={i} className={`flex items-center gap-3 ${i < 3 ? 'md:border-r md:border-white/10 md:pr-6 md:mr-6' : ''}`}>
-              <div className="w-9 h-9 rounded-full border border-[#E6C687]/30 flex items-center justify-center shrink-0">
-                <Icon size={16} className="text-[#E6C687]" />
+              <div className="w-8 h-8 rounded-full border border-[#E6C687]/30 flex items-center justify-center shrink-0">
+                <Icon size={15} className="text-[#E6C687]" />
               </div>
               <div>
-                <p className="font-display text-xs font-bold text-white tracking-wider">{label}</p>
-                <p className="font-body text-[10px] text-white/50 tracking-wider mt-0.5">{sub}</p>
+                <p className="font-display text-xs font-bold text-white tracking-wider leading-tight">{label}</p>
+                <p className="font-body text-[10px] text-white/60 tracking-wider mt-0.5">{sub}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ══ BESTSELLERS ═══════════════════════════════════════════ */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <SectionHeader
-          tag="Our Craft"
-          title="Bestselling Sweets"
-          subtitle="Handcrafted in small batches each morning. Every piece tells a story of heritage and devotion."
-        />
-        {loading && bestsellers.length === 0 ? (
-          <ProductGridSkeleton count={4} />
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {bestsellers.map((p, i) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-              >
-                <SweetCard product={p} onAdd={() => handleAdd(p)} />
-              </motion.div>
-            ))}
-          </div>
-        )}
-        <div className="text-center mt-14">
-          <Link to="/products" className="btn-outline">
-            View Full Collection <ArrowRight size={14} />
-          </Link>
+      {/* ══ MARQUEE STRIP ══════════════════════════════════════════ */}
+      <section className="overflow-hidden bg-[#FFFDF8] border-b border-[#B8860B]/12 py-3.5">
+        <style>{`
+          @keyframes marquee-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee-scroll 32s linear infinite;
+          }
+          .marquee-track:hover { animation-play-state: paused; }
+        `}</style>
+        <div className="marquee-track">
+          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+            <a
+              key={i}
+              href="/products"
+              className="inline-flex items-center gap-2 px-5 py-1.5 mx-2 rounded-full border border-[#B8860B]/25 bg-white hover:bg-[#8B0000] hover:border-[#8B0000] hover:text-white text-[#3A2D23] transition-all duration-200 group whitespace-nowrap"
+            >
+              <span className="text-base leading-none group-hover:scale-110 transition-transform">{item.emoji}</span>
+              <span className="font-body text-[11px] font-semibold tracking-wide">{item.label}</span>
+            </a>
+          ))}
         </div>
       </section>
 
-      {/* ══ STORY BAND ════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-[#3A1F0F] py-24 px-6 md:px-20">
-        <div className="absolute inset-0">
-          <img src="/images/pexels-towfiqu-barbhuiya-3440682-11484120.jpg" alt="Sweets story" className="w-full h-full object-cover opacity-15" />
-          <div className="absolute inset-0 bg-[#3A1F0F]/80" />
-        </div>
-        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <span className="text-[9px] tracking-[0.5em] font-semibold text-[#E6C687] uppercase font-body block mb-5">✦ Est. 1994 — Hyderabad</span>
-            <h2 className="font-display text-4xl md:text-6xl text-white font-bold leading-[0.95] mb-6">
-              Tradition Tastes<br /><em className="italic text-[#E6C687]">Like This.</em>
-            </h2>
-            <p className="font-body text-sm text-white/60 leading-relaxed mb-8 max-w-md">
-              Three decades. One family. Recipes passed down through whispering kitchens and countless festive seasons. Every sweet we make carries that weight — and that sweetness.
-            </p>
-            <Link to="/products" className="inline-flex items-center gap-2.5 text-xs font-bold tracking-widest uppercase text-[#E6C687] border-b-2 border-[#E6C687]/30 pb-1 hover:border-[#E6C687] transition-colors">
-              Discover Our Story <ArrowUpRight size={14} />
+      {/* ══ BESTSELLERS (OUR CRAFT) ══════════════════════════════ */}
+      <section className="section">
+        <div className="container-luxury">
+          <SectionHeader
+            tag="Our Craft"
+            title="Bestselling Sweets"
+            subtitle="Handcrafted in small batches each morning. Every piece tells a story of heritage and devotion."
+          />
+          {loading && bestsellers.length === 0 ? (
+            <ProductGridSkeleton count={4} />
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+              {bestsellers.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06, duration: 0.4 }}
+                >
+                  <SweetCard key={p.id} product={p} onAdd={() => handleAdd(p)} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+          <div className="section-cta">
+            <Link to="/products" className="btn-outline">
+              View Full Collection <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { num: '30+', label: 'Years of Tradition' },
-              { num: '50+', label: 'Heritage Recipes' },
-              { num: '10K+', label: 'Happy Families' },
-              { num: '100%', label: 'Pure Desi Ghee' },
-            ].map(({ num, label }) => (
-              <div key={label} className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm">
-                <p className="font-display text-3xl md:text-4xl font-bold text-[#E6C687] mb-2">{num}</p>
-                <p className="font-body text-[10px] text-white/50 tracking-widest uppercase">{label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
+      {/* ══ INTERACTIVE UNIQUE ITEMS SCROLLING SHOWCASE ══ */}
+      <InteractiveItemsReel items={allProducts} />
+
       {/* ══ ALL PRODUCTS ══════════════════════════════════════════ */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <SectionHeader
-          tag="Full Collection"
-          title="Every Sweet, Perfected"
-          subtitle="From everyday indulgence to grand occasion gifting — every product is an art form."
-        />
-        {allProducts.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-            {allProducts.map((p, i) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05, duration: 0.45 }}
-              >
-                <SweetCard product={p} onAdd={() => handleAdd(p)} />
-              </motion.div>
-            ))}
+      <section className="section">
+        <div className="container-luxury">
+          <SectionHeader
+            tag="Full Collection"
+            title="Every Sweet, Perfected"
+            subtitle="From everyday indulgence to grand occasion gifting — every product is an art form."
+          />
+          {allProducts.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+              {allProducts.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04, duration: 0.4 }}
+                >
+                  <SweetCard key={p.id} product={p} onAdd={() => handleAdd(p)} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+          {/* Shop All Products CTA button - strictly 16-24px from products, 32-56px to next section */}
+          <div className="section-cta">
+            <Link to="/products" className="btn-primary">
+              Shop All Products <ArrowRight size={14} />
+            </Link>
           </div>
-        )}
-        <div className="text-center mt-14">
-          <Link to="/products" className="btn-primary">
-            Shop All Products <ArrowRight size={14} />
-          </Link>
         </div>
       </section>
 
       {/* ══ GIFT HAMPERS PROMO ════════════════════════════════════ */}
-      <section className="mx-6 md:mx-12 xl:mx-20 mb-24 rounded-3xl overflow-hidden relative">
-        <img
-          src="/images/pexels-jonathanborba-19863265.jpg"
-          alt="Festival Hampers"
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/90 via-[#8B0000]/70 to-transparent" />
-        <div className="relative z-10 p-12 md:p-20 max-w-xl">
-          <span className="text-[9px] tracking-[0.5em] font-semibold text-[#E6C687] uppercase font-body block mb-5">✦ Gift Curation</span>
-          <h2 className="font-display text-4xl md:text-5xl text-white font-bold leading-tight mb-4">
-            Festival Hampers,<br />Elevated.
-          </h2>
-          <p className="font-body text-sm text-white/70 mb-8 leading-relaxed">
-            Six handpicked sweets in a handcrafted keepsake box. A gift as memorable as the occasion itself.
-          </p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/products?category=Festival+Hampers" className="inline-flex items-center gap-2 bg-[#E6C687] text-[#3A1F0F] font-bold px-7 py-3.5 rounded-full text-xs tracking-widest uppercase hover:bg-white transition-colors">
-              Explore Hampers <Gift size={14} />
-            </Link>
-            <Link to="/products" className="inline-flex items-center gap-2 border-2 border-white/40 text-white font-semibold px-7 py-3.5 rounded-full text-xs tracking-widest uppercase hover:border-[#E6C687] hover:text-[#E6C687] transition-all">
-              Custom Orders
-            </Link>
+      <section className="container-luxury my-4 md:my-6">
+        <div className="rounded-3xl overflow-hidden relative shadow-lg">
+          <img
+            src="/images/pexels-jonathanborba-19863265.jpg"
+            alt="Festival Hampers"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/95 via-[#8B0000]/75 to-transparent" />
+          <div className="relative z-10 p-8 sm:p-12 md:p-14 max-w-xl">
+            <span className="section-eyebrow text-[#E6C687]">✦ Gift Curation</span>
+            <h2 className="font-display text-3xl md:text-4xl text-white font-bold leading-tight mb-3">
+              Festival Hampers,<br />Elevated.
+            </h2>
+            <p className="font-body text-xs md:text-sm text-white/80 mb-6 leading-relaxed max-w-md">
+              Six handpicked sweets in a handcrafted keepsake box. A gift as memorable as the occasion itself.
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <Link to="/products?category=Festival+Hampers" className="inline-flex items-center gap-2 bg-[#E6C687] text-[#3A1F0F] font-bold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:bg-white transition-colors shadow">
+                Explore Hampers <Gift size={13} />
+              </Link>
+              <Link to="/products" className="inline-flex items-center gap-2 border border-white/40 text-white font-semibold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:border-[#E6C687] hover:text-[#E6C687] transition-all">
+                Custom Orders
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ══ TESTIMONIALS ══════════════════════════════════════════ */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <SectionHeader
-          tag="Happy Customers"
-          title="Voices of Delight"
-          subtitle="From families to corporates — the taste of Pragathi stays with you."
-        />
-        <div className="grid md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="bg-white border border-[#B8860B]/15 rounded-3xl p-8 hover:shadow-[0_12px_48px_rgba(184,134,11,0.1)] hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="flex gap-1 mb-5">
-                {[...Array(t.rating)].map((_, s) => (
-                  <Star key={s} size={13} className="text-[#B8860B] fill-[#B8860B]" />
-                ))}
-              </div>
-              <p className="font-body text-sm text-[#3A2D23]/70 leading-relaxed italic mb-6">
-                "{t.quote}"
-              </p>
-              <div className="flex items-center gap-3 pt-5 border-t border-[#B8860B]/10">
-                <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#B8860B]/20" />
+      {/* ══ TESTIMONIALS (HAPPY CUSTOMERS) ════════════════════════ */}
+      <section className="section">
+        <div className="container-luxury">
+          <SectionHeader
+            tag="Happy Customers"
+            title="Voices of Delight"
+            subtitle="From families to corporates — the taste of Pragathi stays with you."
+          />
+          <div className="grid md:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="bg-white border border-[#B8860B]/15 rounded-3xl p-6 md:p-7 hover:shadow-[0_12px_40px_rgba(184,134,11,0.08)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+              >
                 <div>
-                  <p className="font-display text-sm font-bold text-[#8B0000]">{t.name}</p>
-                  <p className="font-body text-[10px] text-[#3A2D23]/40 tracking-wider">{t.city}</p>
+                  <div className="flex gap-1 mb-3.5">
+                    {[...Array(t.rating)].map((_, s) => (
+                      <Star key={s} size={13} className="text-[#B8860B] fill-[#B8860B]" />
+                    ))}
+                  </div>
+                  <p className="font-body text-xs md:text-sm text-[#3A2D23]/70 leading-relaxed italic mb-5">
+                    "{t.quote}"
+                  </p>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="flex items-center gap-3 pt-4 border-t border-[#B8860B]/10">
+                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover border-2 border-[#B8860B]/20 shrink-0" />
+                  <div>
+                    <p className="font-display text-xs md:text-sm font-bold text-[#8B0000]">{t.name}</p>
+                    <p className="font-body text-[10px] text-[#3A2D23]/50 tracking-wider">{t.city}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ══ PRAGATHI CIRCLE & VIP PRIVILEGES ════════════════════════ */}
-      <section className="mx-6 md:mx-12 xl:mx-20 mb-24 rounded-3xl bg-[#8B0000] overflow-hidden relative py-16 px-6 md:px-14 shadow-2xl border border-[#B8860B]/30">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#B8860B]/25 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#B8860B]/15 rounded-full blur-3xl pointer-events-none" />
+      <section className="container-luxury my-4 md:my-6 mb-12 md:mb-16">
+        <div className="rounded-3xl bg-[#8B0000] overflow-hidden relative py-10 md:py-14 px-6 md:px-12 shadow-2xl border border-[#B8860B]/30">
+          <div className="absolute inset-0 opacity-10 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#B8860B]/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B8860B]/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <span className="text-[10px] tracking-[0.45em] font-semibold text-[#E6C687] uppercase font-body block mb-3">
-            ✦ EXCLUSIVE ACCESS ✦
-          </span>
+          <div className="relative z-10 max-w-2xl mx-auto text-center">
+            <span className="section-eyebrow text-[#E6C687]">
+              ✦ EXCLUSIVE ACCESS ✦
+            </span>
 
-          {!circleMember ? (
-            <div>
-              <h2 className="font-display text-3xl md:text-5xl text-white font-bold mb-4 tracking-tight">
-                Join the Pragathi Circle
-              </h2>
-              <p className="font-body text-sm md:text-base text-white/75 mb-8 max-w-xl mx-auto leading-relaxed">
-                First access to seasonal confections, heritage family recipes, and private luxury gifting privileges.
-              </p>
+            {!circleMember ? (
+              <div>
+                <h2 className="font-display text-2xl md:text-4xl text-white font-bold mb-2.5 tracking-tight">
+                  Join the Pragathi Circle
+                </h2>
+                <p className="font-body text-xs md:text-sm text-white/80 mb-6 max-w-lg mx-auto leading-relaxed">
+                  First access to seasonal confections, heritage family recipes, and private luxury gifting privileges.
+                </p>
 
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row max-w-md mx-auto shadow-xl rounded-full sm:rounded-full bg-white/10 p-1 border border-white/20 backdrop-blur-md">
-                <input
-                  type="email"
-                  required
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  placeholder="Your email address"
-                  className="flex-1 bg-transparent text-white placeholder-white/50 text-xs md:text-sm tracking-wide font-body px-6 py-4 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  disabled={subscribing}
-                  className="bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold px-8 py-4 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shrink-0 shadow-md active:scale-95 disabled:opacity-70 mt-2 sm:mt-0 flex items-center justify-center gap-2"
-                >
-                  {subscribing ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-[#3A1F0F] border-t-transparent rounded-full animate-spin" />
-                      <span>Joining...</span>
-                    </>
-                  ) : (
-                    <span>JOIN</span>
-                  )}
-                </button>
-              </form>
-              <p className="text-[11px] text-[#E6C687]/60 mt-4 tracking-wide">
-                Instant 15% Welcome Confectionery Credit unlocked immediately upon enrollment.
-              </p>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-6"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E6C687]/15 border border-[#E6C687]/40 text-[#E6C687] text-xs font-semibold tracking-wider uppercase">
-                <Sparkles size={14} className="text-[#E6C687]" />
-                <span>Pragathi Circle VIP Member</span>
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row max-w-md mx-auto shadow-xl rounded-full bg-white/10 p-1 border border-white/20 backdrop-blur-md">
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="Your email address"
+                    className="flex-1 bg-transparent text-white placeholder-white/50 text-xs md:text-sm tracking-wide font-body px-5 py-3 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={subscribing}
+                    className="bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold px-7 py-3 rounded-full text-xs tracking-widest uppercase transition-all duration-300 shrink-0 shadow-md active:scale-95 disabled:opacity-70 mt-2 sm:mt-0 flex items-center justify-center gap-2"
+                  >
+                    {subscribing ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-[#3A1F0F] border-t-transparent rounded-full animate-spin" />
+                        <span>Joining...</span>
+                      </>
+                    ) : (
+                      <span>JOIN</span>
+                    )}
+                  </button>
+                </form>
+                <p className="text-[10px] text-[#E6C687]/70 mt-3 tracking-wide">
+                  Instant 15% Welcome Confectionery Credit unlocked immediately upon enrollment.
+                </p>
               </div>
-
-              <h2 className="font-display text-3xl md:text-4xl text-white font-bold tracking-tight">
-                Welcome to the Inner Circle
-              </h2>
-
-              <p className="text-xs md:text-sm text-white/80 max-w-lg mx-auto">
-                Privileges activated for <span className="font-bold text-[#E6C687]">{circleMember.email}</span>. Use your personal promo code below for your next confectionery order.
-              </p>
-
-              {/* Special Voucher Card */}
-              <div className="bg-gradient-to-r from-[#2A1117] via-[#3D141F] to-[#2A1117] border-2 border-dashed border-[#E6C687]/60 rounded-2xl p-6 max-w-lg mx-auto shadow-2xl relative overflow-hidden text-left">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E6C687]/10 rounded-full blur-2xl pointer-events-none" />
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
-                  <div>
-                    <span className="text-[10px] text-[#E6C687] tracking-[0.2em] uppercase font-bold block mb-1">
-                      VIP WELCOME VOUCHER
-                    </span>
-                    <span className="font-mono text-2xl md:text-3xl font-bold text-white tracking-widest">
-                      {circleMember.couponCode || 'CIRCLE15'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleCopyCode}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95"
-                    >
-                      {copiedCode ? (
-                        <>
-                          <Check size={14} className="text-green-700" />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={14} />
-                          <span>Copy Code</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-4"
+              >
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E6C687]/15 border border-[#E6C687]/40 text-[#E6C687] text-xs font-semibold tracking-wider uppercase">
+                  <Sparkles size={13} className="text-[#E6C687]" />
+                  <span>Pragathi Circle VIP Member</span>
                 </div>
 
-                <div className="pt-3 flex flex-wrap items-center justify-between text-[11px] text-white/70 gap-2">
-                  <div className="flex items-center gap-1.5 text-[#E6C687]">
-                    <Calendar size={13} />
-                    <span>
-                      Valid till{' '}
+                <h2 className="font-display text-2xl md:text-3xl text-white font-bold tracking-tight">
+                  Welcome to the Inner Circle
+                </h2>
+
+                <p className="text-xs text-white/85 max-w-lg mx-auto">
+                  Privileges activated for <span className="font-bold text-[#E6C687]">{circleMember.email}</span>. Use your personal promo code below for your next confectionery order.
+                </p>
+
+                {/* Special Voucher Card */}
+                <div className="bg-gradient-to-r from-[#2A1117] via-[#3D141F] to-[#2A1117] border-2 border-dashed border-[#E6C687]/60 rounded-2xl p-5 max-w-md mx-auto shadow-2xl relative overflow-hidden text-left">
+                  <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
+                    <div>
+                      <span className="text-[9px] text-[#E6C687] tracking-[0.2em] uppercase font-bold block mb-0.5">
+                        VIP WELCOME VOUCHER
+                      </span>
+                      <span className="font-mono text-xl md:text-2xl font-bold text-white tracking-widest">
+                        {circleMember.couponCode || 'CIRCLE15'}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={handleCopyCode}
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95 shrink-0"
+                    >
+                      {copiedCode ? <Check size={13} className="text-green-700" /> : <Copy size={13} />}
+                      <span>{copiedCode ? 'Copied!' : 'Copy Code'}</span>
+                    </button>
+                  </div>
+
+                  <div className="pt-2.5 flex items-center justify-between text-[10px] text-white/70">
+                    <span className="flex items-center gap-1 text-[#E6C687]">
+                      <Calendar size={12} />
                       {circleMember.validTill
                         ? new Date(circleMember.validTill).toLocaleDateString('en-IN', {
                             day: 'numeric',
@@ -600,85 +608,50 @@ export default function Home() {
                           })
                         : 'Active for 30 Days'}
                     </span>
-                    {circleMember.daysRemaining !== undefined && (
-                      <span className="bg-[#E6C687]/20 text-[#E6C687] px-2 py-0.5 rounded-full font-bold ml-1">
-                        {circleMember.daysRemaining} days left
-                      </span>
-                    )}
+                    <span>Min spend ₹{circleMember.minOrderAmount || 499}</span>
                   </div>
-
-                  <span className="text-white/50 text-[10px]">
-                    Min spend ₹{circleMember.minOrderAmount || 499}
-                  </span>
-                </div>
-              </div>
-
-              {/* 4 Unlocked Exclusive Perks */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-left pt-2">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
-                    <Ticket size={16} />
-                  </div>
-                  <h4 className="font-display font-bold text-xs text-white mb-1">15% First Order Credit</h4>
-                  <p className="text-[11px] text-white/65 leading-relaxed">
-                    Instant 15% savings across all artisanal confections on orders over ₹499.
-                  </p>
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
-                    <Gift size={16} />
-                  </div>
-                  <h4 className="font-display font-bold text-xs text-white mb-1">Royale Gift Packaging</h4>
-                  <p className="text-[11px] text-white/65 leading-relaxed">
-                    Complimentary keepsake box with satin ribbon wrap and custom gift message card.
-                  </p>
+                {/* Unlocked Exclusive Perks */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-left pt-1">
+                  {[
+                    { icon: Ticket, title: '15% First Credit', desc: 'On orders over ₹499' },
+                    { icon: Gift, title: 'Gift Packaging', desc: 'Complimentary box & ribbon' },
+                    { icon: Zap, title: 'Priority Dispatch', desc: 'Same-day kitchen prep' },
+                    { icon: BookOpen, title: 'Heritage Menus', desc: 'Early festival batches' },
+                  ].map((perk, idx) => (
+                    <div key={idx} className="bg-white/10 backdrop-blur-sm border border-white/15 p-3 rounded-xl">
+                      <perk.icon size={15} className="text-[#E6C687] mb-1.5" />
+                      <h4 className="font-display font-bold text-[11px] text-white leading-tight mb-0.5">{perk.title}</h4>
+                      <p className="text-[10px] text-white/60 leading-tight">{perk.desc}</p>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
-                    <Zap size={16} />
-                  </div>
-                  <h4 className="font-display font-bold text-xs text-white mb-1">Priority Dispatch</h4>
-                  <p className="text-[11px] text-white/65 leading-relaxed">
-                    Guaranteed same-day kitchen preparation even during festive peak rush days.
-                  </p>
+                {/* Action Bar */}
+                <div className="pt-2 flex items-center justify-center gap-4">
+                  <Link
+                    to="/products"
+                    className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-widest uppercase transition-all shadow-md active:scale-95"
+                  >
+                    <span>Shop & Redeem 15%</span>
+                    <ArrowRight size={13} />
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem('ps_circle_member')
+                      setCircleMember(null)
+                      setEmailInput('')
+                    }}
+                    className="text-white/60 hover:text-white text-xs underline transition-colors"
+                  >
+                    Enroll another email
+                  </button>
                 </div>
-
-                <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-4 rounded-xl">
-                  <div className="w-8 h-8 rounded-lg bg-[#E6C687]/20 flex items-center justify-center mb-2.5 text-[#E6C687]">
-                    <BookOpen size={16} />
-                  </div>
-                  <h4 className="font-display font-bold text-xs text-white mb-1">Heritage Confection Menus</h4>
-                  <p className="text-[11px] text-white/65 leading-relaxed">
-                    First invitations to secret seasonal batches and regional festival tastings.
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Bar */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  to="/products"
-                  className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#E6C687] hover:bg-white text-[#3A1F0F] font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95"
-                >
-                  <span>Explore Boutique & Redeem 15%</span>
-                  <ArrowRight size={14} />
-                </Link>
-
-                <button
-                  onClick={() => {
-                    localStorage.removeItem('ps_circle_member')
-                    setCircleMember(null)
-                    setEmailInput('')
-                  }}
-                  className="text-white/60 hover:text-white text-xs underline transition-colors"
-                >
-                  Enroll a different email
-                </button>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </div>
         </div>
       </section>
 

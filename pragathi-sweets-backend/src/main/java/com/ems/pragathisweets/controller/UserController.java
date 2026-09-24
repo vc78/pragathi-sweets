@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final com.ems.pragathisweets.service.OtpService otpService;
 
     @PutMapping("/profile")
     public ResponseEntity<ApiResponse<UserResponse>> updateProfile(
@@ -35,17 +36,53 @@ public class UserController {
         user.setAddress(request.getAddress());
         User saved = userRepository.save(user);
 
-        UserResponse response = UserResponse.builder()
-                .id(saved.getId())
-                .fullName(saved.getFullName())
-                .email(saved.getEmail())
-                .phone(saved.getPhone())
-                .address(saved.getAddress())
-                .role(saved.getRole().name())
-                .enabled(saved.isEnabled())
-                .createdAt(saved.getCreatedAt())
-                .build();
+        return ResponseEntity.ok(ApiResponse.success("Profile updated successfully", toUserResponse(saved)));
+    }
 
-        return ResponseEntity.ok(ApiResponse.success("Profile updated successfully", response));
+    @PostMapping("/email/send-otp")
+    public ResponseEntity<ApiResponse<com.ems.pragathisweets.dto.OtpDispatchResponse>> sendEmailOtp(
+            @AuthenticationPrincipal UserDetailsImpl principal,
+            @Valid @RequestBody com.ems.pragathisweets.dto.SendEmailOtpRequest request) {
+        com.ems.pragathisweets.dto.OtpDispatchResponse res = otpService.sendEmailChangeOtp(principal.getId(), request.getNewEmail());
+        String msg = "Verification code sent to " + request.getNewEmail();
+        return ResponseEntity.ok(ApiResponse.success(msg, res));
+    }
+
+    @PostMapping("/email/verify-otp")
+    public ResponseEntity<ApiResponse<UserResponse>> verifyEmailOtp(
+            @AuthenticationPrincipal UserDetailsImpl principal,
+            @Valid @RequestBody com.ems.pragathisweets.dto.VerifyEmailOtpRequest request) {
+        User updated = otpService.verifyEmailChangeOtp(principal.getId(), request.getNewEmail(), request.getOtp());
+        return ResponseEntity.ok(ApiResponse.success("Email address updated successfully", toUserResponse(updated)));
+    }
+
+    @PostMapping("/phone/send-otp")
+    public ResponseEntity<ApiResponse<com.ems.pragathisweets.dto.OtpDispatchResponse>> sendPhoneOtp(
+            @AuthenticationPrincipal UserDetailsImpl principal,
+            @Valid @RequestBody com.ems.pragathisweets.dto.SendPhoneOtpRequest request) {
+        com.ems.pragathisweets.dto.OtpDispatchResponse res = otpService.sendPhoneChangeOtp(principal.getId(), request.getNewPhone());
+        String msg = "Verification code sent to " + request.getNewPhone() + " via WhatsApp & SMS";
+        return ResponseEntity.ok(ApiResponse.success(msg, res));
+    }
+
+    @PostMapping("/phone/verify-otp")
+    public ResponseEntity<ApiResponse<UserResponse>> verifyPhoneOtp(
+            @AuthenticationPrincipal UserDetailsImpl principal,
+            @Valid @RequestBody com.ems.pragathisweets.dto.VerifyPhoneOtpRequest request) {
+        User updated = otpService.verifyPhoneChangeOtp(principal.getId(), request.getNewPhone(), request.getOtp());
+        return ResponseEntity.ok(ApiResponse.success("Mobile number updated successfully", toUserResponse(updated)));
+    }
+
+    private UserResponse toUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .address(user.getAddress())
+                .role(user.getRole().name())
+                .enabled(user.isEnabled())
+                .createdAt(user.getCreatedAt())
+                .build();
     }
 }

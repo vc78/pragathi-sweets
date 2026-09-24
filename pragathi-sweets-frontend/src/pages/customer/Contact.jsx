@@ -1,16 +1,56 @@
+import { useState } from 'react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
-import { MapPin, Phone, Mail, Clock, ExternalLink } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, ExternalLink, Send, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { BUSINESS } from '../../constants/business'
+import { sendContactEmails, isEmailJsConfigured } from '../../services/emailJsService'
 
 export default function Contact() {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [sending, setSending] = useState(false)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    toast.success("Thank you for your message! Our representative will contact you shortly.", {
-      style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
-    })
-    e.target.reset()
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      toast.error('Please fill in your name, email, and message.')
+      return
+    }
+
+    if (!isEmailJsConfigured()) {
+      toast.error(
+        'EmailJS Public Key is not configured correctly in .env. "Pragathi sweets Mail" is the service name. Please get your Public Key from EmailJS Dashboard -> Account -> API Keys.',
+        { duration: 7000 }
+      )
+      return
+    }
+
+    setSending(true)
+    try {
+      await sendContactEmails(formData)
+      toast.success('Thank you! Your message and auto-reply confirmation have been sent.', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch (err) {
+      console.error('Contact email dispatch failed:', err)
+      toast.error(err?.message || 'Failed to dispatch email. Please check your EmailJS keys in .env.', {
+        duration: 6000
+      })
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -74,12 +114,70 @@ export default function Contact() {
             <h2 className="font-display text-2xl text-[#8B0000] font-bold mb-6">Send A Message</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <input required placeholder="Your name" className="input-field" />
-                <input required type="email" placeholder="Your email" className="input-field" />
+                <div>
+                  <label className="text-[10px] font-bold text-[#B8860B] uppercase tracking-wider block mb-1">Your Name</label>
+                  <input
+                    required
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Venkat Chowdary"
+                    className="input-field"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-[#B8860B] uppercase tracking-wider block mb-1">Your Email</label>
+                  <input
+                    required
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@domain.com"
+                    className="input-field"
+                  />
+                </div>
               </div>
-              <input required placeholder="Subject" className="input-field" />
-              <textarea required rows={5} placeholder="How can we assist you with corporate, festival, or wedding catering?" className="input-field" />
-              <button type="submit" className="btn-primary w-full">Send Message</button>
+              <div>
+                <label className="text-[10px] font-bold text-[#B8860B] uppercase tracking-wider block mb-1">Subject</label>
+                <input
+                  required
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="Corporate / Wedding Sweet Box Catering"
+                  className="input-field"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-[#B8860B] uppercase tracking-wider block mb-1">Message</label>
+                <textarea
+                  required
+                  rows={5}
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="How can we assist you with festive gift boxes, custom packaging, or doorstep delivery?"
+                  className="input-field"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={sending}
+                className="btn-primary w-full flex items-center justify-center gap-2"
+              >
+                {sending ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>Sending Message...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </button>
             </form>
           </div>
         </div>

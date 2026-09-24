@@ -141,6 +141,18 @@ export const adminService = {
     }
   },
 
+  async generateAiProductContent({ name, category, ingredients, weight, price, characteristics }) {
+    try {
+      const { data } = await api.post('/admin/products/ai-generate', {
+        name, category, ingredients, weight, price, characteristics
+      })
+      return data.data
+    } catch (err) {
+      console.error('AI generate failed:', err)
+      throw err
+    }
+  },
+
   // Orders
   async getOrders() {
     try {
@@ -162,6 +174,7 @@ export const adminService = {
         payment: o.paymentStatus || o.paymentMethod || 'N/A',
         paymentMethod: o.paymentMethod || 'COD',
         status: o.status || 'PENDING',
+        notificationStatus: o.notificationStatus || 'NOT_DISPATCHED',
       }))
     } catch (err) {
       console.error(err)
@@ -175,6 +188,15 @@ export const adminService = {
     } catch (err) {
       if (err.response) throw err
       return { id, status }
+    }
+  },
+  async getOrderNotifications(id) {
+    try {
+      const { data } = await api.get(`/admin/orders/${id}/notifications`)
+      return data.data || []
+    } catch (err) {
+      console.error('Failed to get order notifications:', err)
+      return []
     }
   },
 
@@ -502,4 +524,70 @@ export const adminService = {
       throw err
     }
   },
+
+  // ── Subscriptions & VIP Memberships ─────────────────────────────────────────
+  async getSubscriptions(params = {}) {
+    try {
+      const { data } = await api.get('/admin/subscriptions', { params })
+      return data.data
+    } catch (err) {
+      console.error('Failed to get subscriptions:', err)
+      throw err
+    }
+  },
+
+  async getSubscriptionStats() {
+    try {
+      const { data } = await api.get('/admin/subscriptions/stats')
+      return data.data
+    } catch (err) {
+      console.error('Failed to get subscription stats:', err)
+      throw err
+    }
+  },
+
+  async updateSubscriptionStatus(id, status) {
+    try {
+      const { data } = await api.patch(`/admin/subscriptions/${id}/status`, null, {
+        params: { status }
+      })
+      return data.data
+    } catch (err) {
+      console.error('Failed to update subscription status:', err)
+      throw err
+    }
+  },
+
+  async extendSubscription(id, days = 30) {
+    try {
+      const { data } = await api.patch(`/admin/subscriptions/${id}/extend`, null, {
+        params: { days }
+      })
+      return data.data
+    } catch (err) {
+      console.error('Failed to extend subscription:', err)
+      throw err
+    }
+  },
+
+  async grantSubscription(payload) {
+    try {
+      const { data } = await api.post('/admin/subscriptions/grant', payload)
+      return data.data
+    } catch (err) {
+      console.error('Failed to grant subscription:', err)
+      throw err
+    }
+  },
+
+  async deleteSubscription(id) {
+    try {
+      const { data } = await api.delete(`/admin/subscriptions/${id}`)
+      return data.data
+    } catch (err) {
+      console.error('Failed to delete subscription:', err)
+      throw err
+    }
+  },
 }
+

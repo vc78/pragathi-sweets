@@ -63,6 +63,13 @@ public class ProductController {
         return ResponseEntity.ok(ApiResponse.success(productService.getById(id)));
     }
 
+    @GetMapping("/{id}/related")
+    public ResponseEntity<ApiResponse<List<ProductResponse>>> getRelated(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "4") int limit) {
+        return ResponseEntity.ok(ApiResponse.success(productService.getRelated(id, limit)));
+    }
+
     private Pageable buildPageable(int page, int size, String sortBy, String direction) {
         Sort.Direction dir = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         return PageRequest.of(page, size, Sort.by(dir, sortBy));

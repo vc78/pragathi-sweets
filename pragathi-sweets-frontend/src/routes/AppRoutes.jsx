@@ -32,6 +32,7 @@ const PaymentFailed = lazy(() => import('../pages/customer/PaymentFailed'))
 const TrackOrder = lazy(() => import('../pages/customer/TrackOrder'))
 const Addresses = lazy(() => import('../pages/customer/Addresses'))
 const Notifications = lazy(() => import('../pages/customer/Notifications'))
+const Subscription = lazy(() => import('../pages/customer/Subscription'))
 
 // Lazy loaded auth pages
 const Login = lazy(() => import('../pages/auth/Login'))
@@ -51,6 +52,7 @@ const OffersManagement = lazy(() => import('../pages/admin/Offers'))
 const CouponsManagement = lazy(() => import('../pages/admin/CouponsManagement'))
 const Reviews = lazy(() => import('../pages/admin/Reviews'))
 const Analytics = lazy(() => import('../pages/admin/Analytics'))
+const SubscriptionsManagement = lazy(() => import('../pages/admin/SubscriptionsManagement'))
 const Settings = lazy(() => import('../pages/admin/Settings'))
 
 export default function AppRoutes() {
@@ -84,6 +86,8 @@ export default function AppRoutes() {
           <Route path="/payment-success" element={<PageTransition><PaymentSuccess /></PageTransition>} />
           <Route path="/payment-failed" element={<PageTransition><PaymentFailed /></PageTransition>} />
           <Route path="/track-order" element={<PageTransition><TrackOrder /></PageTransition>} />
+          <Route path="/track" element={<PageTransition><TrackOrder /></PageTransition>} />
+          <Route path="/subscription" element={<PageTransition><Subscription /></PageTransition>} />
 
           {/* Customer — requires login */}
           <Route path="/checkout" element={<ProtectedRoute role="CUSTOMER"><PageTransition><Checkout /></PageTransition></ProtectedRoute>} />
@@ -102,6 +106,7 @@ export default function AppRoutes() {
           <Route path="/admin/categories" element={<ProtectedRoute role="ADMIN"><PageTransition><CategoriesManagement /></PageTransition></ProtectedRoute>} />
           <Route path="/admin/orders" element={<ProtectedRoute role="ADMIN"><PageTransition><OrdersManagement /></PageTransition></ProtectedRoute>} />
           <Route path="/admin/customers" element={<ProtectedRoute role="ADMIN"><PageTransition><Customers /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/subscriptions" element={<ProtectedRoute role="ADMIN"><PageTransition><SubscriptionsManagement /></PageTransition></ProtectedRoute>} />
           <Route path="/admin/inventory" element={<ProtectedRoute role="ADMIN"><PageTransition><Inventory /></PageTransition></ProtectedRoute>} />
           <Route path="/admin/offers" element={<ProtectedRoute role="ADMIN"><PageTransition><OffersManagement /></PageTransition></ProtectedRoute>} />
           <Route path="/admin/coupons" element={<ProtectedRoute role="ADMIN"><PageTransition><CouponsManagement /></PageTransition></ProtectedRoute>} />

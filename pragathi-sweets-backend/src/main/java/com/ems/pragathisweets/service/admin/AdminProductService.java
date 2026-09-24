@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 public class AdminProductService {
 
     private final ProductService productService;
+    private final GeminiService geminiService;
+
+    public com.ems.pragathisweets.dto.admin.AiProductGenerateResponse generateAiContent(com.ems.pragathisweets.dto.admin.AiProductGenerateRequest request) {
+        return geminiService.generateProductContent(request);
+    }
 
     public Page<ProductResponse> getAll(Pageable pageable) {
         return productService.getAll(pageable);

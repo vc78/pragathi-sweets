@@ -95,19 +95,19 @@ export default function Cart() {
     <div className="min-h-screen bg-[#FFFDF8] text-[#3A2D23] font-body">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-16">
-        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-10 select-none">
+      <div className="container-luxury py-8 md:py-12">
+        <h1 className="font-display text-3xl md:text-5xl text-[#8B0000] font-bold mb-6 select-none">
           Your Selection Box
         </h1>
 
         {items.length === 0 ? (
-          <div className="text-center py-24 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
+          <div className="text-center py-12 md:py-16 border border-dashed border-[#B8860B]/20 rounded-3xl bg-white select-none shadow-sm">
             <p className="font-display text-lg italic text-[#8B0000] font-bold">Your selection box is empty.</p>
-            <p className="text-xs text-[#3A2D23]/50 mt-2 mb-8">Time to fill it with traditional delicacies.</p>
+            <p className="text-xs text-[#3A2D23]/50 mt-1.5 mb-6">Time to fill it with traditional delicacies.</p>
             <Link to="/products" className="btn-primary">Browse Boutique</Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left Column: Cart items list */}
             <div className="lg:col-span-8 space-y-4">

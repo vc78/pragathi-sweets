@@ -34,12 +34,14 @@ public class SecurityConfig {
             "/api/categories/**",
             "/api/reviews/product/**",
             "/api/festival-offers/**",
-            "/api/coupons/**"
+            "/api/coupons/**",
+            "/api/orders/track/**"
     };
 
     private static final String[] PUBLIC_ENDPOINTS = {
             "/api/auth/**",
             "/api/newsletter/**",
+            "/api/subscriptions/**",
             "/api/health",
             "/actuator/health",
             "/api/payments/webhook",

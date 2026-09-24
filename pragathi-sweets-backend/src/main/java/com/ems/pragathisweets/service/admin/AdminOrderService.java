@@ -25,6 +25,7 @@ public class AdminOrderService {
     private final OrderService orderService;
     private final EmailService emailService;
     private final WhatsAppService whatsAppService;
+    private final com.ems.pragathisweets.service.OrderNotificationService orderNotificationService;
 
     @Transactional(readOnly = true)
     public Page<OrderResponse> getAll(Pageable pageable) {
@@ -40,6 +41,11 @@ public class AdminOrderService {
     public OrderResponse getById(Long id) {
         Order order = findEntity(id);
         return orderService.toResponse(order);
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<com.ems.pragathisweets.entity.OrderNotificationLog> getOrderNotifications(Long id) {
+        return orderNotificationService.getNotificationHistory(id);
     }
 
     @Transactional
@@ -70,15 +76,17 @@ public class AdminOrderService {
         }
 
         Order saved = orderRepository.save(order);
+        OrderResponse orderResponse = orderService.toResponse(saved);
 
-        emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order.getOrderNumber(), newStatus.name());
-
-        // WhatsApp status update for every status transition
         String phone = order.getContactPhone() != null ? order.getContactPhone() : order.getUser().getPhone();
-        whatsAppService.sendOrderStatusUpdate(
-                order.getOrderNumber(), newStatus.name(), order.getUser().getFullName(), phone);
+        String customerEmail = order.getUser() != null ? order.getUser().getEmail() : null;
+        String customerName = order.getUser() != null ? order.getUser().getFullName() : "Valued Customer";
 
-        return orderService.toResponse(saved);
+        // Dispatch authoritative status change notification to customer (idempotent, rich branded HTML)
+        orderNotificationService.sendOrderStatusNotification(
+                orderResponse, newStatus.name(), customerEmail, customerName, phone, null);
+
+        return orderResponse;
     }
 
     private Order findEntity(Long id) {

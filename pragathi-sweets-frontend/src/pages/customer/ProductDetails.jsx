@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { Star, Minus, Plus, ArrowLeft, ShieldCheck, Heart, Truck, HelpCircle, ChevronDown } from 'lucide-react'
+import { Star, Minus, Plus, ArrowLeft, ShieldCheck, Heart, Truck, HelpCircle, ChevronDown, CheckCircle, Zap } from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
 import SweetCard from '../../components/customer/SweetCard'
 import { productService } from '../../services/productService'
+import { authService } from '../../services/authService'
 import { useCart } from '../../hooks/useCart'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReliableImage from '../../components/common/ReliableImage'
@@ -13,6 +14,7 @@ import { ProductDetailsSkeleton } from '../../components/common/SkeletonLoaders'
 
 export default function ProductDetails() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [product, setProduct] = useState(null)
   const [qty, setQty] = useState(1)
   const [reviews, setReviews] = useState([])
@@ -32,11 +34,9 @@ export default function ProductDetails() {
     window.scrollTo(0, 0)
     productService.getById(id).then((prod) => {
       setProduct(prod)
-      if (prod) {
-        productService.getAll().then((list) => {
-          setRelated(list.filter((p) => p.category === prod.category && String(p.id) !== String(id)).slice(0, 4))
-        })
-      }
+    })
+    productService.getRelated(id, 4).then((list) => {
+      setRelated(list)
     })
     productService.getReviews(id).then(setReviews)
   }, [id])
@@ -60,6 +60,11 @@ export default function ProductDetails() {
     })
   }
 
+  const handleBuyNow = () => {
+    addToCart(product, qty)
+    navigate('/checkout')
+  }
+
   const handleReviewSubmit = async (e) => {
     e.preventDefault()
     if (!newComment.trim()) {
@@ -68,8 +73,10 @@ export default function ProductDetails() {
     }
     setSubmitting(true)
     try {
+      const currentUser = authService.getCurrentUser()
+      const customerName = currentUser?.fullName || currentUser?.name || 'Valued Customer'
       const saved = await productService.submitReview(id, {
-        customer: 'Customer Guest',
+        customer: customerName,
         rating: newRating,
         comment: newComment,
         date: new Date().toISOString().slice(0, 10),
@@ -194,9 +201,12 @@ export default function ProductDetails() {
                   </div>
                 </div>
 
-                <div className="flex-1 pt-5">
-                  <button onClick={handleAdd} className="btn-primary w-full text-center flex items-center justify-center gap-2">
-                    Add to selection box <Plus size={14} />
+                <div className="flex-1 pt-5 flex flex-col sm:flex-row gap-3">
+                  <button onClick={handleAdd} className="btn-primary flex-1 text-center flex items-center justify-center gap-2">
+                    Add to Box <Plus size={14} />
+                  </button>
+                  <button onClick={handleBuyNow} className="bg-[#B8860B] hover:bg-[#996515] text-white font-body text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-full transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                    <Zap size={14} fill="currentColor" /> Buy Now
                   </button>
                 </div>
               </div>
@@ -248,7 +258,21 @@ export default function ProductDetails() {
           
           {/* Reviews list */}
           <div className="lg:col-span-7 space-y-6">
-            <h2 className="font-display text-2xl md:text-3xl text-[#8B0000] font-bold mb-8">Client Experiences</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl text-[#8B0000] font-bold">Client Experiences</h2>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <div className="flex text-[#B8860B]">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} size={13} fill={i < Math.round(product.rating || 4.8) ? '#B8860B' : 'none'} className="text-[#B8860B]" />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold text-[#3A2D23]">{product.rating || 4.8} / 5</span>
+                  <span className="text-xs text-[#3A2D23]/50">({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})</span>
+                </div>
+              </div>
+            </div>
+
             {reviews.length === 0 ? (
               <p className="text-xs italic text-[#3A2D23]/40">No experiences listed yet. Be the first to share your thoughts.</p>
             ) : (
@@ -256,7 +280,14 @@ export default function ProductDetails() {
                 {reviews.map((r) => (
                   <div key={r.id} className="border border-[#B8860B]/10 rounded-2xl p-5 bg-white shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#3A2D23]">{r.customer}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-[#3A2D23]">{r.customer}</span>
+                        {r.verified && (
+                          <span className="inline-flex items-center gap-1 text-[9px] text-[#B8860B] font-bold bg-[#B8860B]/10 px-2 py-0.5 rounded-full">
+                            <CheckCircle size={10} className="text-[#B8860B]" /> Verified Purchase
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[10px] text-[#3A2D23]/40">{r.date}</span>
                     </div>
                     <div className="flex text-[#B8860B] mt-1.5 mb-3">
