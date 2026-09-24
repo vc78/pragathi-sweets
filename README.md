@@ -1,191 +1,583 @@
-# 🍬 Pragathi Sweets — Enterprise E-Commerce Platform
+🍬 Pragathi Sweets
 
-[![CI Pipeline](https://github.com/vc78/pragathi-sweets/actions/workflows/ci.yml/badge.svg)](https://github.com/vc78/pragathi-sweets/actions)
-![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3-green?logo=springboot)
-![React](https://img.shields.io/badge/React-18.3-blue?logo=react)
-![Vite](https://img.shields.io/badge/Vite-5.4-purple?logo=vite)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
+Enterprise-Grade Indian Sweets & D2C E-Commerce Platform
 
-A production-hardened, full-stack e-commerce platform designed for authentic Indian confections, savouries, dry fruits, and festive gift assortments. Built with **Java 21 (Spring Boot 3.5.3)**, **MySQL 8**, **React 18 (Vite 5)**, **TailwindCSS**, and **Docker**.
+<p align="center">
+  <strong>Premium sweets • Secure checkout • Real-time order operations • Admin ERP</strong>
+</p>
 
----
+<p align="center">
+  <a href="#-overview">Overview</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-api-overview">API</a> •
+  <a href="#-local-development">Development</a> •
+  <a href="#-deployment">Deployment</a> •
+  <a href="#-security">Security</a>
+</p>
 
-## 📖 Table of Contents
-- [Architecture Overview](#-architecture-overview)
-- [Key Features](#-key-features)
-- [Quick Start with Docker Compose](#-quick-start-with-docker-compose)
-- [Local Development Setup](#-local-development-setup)
-- [Default Credentials](#-default-credentials)
-- [API & Documentation](#-api--documentation)
-- [Security & Production Hardening](#-security--production-hardening)
-- [Repository Structure](#-repository-structure)
+📌 Overview
 
----
+Pragathi Sweets is a full-stack, production-oriented e-commerce platform built for Indian sweets, savouries, dry fruits, and festive gift collections.
 
-## 🏛 Architecture Overview
+The platform combines a premium customer shopping experience with a secure Spring Boot backend, transactional checkout, Razorpay payments, Cash on Delivery, inventory management, coupon operations, order lifecycle tracking, and an administrative ERP-style dashboard.
 
-```
-                                  [ Client Browsers / Devices ]
-                                                 │
-                                                 ▼
-                                     ┌───────────────────────┐
-                                     │     Nginx (Port 80)   │
-                                     │  (Gzip, Cache, Proxy) │
-                                     └───────────┬───────────┘
-                                                 │
-                        ┌────────────────────────┴────────────────────────┐
-                        │ Static Assets (SPA)                             │ /api/* Proxy
-                        ▼                                                 ▼
-             ┌─────────────────────┐                          ┌────────────────────────┐
-             │  React + Vite SPA   │                          │  Spring Boot 3.5 API   │
-             │ (Tailwind + Redux)  │                          │      (Port 8080)       │
-             └─────────────────────┘                          └───────────┬────────────┘
-                                                                          │
-                                               ┌──────────────────────────┴──────────────────────────┐
-                                               ▼                                                     ▼
-                                     ┌──────────────────┐                                  ┌──────────────────┐
-                                     │  MySQL 8.0 RDBMS │                                  │ Razorpay Gateway │
-                                     │   (Port 3306)    │                                  │ (Online Payments)│
-                                     └──────────────────┘                                  └──────────────────┘
-```
+The system is designed with seasonal commerce in mind, including festivals, weddings, and gifting seasons. fileciteturn2file0L7-L21
 
-For comprehensive deep-dive documentation, see [PROJECT_DOCUMENTATION.md](file:///c:/Training/Pragathi%20sweets/PROJECT_DOCUMENTATION.md).
+✨ Features
 
----
+🛍️ Premium product discovery and catalog
 
-## ✨ Key Features
+🧁 Indian sweets, savouries, dry fruits & gift boxes
 
-### 🛒 Customer Experience
-- **Artisanal Product Showcase**: Category filtering, live search, dietary badges, and package size selection (250g, 500g, 1kg).
-- **Per-User Cart Isolation**: Separate cart storage per customer (`ps_cart_${userId}`) preventing cart bleeding between accounts.
-- **Guest-to-User Cart Migration**: Selections made anonymously in `ps_cart_guest` merge automatically upon authentication.
-- **Dynamic Coupons Engine**: Live promo code validation (`AZADI15`, `RAKHI200`, `SWEET10`) with minimum order requirements.
-- **Dual Payment Workflows**:
-  - **Razorpay**: Online payments with server-side HMAC-SHA256 signature verification.
-  - **Cash on Delivery (COD)**: Post-delivery reconciliation and verification workflow.
-- **Real-Time Order Tracking**: 8-stage progress tracker (`PENDING` → `CONFIRMED` → `PROCESSING` → `PREPARING` → `SHIPPED` → `OUT_FOR_DELIVERY` → `DELIVERED`).
-- **Pragathi Royale Loyalty**: Client gold coin rewards system with instant redemption.
+🛒 Per-user cart isolation
 
-### 🛡 Administrative ERP Suite
-- **Live Command Dashboard**: Real-time KPI summary cards (revenue, active orders, customer count, low-stock warnings).
-- **Orders Management**: Live status updates with 10-second polling, customer phone calling shortcuts, and coupon breakdown.
-- **Customer Directory**: Auto-matching order history across user IDs, emails, and full names.
-- **Promotions & Offers Control**: One-click **Implement / Stop** switches to pause campaigns without deleting history.
-- **Inventory Threshold Management**: Automatic flagging of products with inventory below 10 units.
+🔄 Guest-to-user cart migration
 
----
+💳 Razorpay payments
 
-## 🚀 Quick Start with Docker Compose
+💵 Cash on Delivery
 
-Deploy the entire stack (MySQL 8 + Backend API + Frontend SPA) with a single command:
+🎟️ Server-side coupon validation
 
-```bash
-# 1. Clone repository
-git clone https://github.com/vc78/pragathi-sweets.git
-cd pragathi-sweets
+🚚 Delivery-fee calculation
 
-# 2. Copy environment template
-cp .env.example .env
+📦 End-to-end order lifecycle
 
-# 3. Start all containers
-docker-compose up -d --build
-```
+⭐ Product reviews
 
-Access the application:
-- **Customer Storefront**: `http://localhost`
-- **Admin Control Panel**: `http://localhost/admin/login`
-- **Backend Healthcheck**: `http://localhost/api/health`
+📊 Admin ERP dashboard
 
----
+👥 Customer management
 
-## 💻 Local Development Setup
+📦 Inventory management
 
-### Prerequisites
-- Java 21 JDK
-- Node.js 20+ and npm
-- MySQL 8.0 running locally on port 3306
+🎫 Coupon management
 
-### 1. Database Setup
-```sql
+🔐 JWT authentication & role-based authorization
+
+🛡️ Login rate limiting and security headers
+
+📱 Responsive customer experience
+
+🐳 Dockerized deployment
+
+⚙️ GitHub Actions CI
+
+📚 OpenAPI / Swagger
+
+🩺 Health and monitoring endpoints
+
+🏗️ Architecture
+
+                         ┌──────────────────────────────┐
+                         │      Customer Browser        │
+                         │     Desktop / Mobile         │
+                         └──────────────┬───────────────┘
+                                        │
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │       Nginx Reverse Proxy    │
+                         │          :80 / :443          │
+                         └──────────────┬───────────────┘
+                                        │
+                         ┌──────────────┴──────────────┐
+                         │                             │
+                         ▼                             ▼
+              ┌────────────────────┐        ┌────────────────────┐
+              │ React 18 + Vite    │        │ Spring Boot API    │
+              │ Tailwind + Redux   │        │ Java 21            │
+              └────────────────────┘        └─────────┬──────────┘
+                                                       │
+                          ┌────────────────────────────┼──────────────────────┐
+                          │                            │                      │
+                          ▼                            ▼                      ▼
+                 ┌────────────────┐          ┌────────────────┐      ┌───────────────┐
+                 │    MySQL 8     │          │    Razorpay    │      │  SMTP / Mail  │
+                 │   Persistence  │          │ Payments/API   │      │ Notifications │
+                 └────────────────┘          └────────────────┘      └───────────────┘
+
+The documented production architecture uses React/Vite behind Nginx, a Spring Boot API, MySQL persistence, Razorpay integration, SMTP, Docker Compose, and GitHub Actions CI. fileciteturn2file0L25-L103
+
+🧰 Tech Stack
+
+Layer
+
+Technology
+
+Frontend
+
+React 18
+
+Build Tool
+
+Vite 5.4
+
+Styling
+
+TailwindCSS
+
+State Management
+
+Redux Toolkit
+
+UI Icons
+
+Lucide React
+
+Animations
+
+Framer Motion
+
+HTTP
+
+Axios
+
+Backend
+
+Java 21
+
+Framework
+
+Spring Boot 3.5.3
+
+Security
+
+Spring Security 6
+
+Authentication
+
+JWT / JJWT
+
+Password Hashing
+
+BCrypt
+
+Persistence
+
+Spring Data JPA
+
+ORM
+
+Hibernate
+
+Database
+
+MySQL 8
+
+API Documentation
+
+SpringDoc OpenAPI / Swagger
+
+Payments
+
+Razorpay
+
+Web Server
+
+Nginx Alpine
+
+Containers
+
+Docker / Docker Compose
+
+CI
+
+GitHub Actions
+
+📁 Repository Structure
+
+.
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── docker-compose.yml
+├── .env.example
+├── pragathi-sweets-backend/
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/main/
+│       ├── java/com/ems/pragathisweets/
+│       │   ├── config/
+│       │   ├── controller/
+│       │   │   └── admin/
+│       │   ├── dto/
+│       │   ├── entity/
+│       │   ├── exception/
+│       │   ├── mapper/
+│       │   ├── repository/
+│       │   ├── security/
+│       │   └── service/
+│       └── resources/
+│           ├── application.properties
+│           └── application-prod.properties
+└── pragathi-sweets-frontend/
+    ├── Dockerfile
+    ├── nginx.conf
+    ├── package.json
+    ├── index.html
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        ├── components/
+        ├── hooks/
+        ├── pages/
+        ├── services/
+        └── store/
+
+The documented repository separates the React SPA from the Spring Boot API and organizes backend concerns into controllers, DTOs, entities, repositories, services, security, and configuration. fileciteturn2file0L107-L207
+
+🛍️ Core Commerce
+
+Customer Experience
+
+Catalog discovery
+
+Categories and featured products
+
+Product details
+
+Package-size selection
+
+Customer reviews
+
+Responsive product grids
+
+Cart synchronization
+
+Cart Isolation
+
+Guest
+  │
+  ├── ps_cart_guest
+  │
+  ▼
+Authentication
+  │
+  ▼
+ps_cart_{userId}
+  │
+  └── Guest selections merged
+
+The documented cart lifecycle isolates users and supports guest-to-user migration. fileciteturn2file0L213-L229
+
+💳 Checkout & Payments
+
+Delivery
+
+Order < ₹999  →  ₹50 delivery
+Order ≥ ₹999  →  Free priority delivery
+
+Coupon validation and delivery pricing are enforced server-side. fileciteturn2file0L231-L240
+
+Razorpay Flow
+
+Customer
+   │
+   ▼
+POST /api/payments/create-order
+   │
+   ▼
+Spring Boot → Razorpay
+   │
+   ▼
+Razorpay Checkout
+   │
+   ▼
+POST /api/payments/verify
+   │
+   ▼
+HMAC-SHA256 verification
+   │
+   ▼
+Order CONFIRMED
+
+The backend verifies the Razorpay signature before finalizing payment. fileciteturn2file0L241-L251
+
+COD
+
+COD bypasses the initial gateway payment and is reconciled during fulfillment. fileciteturn2file0L253-L257
+
+📦 Order Lifecycle
+
+PENDING
+   ↓
+CONFIRMED
+   ↓
+PROCESSING
+   ↓
+PREPARING
+   ↓
+SHIPPED
+   ↓
+OUT_FOR_DELIVERY
+   ↓
+DELIVERED
+
+Pre-dispatch orders may transition to CANCELLED with stock restoration. fileciteturn2file0L259-L311
+
+🧑‍💼 Admin ERP
+
+The administrative system provides:
+
+Live order monitoring
+
+Customer directory
+
+Revenue metrics
+
+Active-order metrics
+
+Low-stock warnings
+
+Product management
+
+Inventory controls
+
+Category controls
+
+Coupon activation/deactivation
+
+Customer order history
+
+fileciteturn2file0L313-L323
+
+🔐 Security
+
+The application uses defense-in-depth security:
+
+Stateless JWT authentication
+
+24-hour token expiration
+
+BCrypt password hashing
+
+Role-based authorization
+
+Login rate limiting
+
+HSTS
+
+X-Frame-Options: DENY
+
+X-Content-Type-Options: nosniff
+
+Strict referrer policy
+
+Global exception handling
+
+Request correlation IDs
+
+Health probes
+
+Frontend Error Boundary
+
+GET retry handling for transient failures
+
+fileciteturn2file0L327-L359
+
+🔌 REST API
+
+Authentication
+
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+
+Products
+
+GET /api/products
+GET /api/products/{id}
+GET /api/products/featured
+GET /api/categories
+
+Cart
+
+GET    /api/cart
+POST   /api/cart/items
+DELETE /api/cart
+
+Orders
+
+POST /api/orders/checkout
+GET  /api/orders
+GET  /api/orders/{id}
+
+Payments
+
+POST /api/payments/create-order
+POST /api/payments/verify
+POST /api/payments/webhook
+
+Health
+
+GET /api/health
+GET /actuator/health
+
+Admin
+
+GET   /api/admin/orders
+PATCH /api/admin/orders/{id}/status
+GET   /api/admin/users
+GET   /api/admin/products
+POST  /api/admin/products
+PUT   /api/admin/products/{id}
+GET   /api/admin/coupons
+POST  /api/admin/coupons
+PATCH /api/admin/coupons/{id}/toggle
+
+fileciteturn2file0L459-L519
+
+🚀 Local Development
+
+Prerequisites
+
+Java 21
+
+Node.js
+
+npm
+
+MySQL 8
+
+Git
+
+Database
+
 CREATE DATABASE IF NOT EXISTS pragathi_sweets;
-```
 
-### 2. Backend Setup
-```bash
+Backend
+
 cd pragathi-sweets-backend
-./mvnw clean spring-boot:run
-```
-- API Server runs at: `http://localhost:8080`
-- Swagger OpenAPI documentation: `http://localhost:8080/swagger-ui.html`
+.\mvnw.cmd spring-boot:run
 
-### 3. Frontend Setup
-```bash
+API:
+
+http://localhost:8080
+
+Swagger:
+
+http://localhost:8080/swagger-ui.html
+
+Frontend
+
 cd pragathi-sweets-frontend
 npm install
 npm run dev
-```
-- Frontend dev server runs at: `http://localhost:5173`
 
----
+Frontend:
 
-## 🔑 Default Credentials
+http://localhost:5173
 
-On initial startup, the database auto-seeds a default administrative user:
-- **Email**: `admin@pragathisweets.com`
-- **Password**: `Admin@123`
-- **Admin URL**: `http://localhost:5173/admin/login` (or `http://localhost/admin/login` in Docker)
+fileciteturn2file0L523-L563
 
----
+🐳 Docker Deployment
 
-## 📡 API & Documentation
+cp .env.example .env
 
-| Endpoint | Method | Description | Access |
-|---|---|---|---|
-| `/api/auth/register` | `POST` | Register new customer | Public |
-| `/api/auth/login` | `POST` | Customer & admin login (JWT) | Public (Rate Limited) |
-| `/api/products` | `GET` | Paginated product catalog | Public |
-| `/api/categories` | `GET` | Active sweet categories | Public |
-| `/api/cart` | `GET` / `POST` / `DELETE` | Shopping cart operations | Authenticated |
-| `/api/orders/checkout` | `POST` | Atomic checkout transaction | Authenticated |
-| `/api/orders` | `GET` | Customer order history | Authenticated |
-| `/api/payments/verify` | `POST` | HMAC signature validation | Authenticated |
-| `/api/health` | `GET` | Service uptime and heartbeat | Public |
-| `/api/admin/orders` | `GET` / `PATCH` | Order processing & dispatch | Admin Only |
-| `/api/admin/coupons` | `GET` / `PATCH` | Promotions & toggle controls | Admin Only |
+Configure:
 
-Full interactive API contracts can be inspected via Swagger UI at `/swagger-ui.html`.
+DB_NAME=pragathi_sweets
+DB_ROOT_PASSWORD=<strong-secret>
+DB_USER=<application-user>
+DB_PASSWORD=<strong-secret>
+JWT_SECRET=<strong-secret>
+RAZORPAY_KEY_ID=<razorpay-key>
+RAZORPAY_KEY_SECRET=<razorpay-secret>
+DEFAULT_ADMIN_EMAIL=<admin-email>
+DEFAULT_ADMIN_PASSWORD=<strong-secret>
 
----
+Start:
 
-## 🔒 Security & Production Hardening
+docker compose up -d --build
 
-- **Sliding-Window Rate Limiting**: In-memory IP tracking on `/api/auth/login` throttles brute-force attempts to max 15 requests/minute.
-- **Enterprise Headers**: Enforces HSTS (1 year), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and strict referrer policy.
-- **Data Leak Prevention**: Global exception handler masks internal error messages and stack traces on 500 errors.
-- **Distributed Tracing**: Generates `X-Request-ID` UUID per request, integrated into Logback's `MDC` context.
-- **Resilient Frontend**: Top-level `ErrorBoundary` handles render glitches with one-click page reload recovery.
+Verify:
 
----
+docker compose ps
+curl http://localhost/api/health
 
-## 📂 Repository Structure
+The documented Docker deployment runs MySQL, Spring Boot, and Nginx/React as the production stack. fileciteturn2file0L567-L629
 
-```
-├── .github/workflows/ci.yml         # Automated GitHub Actions CI pipeline
-├── docker-compose.yml               # Multi-container production deployment
-├── .env.example                     # Environment template file
-├── PROJECT_DOCUMENTATION.md         # Detailed technical and architecture guide
-├── README.md                        # Project introduction and quickstart
-├── pragathi-sweets-backend/         # Spring Boot 3.5 Java backend
-│   ├── Dockerfile                   # Multi-stage JRE 21 Alpine image
-│   └── src/main/                    # Source files, entities, security, configs
-└── pragathi-sweets-frontend/        # React 18 + Vite frontend
-    ├── Dockerfile                   # Multi-stage Nginx Alpine image
-    ├── nginx.conf                   # Reverse proxy, caching & SPA routing
-    └── src/                         # Components, pages, hooks, state store
-```
+⚠️ Never commit .env, payment secrets, JWT secrets, database passwords, or other private credentials.
 
----
+⚙️ CI/CD
 
-## 📄 License
-All rights reserved © 2026 Pragathi Sweets. Proprietary and confidential.
+GitHub Actions is configured under:
+
+.github/workflows/ci.yml
+
+The documented CI process validates backend Maven builds/tests and frontend production builds. fileciteturn2file0L101-L103
+
+🧪 Quality Checklist
+
+Before merging:
+
+[ ] Backend tests pass
+[ ] Frontend production build passes
+[ ] Authentication tested
+[ ] Authorization tested
+[ ] Cart isolation tested
+[ ] Checkout tested
+[ ] Coupon validation tested
+[ ] Razorpay verification tested
+[ ] COD tested
+[ ] Order lifecycle tested
+[ ] Inventory tested
+[ ] Admin APIs tested
+[ ] Mobile UI tested
+[ ] Docker build tested
+[ ] Secrets checked
+
+🤝 Contributing
+
+Fork the repository.
+
+Create a feature branch.
+
+git checkout -b feature/your-feature
+
+Make focused changes.
+
+Run tests and production builds.
+
+Review security implications.
+
+Commit clearly.
+
+git commit -m "feat: improve product recommendations"
+
+Push:
+
+git push origin feature/your-feature
+
+Open a Pull Request.
+
+For UI changes, include screenshots and explain relevant API, database, security, and deployment impact.
+
+📄 License
+
+Add the project's intended license before publishing the repository publicly.
+
+Do not claim an open-source license unless the project owner has explicitly selected one.
+
+🍬 Pragathi Sweets
+
+Premium Customer Experience
+          +
+Secure Backend
+          +
+Transactional Commerce
+          +
+Payment Infrastructure
+          +
+Administrative Operations
+          +
+Containerized Deployment
+          +
+CI/CD
+
+<p align="center">
+  <strong>Pragathi Sweets</strong><br/>
+  Crafted for sweets. Engineered for scale.
+</p>
