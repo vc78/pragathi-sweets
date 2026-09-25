@@ -89,7 +89,7 @@ export default function Subscription() {
         email: user.email,
         customerName: user.name,
         customerPhone: user.phone || '',
-        planName: 'PRAGATHI_CIRCLE_VIP'
+        planName: 'AGVIA_ATELIER_VIP'
       })
 
       const options = {
@@ -121,7 +121,7 @@ export default function Subscription() {
             })
             setActiveSub(result)
             setStep('success')
-            toast.success('Welcome to Pragathi Circle VIP! Your membership is now ACTIVE.', {
+            toast.success('Welcome to AGVIA Atelier Circle VIP! Your membership is now ACTIVE.', {
               duration: 5000,
               style: { background: '#1F1F1F', color: '#E6C687', borderRadius: '14px', border: '1px solid #B8860B' }
             })
@@ -140,7 +140,7 @@ export default function Subscription() {
   }
 
   const handleCopyCoupon = () => {
-    const code = activeSub?.exclusiveCoupon || activeSub?.couponCode || 'PRAGATHIVIP10'
+    const code = activeSub?.exclusiveCoupon || activeSub?.couponCode || 'AGVIAVIP10'
     navigator.clipboard.writeText(code)
     setCopied(true)
     toast.success('Coupon copied! Ready to use at checkout.', {
@@ -176,7 +176,7 @@ export default function Subscription() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
             <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#B8860B]/40 bg-[#B8860B]/10 text-[#E6C687] text-[10px] font-bold tracking-[0.3em] uppercase mb-6">
               <Crown size={14} className="text-[#E6C687]" />
-              <span>Pragathi Circle</span>
+              <span>AGVIA Atelier Circle</span>
               <Crown size={14} className="text-[#E6C687]" />
             </div>
 
@@ -241,7 +241,7 @@ export default function Subscription() {
                 <div className="relative z-10">
                   <div className="flex items-start justify-between mb-8">
                     <div>
-                      <span className="text-[9px] tracking-[0.35em] text-[#B8860B] font-bold uppercase block mb-1.5">Pragathi Circle</span>
+                      <span className="text-[9px] tracking-[0.35em] text-[#B8860B] font-bold uppercase block mb-1.5">AGVIA Atelier Circle</span>
                       <h2 className="font-display text-2xl md:text-3xl font-bold text-white">VIP Membership</h2>
                     </div>
                     <div className="w-14 h-14 rounded-2xl bg-[#B8860B]/20 border border-[#B8860B]/40 flex items-center justify-center">
@@ -290,7 +290,7 @@ export default function Subscription() {
                     <span className="text-[9px] text-[#B8860B] tracking-[0.25em] uppercase font-bold block mb-2">Your Exclusive VIP Coupon</span>
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono text-2xl md:text-3xl font-bold text-white tracking-widest">
-                        {activeSub.exclusiveCoupon || activeSub.couponCode || 'PRAGATHIVIP10'}
+                        {activeSub.exclusiveCoupon || activeSub.couponCode || 'AGVIAVIP10'}
                       </span>
                       <button
                         onClick={handleCopyCoupon}
@@ -450,7 +450,7 @@ export default function Subscription() {
               Ready to go <em className="italic text-[#E6C687]">Royal?</em>
             </h2>
             <p className="text-white/60 text-sm max-w-md mx-auto mb-8 leading-relaxed">
-              Join the Pragathi Circle today for just ₹299/year and unlock lifetime VIP privileges on every order.
+              Join the AGVIA Atelier Circle today for just ₹299/year and unlock lifetime VIP privileges on every order.
             </p>
             <button
               onClick={handleSubscribe}

@@ -31,6 +31,5 @@ public class OrderResponse {
     private String shippingAddress;
     private String contactPhone;
     private String notes;
-    private String notificationStatus;
     private LocalDateTime createdAt;
 }

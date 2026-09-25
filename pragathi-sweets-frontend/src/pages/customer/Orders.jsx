@@ -132,7 +132,7 @@ export default function Orders() {
 
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <span className="text-[8px] tracking-[0.25em] text-[#B8860B] font-bold uppercase block">PRAGATHI COINS</span>
+                  <span className="text-[8px] tracking-[0.25em] text-[#B8860B] font-bold uppercase block">AGVIA REWARDS</span>
                   <p className="font-display text-xs text-[#B8860B] mt-1">Royale Class Membership</p>
                 </div>
                 <Award size={20} className="text-[#B8860B] animate-pulse" />
@@ -398,12 +398,12 @@ export default function Orders() {
                                         <div key={idx} className="flex justify-between items-center pt-3 first:pt-0">
                                           <div className="flex items-center gap-3">
                                             <ReliableImage
-                                              src={item.image || item.imageUrl || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+                                              src={item.image || item.imageUrl || '/images/classic_silk_saree.jpg'}
                                               alt={item.name || item.productName || 'Confection'}
                                               className="w-12 h-12 rounded-lg border border-[#B8860B]/10 shadow-sm shrink-0 object-cover"
                                             />
                                             <div>
-                                              <p className="font-display text-sm font-bold text-[#8B0000]">{item.name || item.productName || 'Pragathi Confection'}</p>
+                                              <p className="font-display text-sm font-bold text-[#8B0000]">{item.name || item.productName || 'AGVIA Silhouette'}</p>
                                               <p className="text-[10px] text-[#3A2D23]/40">
                                                 ₹{item.price || item.unitPrice || 0} {item.unit ? `/ ${item.unit}` : ''}
                                               </p>

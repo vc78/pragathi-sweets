@@ -175,6 +175,10 @@ export const adminService = {
         paymentMethod: o.paymentMethod || 'COD',
         status: o.status || 'PENDING',
         notificationStatus: o.notificationStatus || 'NOT_DISPATCHED',
+        awbNumber: o.awbNumber || null,
+        trackingUrl: o.trackingUrl || null,
+        shippingAddress: o.shippingAddress || null,
+        contactPhone: o.contactPhone || null,
       }))
     } catch (err) {
       console.error(err)
@@ -460,6 +464,28 @@ export const adminService = {
   },
 
   // Analytics
+  async getAnalyticsDashboard() {
+    try {
+      const { data } = await api.get('/admin/analytics/dashboard')
+      return data.data || {}
+    } catch (err) {
+      console.error('Failed to get analytics dashboard:', err)
+      throw err
+    }
+  },
+
+  async getSalesReport(startDate, endDate) {
+    try {
+      const { data } = await api.get('/admin/analytics/sales-report', {
+        params: { startDate, endDate }
+      })
+      return data.data || null
+    } catch (err) {
+      console.error('Failed to get sales report:', err)
+      return null
+    }
+  },
+
   async getAnalytics() {
     try {
       const [productsRes, ordersRes, categoriesRes] = await Promise.allSettled([

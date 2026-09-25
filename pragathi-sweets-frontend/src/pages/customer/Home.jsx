@@ -4,11 +4,7 @@ import toast from 'react-hot-toast'
 import {
   ArrowRight,
   Star,
-  Flame,
   Gift,
-  ShieldCheck,
-  Clock,
-  ArrowUpRight,
   ChevronLeft,
   ChevronRight,
   Check,
@@ -33,45 +29,92 @@ import { ProductGridSkeleton } from '../../components/common/SkeletonLoaders'
 // ── Hero Slides ────────────────────────────────────────────
 const HERO_SLIDES = [
   {
-    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg',
-    tag: 'Signature Handloom Edit',
-    title: 'Kanjeevaram Silks',
-    subtitle: 'Woven with certified pure gold zari threads on heirloom mulberry silk',
+    image: '/images/hero_banner.jpg',
+    tag: 'Elegance, Made for Every Occasion',
+    title: 'AGVIA Luxury Boutique',
+    subtitle: 'Discover sarees, kurtas, lehengas and dresses designed for your special moments.',
+    cta: '/products',
+    accent: '#C9A45C',
+  },
+  {
+    image: '/images/classic_silk_saree.jpg',
+    tag: 'The Signature Silk Edit',
+    title: 'Classic Silk & Organza',
+    subtitle: 'Heirloom drapes woven with subtle gold zari borders for festive celebrations.',
     cta: '/products?category=Sarees',
     accent: '#C9A45C',
   },
   {
-    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
+    image: '/images/wedding_lehenga.jpg',
     tag: 'Bridal Couture',
-    title: 'Royal Trousseau Lehengas',
-    subtitle: 'Lavish hand-embroidered zardozi and heritage gota patti masterpieces',
+    title: 'Royal Wedding Lehengas',
+    subtitle: 'Exquisite bridal lehengas adorned with hand-stitched zardozi and double dupattas.',
     cta: '/products?category=Lehengas',
     accent: '#5A1020',
   },
   {
-    image: '/images/pexels-divigraphy-8624624.jpg',
+    image: '/images/anarkali_set.jpg',
     tag: 'Festive Occasion Wear',
-    title: 'Handcrafted Anarkalis',
-    subtitle: 'Flowing regal kalis adorned with fine mirror-work and delicate thread embroidery',
+    title: 'Embroidered Anarkalis',
+    subtitle: 'Flowing regal kalis adorned with fine mirror-work and delicate thread embroidery.',
     cta: '/products?category=Anarkalis+%26+Kurtas',
     accent: '#7A1F32',
   },
-  {
-    image: '/images/pexels-divigraphy-14467844.jpg',
-    tag: 'Contemporary Evening Edit',
-    title: 'Sculpted Cocktail Gowns',
-    subtitle: 'Effortless luxury draping crafted for grand receptions and soirée galas',
-    cta: '/products?category=Dresses+%26+Gowns',
-    accent: '#C9A45C',
-  },
 ]
+
+// ── Realistic Trust Badge SVG Icons ────────────────────────
+function IconSilk() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className="w-5 h-5" aria-hidden="true">
+      <path d="M6 26 Q16 4 26 26" stroke="#E6C687" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M10 20 Q16 10 22 20" stroke="#E6C687" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <circle cx="16" cy="27" r="2" fill="#E6C687" opacity="0.8"/>
+      <path d="M13 14 Q16 8 19 14" stroke="#E6C687" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.4"/>
+    </svg>
+  )
+}
+function IconNeedle() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className="w-5 h-5" aria-hidden="true">
+      <line x1="8" y1="24" x2="24" y2="8" stroke="#E6C687" strokeWidth="2" strokeLinecap="round"/>
+      <ellipse cx="22" cy="10" rx="3" ry="1.5" transform="rotate(-45 22 10)" stroke="#E6C687" strokeWidth="1.5" fill="none"/>
+      <path d="M8 24 Q6 28 10 26 Z" fill="#E6C687" opacity="0.8"/>
+      <path d="M14 18 Q17 13 20 16" stroke="#E6C687" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <path d="M11 21 Q14 16 17 19" stroke="#E6C687" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.4"/>
+    </svg>
+  )
+}
+function IconTape() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className="w-5 h-5" aria-hidden="true">
+      <rect x="4" y="13" width="24" height="6" rx="3" stroke="#E6C687" strokeWidth="1.5" fill="none"/>
+      <line x1="8" y1="13" x2="8" y2="19" stroke="#E6C687" strokeWidth="1"/>
+      <line x1="12" y1="13" x2="12" y2="19" stroke="#E6C687" strokeWidth="1"/>
+      <line x1="16" y1="13" x2="16" y2="19" stroke="#E6C687" strokeWidth="1"/>
+      <line x1="20" y1="13" x2="20" y2="19" stroke="#E6C687" strokeWidth="1"/>
+      <line x1="24" y1="13" x2="24" y2="19" stroke="#E6C687" strokeWidth="1"/>
+      <path d="M10 10 Q16 7 22 10" stroke="#E6C687" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.6"/>
+    </svg>
+  )
+}
+function IconBox() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className="w-5 h-5" aria-hidden="true">
+      <rect x="6" y="14" width="20" height="14" rx="1.5" stroke="#E6C687" strokeWidth="1.5" fill="none"/>
+      <path d="M6 14 L16 9 L26 14" stroke="#E6C687" strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
+      <line x1="16" y1="9" x2="16" y2="28" stroke="#E6C687" strokeWidth="1" opacity="0.5"/>
+      <path d="M12 11 Q16 7 20 11" stroke="#E6C687" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      <circle cx="16" cy="10" r="1.5" fill="#E6C687" opacity="0.9"/>
+    </svg>
+  )
+}
 
 // ── Trust Badges ───────────────────────────────────────────
 const TRUST = [
-  { icon: ShieldCheck, label: 'Pure Handloom Silk', sub: 'Silk Mark Certified' },
-  { icon: Sparkles, label: 'Zardozi Handcraft', sub: 'Master Atelier Embroidery' },
-  { icon: Clock, label: 'Made-to-Measure', sub: 'Bespoke Custom Fitting' },
-  { icon: Gift, label: 'Luxury Keepsake Box', sub: 'Complimentary Trousseau Wrap' },
+  { Icon: IconSilk, label: 'Pure Handloom Silk', sub: 'Silk Mark Certified' },
+  { Icon: IconNeedle, label: 'Zardozi Handcraft', sub: 'Master Atelier Embroidery' },
+  { Icon: IconTape, label: 'Made-to-Measure', sub: 'Bespoke Custom Fitting' },
+  { Icon: IconBox, label: 'Luxury Keepsake Box', sub: 'Complimentary Trousseau Wrap' },
 ]
 
 // ── Testimonials ───────────────────────────────────────────
@@ -79,34 +122,18 @@ const TESTIMONIALS = [
   {
     name: 'Radhika Reddy', city: 'Hyderabad', rating: 5,
     quote: "My wedding reception lehenga from AGVIA drew endless compliments. The zardozi intricacy and bespoke drape were completely unmatched.",
-    avatar: '/images/pexels-yankrukov-8819577.jpg',
+    avatar: '/images/wedding_lehenga.jpg',
   },
   {
     name: 'Meera Nambiar', city: 'Bengaluru', rating: 5,
-    quote: "The pure Kanjeevaram saree I received feels like an heirloom. The weight of the silk and real gold zari border are extraordinary.",
-    avatar: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
+    quote: "The pure silk saree I received feels like an heirloom. The weight of the silk and real gold zari border are extraordinary.",
+    avatar: '/images/classic_silk_saree.jpg',
   },
   {
     name: 'Pooja Singhania', city: 'Mumbai', rating: 5,
-    quote: "AGVIA's concierge team assisted me with made-to-measure blouse styling and dispatch. The velvet keepsake packaging was royal.",
-    avatar: '/images/pexels-kailashkumarphotography-11887844.jpg',
+    quote: "AGVIA's concierge team assisted me with made-to-measure styling and dispatch. The velvet keepsake packaging was royal.",
+    avatar: '/images/anarkali_set.jpg',
   },
-]
-
-// ── Marquee Items ─────────────────────────────────────
-const MARQUEE_ITEMS = [
-  { emoji: '✨', label: 'Pure Kanjeevarams' },
-  { emoji: '👑', label: 'Bridal Lehengas' },
-  { emoji: '🌸', label: 'Silk Anarkalis' },
-  { emoji: '💎', label: 'Banarasi Georgettes' },
-  { emoji: '🪡', label: 'Zardozi Kurtas' },
-  { emoji: '👗', label: 'Cocktail Gowns' },
-  { emoji: '✨', label: 'Organza Sarees' },
-  { emoji: '🌹', label: 'Chanderi Suits' },
-  { emoji: '🎀', label: 'Velvet Dupattas' },
-  { emoji: '⭐', label: 'Handloom Cottons' },
-  { emoji: '👑', label: 'Trousseau Edits' },
-  { emoji: '💎', label: 'Made-to-Measure' },
 ]
 
 // ── Section Header with Strict Spacing Hierarchy ───────────
@@ -325,49 +352,24 @@ export default function Home() {
       </section>
 
       {/* ══ TRUST STRIP ═══════════════════════════════════════════ */}
-      <section className="bg-[#8B0000] text-white py-4 md:py-4.5 border-y border-[#B8860B]/20">
-        <div className="container-luxury grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0">
-          {TRUST.map(({ icon: Icon, label, sub }, i) => (
-            <div key={i} className={`flex items-center gap-3 ${i < 3 ? 'md:border-r md:border-white/10 md:pr-6 md:mr-6' : ''}`}>
-              <div className="w-8 h-8 rounded-full border border-[#E6C687]/30 flex items-center justify-center shrink-0">
-                <Icon size={15} className="text-[#E6C687]" />
+      <section className="bg-[#8B0000] text-white py-5 md:py-6 border-y border-[#B8860B]/20">
+        <div className="container-luxury grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-0">
+          {TRUST.map(({ Icon, label, sub }, i) => (
+            <div key={i} className={`flex items-center gap-3.5 ${i < 3 ? 'md:border-r md:border-white/10 md:pr-8 md:mr-4' : ''}`}>
+              <div className="w-10 h-10 rounded-full border border-[#E6C687]/40 bg-white/5 flex items-center justify-center shrink-0 shadow-inner">
+                <Icon />
               </div>
               <div>
-                <p className="font-display text-xs font-bold text-white tracking-wider leading-tight">{label}</p>
-                <p className="font-body text-[10px] text-white/60 tracking-wider mt-0.5">{sub}</p>
+                <p style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }} className="text-[13px] font-bold text-white tracking-wide leading-tight">{label}</p>
+                <p style={{ fontFamily: "'Lato', 'Inter', sans-serif" }} className="text-[10px] text-[#E6C687]/75 tracking-widest uppercase mt-0.5">{sub}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ══ MARQUEE STRIP ══════════════════════════════════════════ */}
-      <section className="overflow-hidden bg-[#FFFDF8] border-b border-[#B8860B]/12 py-3.5">
-        <style>{`
-          @keyframes marquee-scroll {
-            0%   { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marquee-scroll 32s linear infinite;
-          }
-          .marquee-track:hover { animation-play-state: paused; }
-        `}</style>
-        <div className="marquee-track">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
-            <a
-              key={i}
-              href="/products"
-              className="inline-flex items-center gap-2 px-5 py-1.5 mx-2 rounded-full border border-[#B8860B]/25 bg-white hover:bg-[#8B0000] hover:border-[#8B0000] hover:text-white text-[#3A2D23] transition-all duration-200 group whitespace-nowrap"
-            >
-              <span className="text-base leading-none group-hover:scale-110 transition-transform">{item.emoji}</span>
-              <span className="font-body text-[11px] font-semibold tracking-wide">{item.label}</span>
-            </a>
-          ))}
-        </div>
-      </section>
+      {/* ══ INTERACTIVE COLLECTION SCROLLER ══════════════════════ */}
+      <InteractiveItemsReel items={allProducts} />
 
       {/* ══ BESTSELLERS (OUR CRAFT) ══════════════════════════════ */}
       <section className="section">
@@ -402,8 +404,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ INTERACTIVE UNIQUE ITEMS SCROLLING SHOWCASE ══ */}
-      <InteractiveItemsReel items={allProducts} />
 
       {/* ══ ALL PRODUCTS ══════════════════════════════════════════ */}
       <section className="section">
@@ -438,29 +438,31 @@ export default function Home() {
       </section>
 
       {/* ══ BRIDAL TROUSSEAU PROMO ════════════════════════════════ */}
-      <section className="container-luxury my-4 md:my-6">
-        <div className="rounded-3xl overflow-hidden relative shadow-lg">
+      <section className="container-luxury my-6 md:my-8">
+        <div className="rounded-3xl overflow-hidden relative shadow-xl min-h-[400px] md:min-h-[460px] flex items-center bg-[#5A1020]">
           <img
-            src="/images/pexels-shanks-emperor-1524379304-28769884.jpg"
+            src="/images/wedding_lehenga.jpg"
             alt="Bridal Trousseau Curation"
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-right md:object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5A1020]/95 via-[#5A1020]/75 to-transparent" />
-          <div className="relative z-10 p-8 sm:p-12 md:p-14 max-w-xl">
+          {/* Gradient overlay on left half so text is readable while image shines on right half */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#5A1020] via-[#5A1020]/80 sm:via-[#5A1020]/50 to-transparent sm:w-3/4" />
+          
+          <div className="relative z-10 p-8 sm:p-12 md:p-16 max-w-xl">
             <span className="section-eyebrow text-[#C9A45C]">✦ Bespoke Trousseau Curation</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-white font-bold leading-tight mb-3">
+            <h2 className="font-serif text-3xl md:text-5xl text-white font-bold leading-tight mb-4">
               Bridal Trousseau,<br />Elevated.
             </h2>
-            <p className="font-sans text-xs md:text-sm text-white/80 mb-6 leading-relaxed max-w-md">
-              Handpicked heirloom silks and hand-embroidered zardozi ensembles delivered in a custom velvet keepsake box. Includes bespoke made-to-measure tailoring.
+            <p className="font-sans text-xs md:text-sm text-white/90 mb-7 leading-relaxed max-w-md">
+              Handpicked heirloom silks and hand-embroidered zardozi ensembles delivered in a bespoke keepsake presentation. Includes complimentary made-to-measure tailoring.
             </p>
-            <div className="flex gap-3 flex-wrap">
-              <Link to="/products?category=Lehengas" className="inline-flex items-center gap-2 bg-[#C9A45C] text-[#211D1E] font-bold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:bg-white transition-colors shadow">
-                Explore Trousseau <Crown size={13} />
+            <div className="flex gap-3.5 flex-wrap">
+              <Link to="/products?category=Lehengas" className="inline-flex items-center gap-2 bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold px-7 py-3 rounded-full text-xs tracking-widest uppercase transition-all shadow-md active:scale-95">
+                Explore Trousseau <Crown size={14} />
               </Link>
-              <Link to="/products?category=Sarees" className="inline-flex items-center gap-2 border border-white/40 text-white font-semibold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase hover:border-[#C9A45C] hover:text-[#C9A45C] transition-all">
+              <Link to="/products?category=Sarees" className="inline-flex items-center gap-2 border-2 border-white/50 hover:border-[#C9A45C] text-white hover:text-[#C9A45C] font-semibold px-7 py-3 rounded-full text-xs tracking-widest uppercase transition-all backdrop-blur-sm">
                 Heirloom Sarees
               </Link>
             </div>
@@ -497,7 +499,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-4 border-t border-[#C9A45C]/15">
-                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover border-2 border-[#C9A45C]/30 shrink-0" />
+                  <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#C9A45C]/30 shrink-0" />
                   <div>
                     <p className="font-serif text-xs md:text-sm font-bold text-[#5A1020]">{t.name}</p>
                     <p className="font-sans text-[10px] text-[#211D1E]/60 tracking-wider">{t.city}</p>
@@ -512,7 +514,7 @@ export default function Home() {
       {/* ══ AGVIA ATELIER CIRCLE & VIP PRIVILEGES ════════════════════════ */}
       <section className="container-luxury my-4 md:my-6 mb-12 md:mb-16">
         <div className="rounded-3xl bg-[#5A1020] overflow-hidden relative py-10 md:py-14 px-6 md:px-12 shadow-2xl border border-[#C9A45C]/30">
-          <div className="absolute inset-0 opacity-10 bg-[url('/images/pexels-gaurav-kumar-1281378-18488298.jpg')] bg-cover bg-center" />
+          <div className="absolute inset-0 opacity-15 bg-[url('/images/hero_banner.jpg')] bg-cover bg-center" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#C9A45C]/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C9A45C]/15 rounded-full blur-3xl pointer-events-none" />
 

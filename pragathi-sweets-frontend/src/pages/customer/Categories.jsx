@@ -7,33 +7,45 @@ import ReliableImage from '../../components/common/ReliableImage'
 const CATS = [
   {
     name: 'Sarees',
-    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg',
-    desc: 'Heirloom Kanjeevaram, Banarasi, and tissue silks woven with certified gold zari.',
+    image: '/images/classic_silk_saree.jpg',
+    desc: 'Heirloom Kanjeevaram, organza, and silk weaves designed for festivals and celebrations.',
     path: '/products?category=Sarees'
   },
   {
     name: 'Lehengas',
-    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
-    desc: 'Regal bridal trousseau lehengas adorned with hand-stitched zardozi and gota patti.',
+    image: '/images/wedding_lehenga.jpg',
+    desc: 'Regal bridal trousseau and festive lehengas handcrafted with intricate embroidery.',
     path: '/products?category=Lehengas'
   },
   {
     name: 'Anarkalis & Kurtas',
-    image: '/images/pexels-divigraphy-8624624.jpg',
-    desc: 'Flowing multi-kalidar anarkalis, raw silk kurtas, and handcrafted organza dupattas.',
+    image: '/images/anarkali_set.jpg',
+    desc: 'Graceful flowing Anarkalis, raw silk kurtas, and handcrafted celebration sets.',
     path: '/products?category=Anarkalis+%26+Kurtas'
   },
   {
     name: 'Dresses & Gowns',
-    image: '/images/pexels-divigraphy-14467844.jpg',
-    desc: 'Sculpted cocktail gowns, corset drape dresses, and modern Indo-western silhouettes.',
+    image: '/images/evening_gown.jpg',
+    desc: 'Sculpted cocktail gowns, corset drape dresses, and modern evening silhouettes.',
     path: '/products?category=Dresses+%26+Gowns'
   },
   {
-    name: 'Wedding & Festive Edit',
-    image: '/images/pexels-jonathanborba-19863265.jpg',
-    desc: 'Curated royal collections for Mehendi, Sangeet, Haldi, and grand reception galas.',
-    path: '/products?category=Wedding+%26+Festive+Edit'
+    name: 'Western Wear',
+    image: '/images/coord_set.jpg',
+    desc: 'Modern matching co-ord sets and stylish silhouettes for clean contemporary looks.',
+    path: '/products?category=Western+Wear'
+  },
+  {
+    name: 'Kurtis',
+    image: '/images/festive_kurti.jpg',
+    desc: 'Easy-to-wear festive and everyday kurtis with subtle ethnic craftsmanship.',
+    path: '/products?category=Kurtis'
+  },
+  {
+    name: 'Dupattas',
+    image: '/images/bridal_dupatta.jpg',
+    desc: 'Embellished and sheer bridal dupattas to complete festive and wedding ensembles.',
+    path: '/products?category=Dupattas'
   }
 ]
 

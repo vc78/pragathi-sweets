@@ -3,7 +3,7 @@ import { FALLBACK_PRODUCT_IMAGE } from '../../utils/media'
 
 export default function ReliableImage({
   src,
-  alt = 'Pragathi Sweets Confection',
+  alt = 'AGVIA Luxury Fashion',
   className = '',
   aspectRatio,
   loading = 'lazy',

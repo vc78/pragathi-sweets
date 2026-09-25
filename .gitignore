@@ -1,0 +1,20 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build & Dependencies
+**/target/
+**/node_modules/
+**/dist/
+**/.dist/
+
+# Logs
+*.log
+logs/

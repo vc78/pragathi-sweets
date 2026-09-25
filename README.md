@@ -487,6 +487,7 @@ RAZORPAY_KEY_ID=<razorpay-key>
 RAZORPAY_KEY_SECRET=<razorpay-secret>
 DEFAULT_ADMIN_EMAIL=<admin-email>
 DEFAULT_ADMIN_PASSWORD=<strong-secret>
+GEMINI_API_KEY=<gemini-api-key> (optional)
 
 Start:
 

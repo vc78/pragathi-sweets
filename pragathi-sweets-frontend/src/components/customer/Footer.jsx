@@ -33,32 +33,34 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#1F1F1F] text-[#FFFDF8] pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 border-t border-[#B8860B]/15 select-none relative z-10 font-body">
+    <footer className="relative text-[#FFFDF8] pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 border-t border-[#C9A45C]/20 select-none overflow-hidden font-body">
       
-      {/* Decorative Subtle Gold Glow */}
-      <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#8B0000]/10 filter blur-[100px] pointer-events-none" />
+      {/* Background Image Layer */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-105"
+        style={{ backgroundImage: `url('/images/hero_banner.jpg')` }}
+      />
+      {/* Deep Burgundy & Charcoal Luxury Vignette Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#18060B]/95 via-[#130508]/94 to-[#0C0305]/98 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#5A1020]/30 via-transparent to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 pb-10 md:pb-14 border-b border-[#B8860B]/10">
+      {/* Decorative Subtle Gold Glow */}
+      <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#C9A45C]/10 filter blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#5A1020]/15 filter blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 pb-10 md:pb-14 border-b border-[#C9A45C]/15">
           
           {/* Brand Info */}
           <div className="lg:col-span-4 flex flex-col items-start">
-            <Link to="/" className="flex items-center gap-3 select-none mb-6 group">
+            <Link to="/" className="flex items-center select-none mb-6 group">
               <img
                 src="/images/agvia-logo.png"
-                alt="AGVIA"
-                className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                alt="AGVIA Women's Wear Boutique"
+                className="h-14 sm:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 brightness-110 drop-shadow-[0_2px_12px_rgba(201,164,92,0.25)]"
               />
-              <div className="flex flex-col items-start">
-                <span className="font-serif text-2xl tracking-[0.2em] font-bold uppercase text-[#C9A45C] leading-none group-hover:text-white transition-colors duration-300">
-                  AGVIA
-                </span>
-                <span className="font-sans text-[7.5px] tracking-[0.35em] uppercase text-white/60 font-semibold mt-1.5">
-                  WOMEN'S WEAR BOUTIQUE
-                </span>
-              </div>
             </Link>
-            <p className="font-sans text-xs tracking-wider text-white/60 leading-relaxed max-w-sm mb-6">
+            <p className="font-sans text-xs tracking-wider text-white/70 leading-relaxed max-w-sm mb-6">
               {BUSINESS.description}
             </p>
             <div className="flex gap-4">

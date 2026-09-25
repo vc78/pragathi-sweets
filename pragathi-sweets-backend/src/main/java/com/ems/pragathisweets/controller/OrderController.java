@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
-
     @PostMapping("/checkout")
     public ResponseEntity<ApiResponse<OrderResponse>> checkout(@AuthenticationPrincipal UserDetailsImpl principal,
                                                                 @Valid @RequestBody CheckoutRequest request) {

@@ -236,11 +236,6 @@ public class OrderService {
                         .build())
                 .toList();
 
-        String notifStatus = "NOT_DISPATCHED";
-        try {
-            notifStatus = orderNotificationService.getLatestNotificationStatus(order.getId());
-        } catch (Exception ignored) {}
-
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
@@ -258,7 +253,6 @@ public class OrderService {
                 .shippingAddress(order.getShippingAddress())
                 .contactPhone(order.getContactPhone())
                 .notes(order.getNotes())
-                .notificationStatus(notifStatus)
                 .createdAt(order.getCreatedAt())
                 .build();
     }

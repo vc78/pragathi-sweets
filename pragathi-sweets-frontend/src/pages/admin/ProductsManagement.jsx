@@ -43,10 +43,10 @@ export default function ProductsManagement() {
       label: '',
       render: (r) => (
         <img
-          src={r.image || '/images/pexels-gaurav-kumar-1281378-18488298.jpg'}
+          src={r.image || '/images/classic_silk_saree.jpg'}
           alt={r.name}
           className="w-12 h-16 rounded-lg object-cover border border-[#C9A45C]/20 shadow-sm"
-          onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+          onError={(e) => { e.target.src = '/images/classic_silk_saree.jpg' }}
         />
       ),
     },

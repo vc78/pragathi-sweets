@@ -61,9 +61,9 @@ export const orderService = {
         items: (o.items || []).map(i => ({
           name: i.productName,
           price: i.price,
-          unit: 'kg',
+          unit: i.unit || 'piece',
           qty: i.quantity,
-          image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
+          image: i.imageUrl || i.image || '/images/classic_silk_saree.jpg'
         })),
         total: o.finalAmount,
         totalAmount: o.totalAmount,
@@ -74,6 +74,8 @@ export const orderService = {
         payment: o.paymentStatus,
         paymentStatus: o.paymentStatus,
         paymentMethod: o.paymentMethod || 'COD',
+        awbNumber: o.awbNumber || null,
+        trackingUrl: o.trackingUrl || null,
         address: {
           line1: o.shippingAddress,
           phone: o.contactPhone
@@ -97,9 +99,9 @@ export const orderService = {
         items: (data.data.items || []).map(i => ({
           name: i.productName,
           price: i.price,
-          unit: 'kg',
+          unit: i.unit || 'piece',
           qty: i.quantity,
-          image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
+          image: i.imageUrl || i.image || '/images/classic_silk_saree.jpg'
         })),
         total: data.data.finalAmount,
         totalAmount: data.data.totalAmount,
@@ -110,6 +112,8 @@ export const orderService = {
         payment: data.data.paymentStatus,
         paymentStatus: data.data.paymentStatus,
         paymentMethod: data.data.paymentMethod || 'COD',
+        awbNumber: data.data.awbNumber || null,
+        trackingUrl: data.data.trackingUrl || null,
         address: {
           line1: data.data.shippingAddress,
           phone: data.data.contactPhone
@@ -172,6 +176,8 @@ export const orderService = {
         paymentMethod: o.paymentMethod,
         shippingAddress: o.shippingAddress,
         contactPhone: o.contactPhone,
+        awbNumber: o.awbNumber || null,
+        trackingUrl: o.trackingUrl || null,
         items: Array.isArray(o.items) ? o.items.map(i => ({
           id: i.id,
           productId: i.productId,
@@ -190,4 +196,3 @@ export const orderService = {
     }
   },
 }
-

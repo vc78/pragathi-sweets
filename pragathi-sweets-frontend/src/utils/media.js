@@ -3,7 +3,7 @@ const apiOrigin = new URL(
     window.location.origin
 ).origin
 
-export const FALLBACK_PRODUCT_IMAGE = '/images/pexels-gaurav-kumar-1281378-18488298.jpg'
+export const FALLBACK_PRODUCT_IMAGE = '/images/classic_silk_saree.jpg'
 
 export function resolveImageUrl(image) {
     if (!image) return FALLBACK_PRODUCT_IMAGE

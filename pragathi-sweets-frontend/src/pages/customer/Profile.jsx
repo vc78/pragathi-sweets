@@ -138,7 +138,7 @@ export default function Profile() {
     { id: 'sess_2', device: 'Chrome Mobile · Android 14', location: 'Hyderabad, Telangana', activeNow: false, lastActive: '2 hours ago', icon: Smartphone }
   ])
 
-  // ── 8. Subscription / Pragathi Circle State ──────────────────
+  // ── 8. Subscription / AGVIA Atelier Circle State ──────────────────
   const [subscription, setSubscription] = useState(null)
   const [copiedCoupon, setCopiedCoupon] = useState(false)
 
@@ -452,7 +452,7 @@ export default function Profile() {
   }
 
   const handleCopyVipCoupon = () => {
-    const code = subscription?.exclusiveCoupon || subscription?.couponCode || 'PRAGATHIVIP10'
+    const code = subscription?.exclusiveCoupon || subscription?.couponCode || 'AGVIAVIP10'
     navigator.clipboard.writeText(code)
     setCopiedCoupon(true)
     toast.success(`VIP code ${code} copied!`, { icon: '✂️' })
@@ -615,7 +615,7 @@ export default function Profile() {
 
               {isVipActive && (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#B8860B] to-[#E6C687] text-[#1A0A0A] text-[10px] font-bold uppercase tracking-wider">
-                  <Crown size={12} /> Pragathi Circle VIP
+                  <Crown size={12} /> AGVIA Atelier Circle VIP
                 </div>
               )}
             </div>
@@ -1026,7 +1026,7 @@ export default function Profile() {
                     {wishlistItems.map(item => (
                       <div key={item.id} className="p-4 rounded-2xl border border-gray-200 flex items-center justify-between gap-3 bg-white">
                         <div className="flex items-center gap-3">
-                          <img src={item.imageUrl || item.image || '/images/pexels-divigraphy-8624624.jpg'} alt={item.name} className="w-14 h-14 rounded-xl object-cover border border-gray-100" />
+                          <img src={item.imageUrl || item.image || '/images/classic_silk_saree.jpg'} alt={item.name} className="w-14 h-14 rounded-xl object-cover border border-gray-100" />
                           <div>
                             <h4 className="font-display text-xs font-bold text-gray-900">{item.name}</h4>
                             <p className="font-mono text-xs font-bold text-[#8B0000] mt-0.5">₹{item.price}</p>
@@ -1288,7 +1288,7 @@ export default function Profile() {
             {activeTab === 'vip' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <div className="pb-4 border-b border-[#B8860B]/10">
-                  <h2 className="font-display text-xl font-bold text-[#8B0000]">Pragathi Circle VIP & Loyalty</h2>
+                  <h2 className="font-display text-xl font-bold text-[#8B0000]">AGVIA Atelier Circle VIP & Loyalty</h2>
                   <p className="text-xs text-[#3A2D23]/60">Exclusive privileges, reward coins, and personalized festive benefits.</p>
                 </div>
 
@@ -1301,7 +1301,7 @@ export default function Profile() {
                         </div>
                         <div>
                           <span className="text-[9px] tracking-[0.25em] text-[#D4AF37] font-bold uppercase block">
-                            PRAGATHI CIRCLE
+                            AGVIA ATELIER CIRCLE
                           </span>
                           <h3 className="font-display text-lg font-bold text-white">VIP Royal Member</h3>
                         </div>
@@ -1334,7 +1334,7 @@ export default function Profile() {
                       <div>
                         <span className="text-[9px] text-[#D4AF37] font-bold uppercase tracking-wider block">Exclusive VIP Coupon</span>
                         <span className="font-mono text-xl font-bold text-white tracking-widest">
-                          {subscription?.exclusiveCoupon || subscription?.couponCode || 'PRAGATHIVIP10'}
+                          {subscription?.exclusiveCoupon || subscription?.couponCode || 'AGVIAVIP10'}
                         </span>
                       </div>
                       <button
@@ -1349,7 +1349,7 @@ export default function Profile() {
                 ) : (
                   <div className="p-6 rounded-3xl bg-gradient-to-br from-[#FFFDF8] to-[#FBF6EE] border-2 border-dashed border-[#B8860B]/40 text-center">
                     <Crown size={32} className="mx-auto text-[#B8860B] mb-2" />
-                    <h3 className="font-display text-lg font-bold text-[#8B0000]">Join Pragathi Circle VIP</h3>
+                    <h3 className="font-display text-lg font-bold text-[#8B0000]">Join AGVIA Atelier Circle VIP</h3>
                     <p className="text-xs text-[#3A2D23]/70 max-w-md mx-auto mt-1 mb-5">
                       Get flat 10% VIP discount on all orders, zero delivery fees, and priority morning dispatch for ₹299/year.
                     </p>

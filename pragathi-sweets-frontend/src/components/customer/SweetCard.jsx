@@ -13,9 +13,11 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
   const categoryName = typeof product.category === 'object'
     ? (product.category?.name || '')
     : (product.category || product.categoryName || '')
-  const ratingVal = product.rating ?? product.avgRating ?? 4.8
-  const unitVal = product.unit || 'box'
-  const imgUrl = product.image || product.imageUrl
+  const numReviews = product.numReviews ?? 0
+  const hasRating = numReviews > 0 && (product.rating || product.avgRating)
+  const ratingVal = hasRating ? (product.rating ?? product.avgRating) : null
+  const unitVal = product.unit || 'piece'
+  const imgUrl = product.image || product.imageUrl || '/images/classic_silk_saree.jpg'
   const isBestseller = product.bestseller ?? product.isBestseller ?? false
 
   const handleAdd = () => {
@@ -89,10 +91,18 @@ export default function SweetCard({ product, onAdd, onAddToCart }) {
             </h3>
           </Link>
           <div className="flex items-center gap-1.5 mt-2">
-            <Star size={11} fill="#C9A45C" className="text-[#C9A45C]" />
-            <span className="font-sans text-[10px] text-[#211D1E]/60">
-              {ratingVal} {categoryName ? `· ${categoryName}` : ''}
-            </span>
+            {hasRating ? (
+              <>
+                <Star size={11} fill="#C9A45C" className="text-[#C9A45C]" />
+                <span className="font-sans text-[10px] text-[#211D1E]/60">
+                  {ratingVal} {categoryName ? `· ${categoryName}` : ''}
+                </span>
+              </>
+            ) : (
+              <span className="font-sans text-[9.5px] uppercase tracking-wider text-[#C9A45C] font-medium">
+                New {categoryName ? `· ${categoryName}` : ''}
+              </span>
+            )}
           </div>
           {product.description && (
             <p className="text-[11px] text-[#211D1E]/65 mt-2 line-clamp-2 leading-relaxed font-sans">

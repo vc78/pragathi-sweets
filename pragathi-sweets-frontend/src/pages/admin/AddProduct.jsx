@@ -6,11 +6,16 @@ import { adminService } from '../../services/adminService'
 import { Image, Sparkles, Loader2, Wand2 } from 'lucide-react'
 
 const IMAGE_PRESETS = [
-  { label: 'Kanjeevaram Silk Saree', url: '/images/pexels-gaurav-kumar-1281378-18488298.jpg' },
-  { label: 'Bridal Heritage Lehenga', url: '/images/pexels-shanks-emperor-1524379304-28769884.jpg' },
-  { label: 'Handcrafted Anarkali', url: '/images/pexels-divigraphy-8624624.jpg' },
-  { label: 'Sculpted Cocktail Gown', url: '/images/pexels-divigraphy-14467844.jpg' },
-  { label: 'Royal Trousseau Keepsake', url: '/images/pexels-jonathanborba-19863265.jpg' },
+  { label: 'AGVIA Classic Silk Saree', url: '/images/classic_silk_saree.jpg' },
+  { label: 'AGVIA Floral Organza Saree', url: '/images/floral_organza_saree.jpg' },
+  { label: 'AGVIA Embroidered Anarkali Set', url: '/images/anarkali_set.jpg' },
+  { label: 'AGVIA Everyday Kurta Set', url: '/images/everyday_kurta_set.jpg' },
+  { label: 'AGVIA Festive Lehenga Set', url: '/images/festive_lehenga_set.jpg' },
+  { label: 'AGVIA Embroidered Wedding Lehenga', url: '/images/wedding_lehenga.jpg' },
+  { label: 'AGVIA Evening Gown', url: '/images/evening_gown.jpg' },
+  { label: 'AGVIA Co-ord Set', url: '/images/coord_set.jpg' },
+  { label: 'AGVIA Festive Kurti', url: '/images/festive_kurti.jpg' },
+  { label: 'AGVIA Bridal Dupatta', url: '/images/bridal_dupatta.jpg' },
 ]
 
 export default function AddProduct() {
@@ -334,7 +339,7 @@ export default function AddProduct() {
                   src={form.image}
                   alt={form.name || 'Preview'}
                   className="w-full h-full object-cover"
-                  onError={(e) => { e.target.src = '/images/pexels-gaurav-kumar-1281378-18488298.jpg' }}
+                  onError={(e) => { e.target.src = '/images/classic_silk_saree.jpg' }}
                 />
               ) : (
                 <div className="text-center text-[#211D1E]/40 flex flex-col items-center">

@@ -26,7 +26,7 @@ const ABOUT_SLIDES = [
     tagline: '✦ THE ATELIER HERITAGE ✦',
     title: 'The Timeless Wefts of Royal Hyderabad',
     subtitle: 'From bespoke handloom Kanjeevaram weaves to regal bridal couture, our Jubilee Hills atelier crafts heirlooms of graceful Indian femininity.',
-    image: '/images/pexels-gaurav-kumar-1281378-18488298.jpg',
+    image: '/images/classic_silk_saree.jpg',
     stat: '12+ Years',
     statDesc: 'Atelier Excellence'
   },
@@ -36,7 +36,7 @@ const ABOUT_SLIDES = [
     tagline: '✦ PURE NOBLE FIBERS ✦',
     title: 'Pure Mulberry Silks & Real Metallic Zari',
     subtitle: 'We source genuine Silk Mark certified weaves, handloom organza, and real electroplated silver and gold zari. Zero synthetic polyesters, zero compromise.',
-    image: '/images/pexels-shanks-emperor-1524379304-28769884.jpg',
+    image: '/images/wedding_lehenga.jpg',
     stat: '100% Pure',
     statDesc: 'Handloom & Certified Silk'
   },
@@ -46,7 +46,7 @@ const ABOUT_SLIDES = [
     tagline: '✦ MASTER ARTISAN GUILD ✦',
     title: 'Hundreds of Hours of Hand Embroidery',
     subtitle: 'Our generational artisans hand-knot intricate zardozi, gota patti, dabka, and pearl embroidery onto bespoke silhouettes designed for weddings and grand celebrations.',
-    image: '/images/pexels-divigraphy-8624624.jpg',
+    image: '/images/anarkali_set.jpg',
     stat: '400+ Hours',
     statDesc: 'Craftsmanship Per Ensemble'
   }

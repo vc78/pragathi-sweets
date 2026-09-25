@@ -20,7 +20,7 @@ export default function Products() {
   const [categories, setCategories] = useState([])
   const [activeCategory, setActiveCategory] = useState(urlCategory)
   const [search, setSearch] = useState(urlSearch)
-  const [priceRange, setPriceRange] = useState(2000)
+  const [priceRange, setPriceRange] = useState(25000)
   const [sortBy, setSortBy] = useState('popular')
   const [viewMode, setViewMode] = useState('grid') // 'grid' | 'list'
   const [loading, setLoading] = useState(true)
@@ -73,7 +73,7 @@ export default function Products() {
   const clearFilters = () => {
     setActiveCategory('All')
     setSearch('')
-    setPriceRange(2000)
+    setPriceRange(25000)
     setSortBy('popular')
     setSearchParams({})
   }
