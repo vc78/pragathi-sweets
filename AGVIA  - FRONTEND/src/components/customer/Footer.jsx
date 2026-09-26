@@ -8,116 +8,6 @@ import toast from 'react-hot-toast'
 import { BUSINESS } from '../../constants/business'
 import api from '../../services/api'
 
-/* ── Decorative flower garland – top corners ── */
-function CornerFlowers({ side = 'left' }) {
-  const flip = side === 'right'
-  return (
-    <div
-      className="absolute top-0 pointer-events-none select-none"
-      style={{
-        [side]: 0,
-        width: 'clamp(90px, 12vw, 160px)',
-        height: 'clamp(120px, 20vw, 220px)',
-        transform: flip ? 'scaleX(-1)' : 'none',
-        transformOrigin: 'right top',
-      }}
-      aria-hidden="true"
-    >
-      <svg viewBox="0 0 160 220" fill="none" className="w-full h-full">
-        {/* Stem */}
-        <path d="M20,0 C30,50 10,110 40,160 C60,200 30,210 50,220" stroke="#C8A882" strokeWidth="1" fill="none" opacity="0.4"/>
-        {/* Blooms */}
-        {[
-          { cx: 40, cy: 40, r: 26 },
-          { cx: 20, cy: 100, r: 22 },
-          { cx: 60, cy: 155, r: 24 },
-          { cx: 30, cy: 205, r: 18 },
-        ].map((b, i) =>
-          [0,60,120,180,240,300].map(deg => {
-            const rad = (deg * Math.PI) / 180
-            const px = b.cx + b.r * 0.6 * Math.cos(rad)
-            const py = b.cy + b.r * 0.6 * Math.sin(rad)
-            return (
-              <ellipse key={`${i}-${deg}`} cx={px} cy={py}
-                rx={b.r * 0.44} ry={b.r * 0.27}
-                fill="#F5B8C4" opacity="0.68"
-                transform={`rotate(${deg + 30} ${px} ${py})`}
-              />
-            )
-          })
-        )}
-        {/* Centers */}
-        {[[40,40],[20,100],[60,155],[30,205]].map(([cx,cy], i) => (
-          <circle key={`c-${i}`} cx={cx} cy={cy} r="5" fill="#FADADD" opacity="0.85"/>
-        ))}
-        {/* Buds */}
-        {[[90,70],[15,135],[100,185]].map(([cx,cy], i) => (
-          <ellipse key={`b-${i}`} cx={cx} cy={cy} rx="8" ry="5" fill="#F9CDD5" opacity="0.55" transform={`rotate(${i*35} ${cx} ${cy})`}/>
-        ))}
-        {/* Leaves */}
-        {[[55,80],[30,150],[75,200]].map(([cx,cy], i) => (
-          <ellipse key={`l-${i}`} cx={cx} cy={cy} rx="10" ry="4" fill="#A8B890" opacity="0.4" transform={`rotate(${-20+i*20} ${cx} ${cy})`}/>
-        ))}
-        {/* Scattered petals */}
-        {[[110,50],[130,120],[115,190]].map(([cx,cy], i) => (
-          <ellipse key={`p-${i}`} cx={cx} cy={cy} rx="5" ry="3" fill="#FADADD" opacity="0.45" transform={`rotate(${i*55} ${cx} ${cy})`}/>
-        ))}
-      </svg>
-    </div>
-  )
-}
-
-/* ── "Wear Your Story" arch top banner ── */
-function WearYourStoryBanner() {
-  return (
-    <div className="relative w-full overflow-hidden" style={{ height: 'clamp(52px,8vw,80px)' }}>
-      {/* Cream arch fill */}
-      <svg viewBox="0 0 1200 80" preserveAspectRatio="xMidYMax meet"
-        className="absolute inset-0 w-full h-full" aria-hidden="true">
-        <defs>
-          <linearGradient id="arch-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FDF5EE"/>
-            <stop offset="100%" stopColor="#F5E8DC"/>
-          </linearGradient>
-        </defs>
-        {/* Arch shape – wide shallow arch peaking at center */}
-        <path d="M0,80 L0,50 Q300,0 600,12 Q900,0 1200,50 L1200,80 Z" fill="url(#arch-fill)"/>
-        {/* Gold border on arch edge */}
-        <path d="M0,50 Q300,0 600,12 Q900,0 1200,50"
-          fill="none" stroke="#C9A45C" strokeWidth="0.8" opacity="0.6"/>
-        {/* Decorative gold dots flanking center */}
-        {[-260,-190,-120,-60,60,120,190,260].map((offset, i) => (
-          <circle key={i} cx={600+offset} cy={12 + Math.abs(offset)*0.07} r={i%2===0?1.8:1.2}
-            fill="#C9A45C" opacity="0.55"/>
-        ))}
-        {/* Center lotus ornament */}
-        {[0,45,90,135,180,225,270,315].map((deg, i) => {
-          const rad = (deg * Math.PI)/180
-          const r = 8
-          return (
-            <ellipse key={i} cx={600+r*Math.cos(rad)} cy={12+r*Math.sin(rad)*0.5}
-              rx="4" ry="2.5" fill="#C9A45C" opacity="0.65" transform={`rotate(${deg} ${600+r*Math.cos(rad)} ${12+r*Math.sin(rad)*0.5})`}/>
-          )
-        })}
-        <circle cx="600" cy="12" r="3" fill="#9B2043" opacity="0.8"/>
-      </svg>
-      {/* Text */}
-      <div className="absolute inset-0 flex items-center justify-center pb-1">
-        <span
-          className="text-[#7B1030]"
-          style={{
-            fontFamily: "'Alex Brush','Cormorant Garamond',cursive",
-            fontSize: 'clamp(18px,3.5vw,34px)',
-            letterSpacing: '0.02em',
-          }}
-        >
-          Wear Your Story
-        </span>
-      </div>
-    </div>
-  )
-}
-
 /* ── Pinterest & WhatsApp SVG icons ── */
 const PinterestIcon = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -136,30 +26,6 @@ function ColSep() {
     <div className="hidden lg:flex flex-col items-center gap-2 py-4 opacity-40 shrink-0 mx-1" aria-hidden="true">
       {[...Array(7)].map((_, i) => (
         <span key={i} className="block w-0.5 h-0.5 rounded-full bg-[#C9A45C]"/>
-      ))}
-    </div>
-  )
-}
-
-/* ── Scattered rose petals overlay ── */
-function RosePetals() {
-  const petals = [
-    { top:'12%', left:'18%', rot:-35 }, { top:'28%', left:'8%', rot:20 },
-    { top:'55%', left:'22%', rot:-55 }, { top:'70%', left:'14%', rot:40 },
-    { top:'15%', right:'20%', rot:35 }, { top:'40%', right:'10%', rot:-20 },
-    { top:'60%', right:'25%', rot:55 }, { top:'80%', right:'12%', rot:-40 },
-    { top:'35%', left:'45%', rot:15 }, { top:'65%', left:'55%', rot:-25 },
-    { top:'20%', left:'62%', rot:45 }, { top:'75%', right:'45%', rot:-15 },
-  ]
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-      {petals.map((p, i) => (
-        <div key={i} className="absolute"
-          style={{ top: p.top, left: p.left, right: p.right,
-            width: 10, height: 6, borderRadius: '50%',
-            background: 'rgba(245,184,196,0.30)',
-            transform: `rotate(${p.rot}deg)` }}
-        />
       ))}
     </div>
   )
@@ -263,23 +129,16 @@ export default function Footer() {
   return (
     <footer className="relative select-none overflow-hidden font-body">
 
-      {/* Background bridal image */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/hero_banner.jpg')" }}/>
-      {/* Burgundy overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#3D0C18]/92 via-[#2A0810]/93 to-[#1E0509]/97"/>
-      {/* Soft vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(90,16,32,0.3),transparent_65%)]"/>
+      {/* Royal Background Image */}
+      <div className="absolute inset-0 bg-cover bg-top bg-no-repeat pointer-events-none"
+        style={{ backgroundImage: "url('/images/footer_bg.png')" }}/>
+      
+      {/* Dark overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-black/40 pointer-events-none"/>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#3D0C18]/60 via-[#2A0810]/70 to-[#1E0509]/90 pointer-events-none"/>
 
-      {/* Scattered petals */}
-      <RosePetals />
-
-      {/* Corner flowers */}
-      <CornerFlowers side="left" />
-      <CornerFlowers side="right" />
-
-      {/* ── "Wear Your Story" top arch banner ── */}
-      <WearYourStoryBanner />
+      {/* Push content down to avoid overlapping the image's top arch */}
+      <div className="pt-24 md:pt-32" />
 
       {/* ── Main footer grid ── */}
       <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 xl:px-8 pt-6 pb-4">
