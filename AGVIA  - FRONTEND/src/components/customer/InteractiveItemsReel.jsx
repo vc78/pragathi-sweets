@@ -13,6 +13,7 @@ const BOUTIQUE_COLLECTIONS = [
     image: '/images/classic_silk_saree.jpg',
     link: '/products?category=Sarees',
     iconType: 'saree',
+    featured: false,
   },
   {
     id: 'lehengas',
@@ -22,6 +23,17 @@ const BOUTIQUE_COLLECTIONS = [
     image: '/images/wedding_lehenga.jpg',
     link: '/products?category=Lehengas',
     iconType: 'lehenga',
+    featured: false,
+  },
+  {
+    id: 'festive-ensembles',
+    name: 'Festive Ensembles',
+    subtitle: 'Curated Sets',
+    styles: '40+ Styles',
+    image: '/images/coord_set.jpg',
+    link: '/products?category=Western+Wear',
+    iconType: 'wedding',
+    featured: false,
   },
   {
     id: 'anarkalis-kurtas',
@@ -29,53 +41,39 @@ const BOUTIQUE_COLLECTIONS = [
     subtitle: 'Graceful Comfort',
     styles: '30+ Styles',
     image: '/images/anarkali_set.jpg',
-    link: '/products?category=Anarkalis & Kurtas',
+    link: '/products?category=Anarkalis+%26+Kurtas',
     iconType: 'anarkali',
-  },
-  {
-    id: 'dresses-gowns',
-    name: 'Dresses & Gowns',
-    subtitle: 'Contemporary Chic',
-    styles: '20+ Styles',
-    image: '/images/evening_gown.jpg',
-    link: '/products?category=Dresses & Gowns',
-    iconType: 'gown',
+    featured: true,
   },
   {
     id: 'wedding-festive',
     name: 'Wedding & Festive',
-    subtitle: 'Curated Ensembles',
-    styles: '35+ Styles',
-    image: '/images/festive_lehenga_set.jpg',
+    subtitle: 'Grand Occasions',
+    styles: '20+ Styles',
+    image: '/images/evening_gown.jpg',
     link: '/wedding-orders',
-    iconType: 'wedding',
+    iconType: 'gown',
+    featured: false,
   },
   {
-    id: 'zardosi-kurtas',
-    name: 'Zardosi Kurtas',
+    id: 'western-wear',
+    name: 'Western Wear',
+    subtitle: 'Contemporary Chic',
+    styles: '35+ Styles',
+    image: '/images/pexels-ron-lach-8386651.jpg',
+    link: '/products?category=Western+Wear',
+    iconType: 'gown',
+    featured: false,
+  },
+  {
+    id: 'zardozi-kurtas',
+    name: 'Zardozi Kurtas',
     subtitle: 'Signature Craft',
     styles: '15+ Styles',
     image: '/images/everyday_kurta_set.jpg',
     link: '/products?category=Kurtis',
     iconType: 'zardosi',
-  },
-  {
-    id: 'organza-sarees',
-    name: 'Organza Sarees',
-    subtitle: 'Light & Ethereal',
-    styles: '18+ Styles',
-    image: '/images/floral_organza_saree.jpg',
-    link: '/products?category=Sarees',
-    iconType: 'saree',
-  },
-  {
-    id: 'cocktail-gowns',
-    name: 'Cocktail Gowns',
-    subtitle: 'Modern Evenings',
-    styles: '22+ Styles',
-    image: '/images/pexels-ron-lach-8386651.jpg',
-    link: '/products?category=Dresses & Gowns',
-    iconType: 'gown',
+    featured: false,
   },
 ]
 
@@ -396,7 +394,11 @@ export default function InteractiveItemsReel() {
                   className="group block w-[60vw] min-w-[190px] max-w-[245px] sm:w-[185px] md:w-[195px] lg:w-[210px] xl:w-[220px] select-none"
                 >
                   {/* Card Container with Arched Top */}
-                  <div className="bg-white rounded-t-[84px] sm:rounded-t-[96px] md:rounded-t-[105px] rounded-b-2xl overflow-hidden border border-[#E6C687]/45 shadow-[0_8px_24px_rgba(90,16,32,0.08)] group-hover:shadow-[0_16px_38px_rgba(90,16,32,0.18)] group-hover:border-[#C9A45C] group-hover:-translate-y-1.5 transition-all duration-300 flex flex-col">
+                  <div className={`bg-white rounded-t-[84px] sm:rounded-t-[96px] md:rounded-t-[105px] rounded-b-2xl overflow-hidden transition-all duration-300 flex flex-col ${
+                    col.featured
+                      ? 'border-2 border-[#C9A45C] shadow-[0_16px_45px_rgba(201,164,92,0.28)] ring-4 ring-[#C9A45C]/20 -translate-y-1 group-hover:-translate-y-2'
+                      : 'border border-[#E6C687]/45 shadow-[0_8px_24px_rgba(90,16,32,0.08)] group-hover:shadow-[0_16px_38px_rgba(90,16,32,0.18)] group-hover:border-[#C9A45C] group-hover:-translate-y-1.5'
+                  }`}>
                     {/* Arched Top Image */}
                     <div className="relative aspect-[3/4.2] overflow-hidden rounded-t-[84px] sm:rounded-t-[96px] md:rounded-t-[105px] bg-[#EFE8DD]">
                       <ReliableImage

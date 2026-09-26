@@ -7,6 +7,16 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
+  Play,
+  Scissors,
+  Sparkles,
+  Package,
+  Ruler,
+  ShieldCheck,
+  Globe,
+  Gem,
+  Layers,
+  X,
 } from 'lucide-react'
 import Navbar from '../../components/customer/Navbar'
 import Footer from '../../components/customer/Footer'
@@ -21,34 +31,38 @@ import { ProductGridSkeleton } from '../../components/common/SkeletonLoaders'
 // ── Hero Slides ────────────────────────────────────────────
 const HERO_SLIDES = [
   {
-    image: '/images/hero_banner.jpg',
-    tag: 'Elegance, Made for Every Occasion',
-    title: 'AGVIA Luxury Boutique',
-    subtitle: 'Discover sarees, kurtas, lehengas and dresses designed for your special moments.',
+    image: '/images/hero_dupatta_couture.jpg',
+    tag: 'WEAR YOUR STORY •',
+    titleMain: 'Timeless\nTradition',
+    titleScript: 'Modern You',
+    subtitle: 'Explore our curated ethnic and contemporary collections crafted for every occasion.',
     cta: '/products',
     accent: '#C9A45C',
   },
   {
     image: '/images/classic_silk_saree.jpg',
-    tag: 'The Signature Silk Edit',
-    title: 'Classic Silk & Organza',
-    subtitle: 'Heirloom drapes woven with subtle gold zari borders for festive celebrations.',
+    tag: 'THE SIGNATURE SILK EDIT •',
+    titleMain: 'Heirloom\nSilks',
+    titleScript: 'Pure Grace',
+    subtitle: 'Pure Kanjeevaram and Banarasi handlooms woven with fine gold zari borders.',
     cta: '/products?category=Sarees',
     accent: '#C9A45C',
   },
   {
     image: '/images/wedding_lehenga.jpg',
-    tag: 'Bridal Couture',
-    title: 'Royal Wedding Lehengas',
-    subtitle: 'Exquisite bridal lehengas adorned with hand-stitched zardozi and double dupattas.',
+    tag: 'ROYAL BRIDAL ATELIER •',
+    titleMain: 'Wedding\nCouture',
+    titleScript: 'Regal Charm',
+    subtitle: 'Hand-embroidered zardozi bridal sets with double dupattas and bespoke fit.',
     cta: '/products?category=Lehengas',
     accent: '#5A1020',
   },
   {
     image: '/images/anarkali_set.jpg',
-    tag: 'Festive Occasion Wear',
-    title: 'Embroidered Anarkalis',
-    subtitle: 'Flowing regal kalis adorned with fine mirror-work and delicate thread embroidery.',
+    tag: 'FESTIVE OCCASION WEAR •',
+    titleMain: 'Embroidered\nAnarkalis',
+    titleScript: 'Flowing Kalis',
+    subtitle: 'Intricate kalis adorned with fine mirror-work and delicate thread embroidery.',
     cta: '/products?category=Anarkalis+%26+Kurtas',
     accent: '#7A1F32',
   },
@@ -151,6 +165,7 @@ export default function Home() {
   const [bestsellers, setBestsellers] = useState([])
   const [allProducts, setAllProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showStoryModal, setShowStoryModal] = useState(false)
   const { addToCart } = useCart()
 
   // Hero state
@@ -160,8 +175,8 @@ export default function Home() {
 
   // Scroll parallax
   const { scrollY } = useScroll()
-  const yText = useTransform(scrollY, [0, 400], [0, 50])
-  const yBg = useTransform(scrollY, [0, 400], [0, 70])
+  const yText = useTransform(scrollY, [0, 400], [0, 40])
+  const yBg = useTransform(scrollY, [0, 400], [0, 60])
 
   useEffect(() => {
     setLoading(true)
@@ -183,7 +198,7 @@ export default function Home() {
     heroTimer.current = setInterval(() => {
       setHeroDir(1)
       setHeroIdx(i => (i + 1) % HERO_SLIDES.length)
-    }, 5500)
+    }, 6500)
   }
 
   useEffect(() => {
@@ -196,6 +211,7 @@ export default function Home() {
     setHeroIdx(idx)
     startHeroTimer()
   }
+
   const prevSlide = () => { setHeroDir(-1); setHeroIdx(i => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length); startHeroTimer() }
   const nextSlide = () => { setHeroDir(1); setHeroIdx(i => (i + 1) % HERO_SLIDES.length); startHeroTimer() }
 
@@ -208,153 +224,330 @@ export default function Home() {
 
   return (
     <div className="relative min-h-full bg-[#FFFDF8] overflow-x-hidden pb-14 sm:pb-0">
-      {/* ══ GLOBAL LUXURY BOUTIQUE BACKGROUND TEXTURE (STATIC & OPTIMIZED) ══ */}
+      {/* ══ GLOBAL LUXURY BOUTIQUE BACKGROUND TEXTURE ══ */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div
-          className="w-full h-full bg-cover bg-center bg-fixed opacity-[0.16] mix-blend-multiply"
+          className="w-full h-full bg-cover bg-center bg-fixed opacity-[0.14] mix-blend-multiply"
           style={{
             backgroundImage: "url('/images/boutique_luxury_bg.jpg')",
             filter: 'contrast(1.04) saturate(1.08)',
           }}
         />
-        {/* Soft luxury ivory gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDF8]/40 via-transparent to-[#FFFDF8]/70 pointer-events-none" />
       </div>
 
-      {/* ══ AMBIENT GLOW SPOTLIGHT (STATIC SOFT ACCENT) ══ */}
+      {/* ══ AMBIENT GLOW SPOTLIGHT ══ */}
       <div className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-[#C9A45C]/08 via-[#8B0000]/03 to-transparent rounded-full blur-2xl pointer-events-none z-0" />
-
-      {/* Floating Botanical / Lotus Accents */}
-      <div className="fixed top-1/4 left-6 w-32 h-32 opacity-15 pointer-events-none hidden xl:block text-[#C9A45C] z-0">
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.8">
-          <circle cx="50" cy="50" r="1.5" fill="currentColor" />
-          <path d="M50 15 C42 32 25 42 15 50 C25 58 42 68 50 85 C58 68 75 58 85 50 C75 42 58 32 50 15 Z" />
-        </svg>
-      </div>
-
-      <div className="fixed bottom-1/4 right-8 w-36 h-36 opacity-15 pointer-events-none hidden xl:block text-[#C9A45C] z-0">
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.8">
-          <circle cx="50" cy="50" r="2" fill="currentColor" />
-          <path d="M50 18 C44 32 30 42 20 48 C30 54 44 64 50 78 C56 64 70 54 80 48 C70 42 56 32 50 18 Z" />
-        </svg>
-      </div>
 
       <Navbar />
 
-      {/* ══ HERO ══════════════════════════════════════════════════ */}
-      <section className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[580px] lg:h-[calc(100vh-172px)] lg:min-h-[620px] lg:max-h-[760px] xl:min-h-[660px] xl:max-h-[820px] 2xl:min-h-[700px] flex items-center overflow-hidden bg-[#240B13]">
-        {/* BG Image */}
+      {/* ══════════════════════════════════════════════════════════════
+          1. HERO SECTION (EXACT REFERENCE DESIGN)
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-[640px] sm:min-h-[720px] lg:min-h-[820px] xl:min-h-[880px] flex flex-col justify-between overflow-hidden bg-[#240810] pt-4 pb-6">
+        
+        {/* Cinematic Background Image with Slide Transition */}
         <AnimatePresence mode="sync">
           <motion.div
             key={heroIdx}
-            className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1.04, x: heroDir * 60 }}
+            className="absolute inset-0 z-0"
+            initial={{ opacity: 0, scale: 1.04, x: heroDir * 50 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.97, x: -heroDir * 40 }}
+            exit={{ opacity: 0, scale: 0.98, x: -heroDir * 40 }}
             transition={{ duration: 0.9, ease: [0.25, 1, 0.5, 1] }}
           >
             <motion.img
               src={slide.image}
-              alt={slide.title}
+              alt={slide.titleMain || 'AGVIA Boutique'}
               loading={heroIdx === 0 ? 'eager' : 'lazy'}
               decoding="async"
-              className="absolute -top-8 -bottom-8 w-full h-[calc(100%+64px)] object-cover object-center"
+              className="absolute -top-8 -bottom-8 w-full h-[calc(100%+64px)] object-cover object-[center_28%] lg:object-center filter contrast-[1.03] brightness-[0.96]"
               style={{ y: yBg }}
             />
-            {/* Layered overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            {/* Left Vignette & Gradient for High Text Contrast */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1A040C]/90 via-[#1A040C]/55 to-transparent sm:w-4/5 lg:w-3/5" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#150309] via-transparent to-black/35" />
           </motion.div>
         </AnimatePresence>
 
-        {/* Content */}
-        <motion.div
-          style={{ y: yText }}
-          className="relative z-10 w-full container-luxury py-8 sm:py-10 md:py-12"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={heroIdx}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="max-w-2xl"
-            >
-              <span className="inline-block font-body text-[8.5px] tracking-[0.35em] uppercase font-bold text-[#E6C687] mb-2 border border-[#E6C687]/40 px-3 py-0.5 rounded-full backdrop-blur-sm">
-                ✦ {slide.tag}
-              </span>
-              <h1 className="font-display text-3xl sm:text-5xl xl:text-6xl font-bold text-white leading-[1.05] mb-2.5">
-                {slide.title}
-              </h1>
-              <p className="font-body text-xs sm:text-sm text-white/80 tracking-wide mb-4 max-w-lg leading-relaxed">
-                {slide.subtitle}
-              </p>
-              <div className="flex flex-wrap gap-2.5">
-                <Link to={slide.cta} className="btn-primary">
-                  Shop Now <ArrowRight size={14} />
-                </Link>
-                <Link to="/products" className="inline-flex items-center gap-1.5 border border-white/40 text-white font-semibold px-5 py-2.5 rounded-full hover:border-[#E6C687] hover:text-[#E6C687] transition-all text-xs tracking-wider uppercase backdrop-blur-sm">
-                  All Products
-                </Link>
+        {/* Top Vignette Overlay */}
+        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/50 to-transparent pointer-events-none z-10" />
+
+        {/* Main Hero Content Area */}
+        <div className="relative z-10 w-full container-luxury flex-1 flex items-center py-6 sm:py-10">
+          <div className="w-full flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            
+            {/* Left Column: Vertical Slide Indicator + Main Typography + CTAs + Social Proof */}
+            <div className="flex items-start gap-4 sm:gap-6 max-w-2xl">
+              
+              {/* Vertical Slide Numbers (Desktop) */}
+              <div className="hidden sm:flex flex-col items-center gap-3 text-white/45 text-[11px] font-mono select-none pt-2">
+                <span className={`transition-all font-bold ${heroIdx === 0 ? 'text-white text-xs' : 'text-white/40'}`}>01</span>
+                <span className="w-[1.5px] h-6 bg-white/70 rounded-full" />
+                <button onClick={() => gotoSlide(1)} className={`hover:text-white transition-colors ${heroIdx === 1 ? 'text-white font-bold' : ''}`}>02</button>
+                <button onClick={() => gotoSlide(2)} className={`hover:text-white transition-colors ${heroIdx === 2 ? 'text-white font-bold' : ''}`}>03</button>
+                <button onClick={() => gotoSlide(3)} className={`hover:text-white transition-colors ${heroIdx === 3 ? 'text-white font-bold' : ''}`}>04</button>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
 
-        {/* Arrows */}
-        <button onClick={prevSlide} aria-label="Previous Slide" className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-105 transition-all flex items-center justify-center backdrop-blur-sm">
-          <ChevronLeft size={16} />
-        </button>
-        <button onClick={nextSlide} aria-label="Next Slide" className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/25 hover:scale-105 transition-all flex items-center justify-center backdrop-blur-sm">
-          <ChevronRight size={16} />
-        </button>
+              {/* Text Block */}
+              <div className="space-y-3 sm:space-y-4">
+                <div className="inline-flex items-center gap-1.5 text-[#E6C894] tracking-[0.26em] text-[9px] sm:text-[10px] font-bold uppercase">
+                  <span>{slide.tag || 'WEAR YOUR STORY •'}</span>
+                </div>
 
-        {/* Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-          {HERO_SLIDES.map((_, i) => (
-            <button key={i} onClick={() => gotoSlide(i)} aria-label={`Slide ${i + 1}`} className={`transition-all duration-300 rounded-full ${i === heroIdx ? 'w-6 h-1.5 bg-[#E6C687]' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`} />
-          ))}
-        </div>
+                <h1 className="font-display text-4xl sm:text-6xl xl:text-7xl font-bold text-white leading-[1.02] tracking-tight">
+                  Timeless<br />
+                  Tradition<br />
+                  <span
+                    style={{ fontFamily: "'Alex Brush', 'Cormorant Garamond', cursive" }}
+                    className="italic font-normal text-5xl sm:text-7xl xl:text-8xl text-[#FFFDF8] block -mt-1 sm:-mt-2 filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
+                  >
+                    Modern You
+                  </span>
+                </h1>
 
-        {/* Slide counter */}
-        <div className="absolute bottom-4 right-6 z-20 font-display text-white/40 text-[10px] tracking-widest">
-          {String(heroIdx + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}
-        </div>
-      </section>
+                <p className="font-sans text-xs sm:text-[13.5px] text-white/85 max-w-md leading-relaxed tracking-wide">
+                  {slide.subtitle || 'Explore our curated ethnic and contemporary collections crafted for every occasion.'}
+                </p>
 
-      {/* ══ TRUST STRIP ═══════════════════════════════════════════ */}
-      <section className="bg-[#8B0000] text-white py-3.5 sm:py-4 border-y border-[#B8860B]/20">
-        <div className="container-luxury grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0">
-          {TRUST.map(({ Icon, label, sub }, i) => (
-            <div key={i} className={`flex items-center gap-2.5 sm:gap-3 ${i < 3 ? 'md:border-r md:border-white/10 md:pr-6 md:mr-4' : ''}`}>
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#E6C687]/40 bg-white/5 flex items-center justify-center shrink-0 shadow-inner">
-                <Icon />
-              </div>
-              <div>
-                <p style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif" }} className="text-xs sm:text-[13px] font-bold text-white tracking-wide leading-tight">{label}</p>
-                <p style={{ fontFamily: "'Lato', 'Inter', sans-serif" }} className="text-[9.5px] text-[#E6C687]/75 tracking-wider uppercase mt-0.5">{sub}</p>
+                {/* CTAs */}
+                <div className="flex flex-wrap items-center gap-3 pt-1">
+                  <Link
+                    to={slide.cta || '/products'}
+                    className="inline-flex items-center gap-2 bg-[#6B1426] hover:bg-[#8B1A32] text-white font-bold text-[11px] sm:text-xs tracking-[0.16em] uppercase px-7 sm:px-8 py-3.5 rounded-full shadow-[0_8px_25px_rgba(107,20,38,0.5)] hover:scale-105 active:scale-95 transition-all duration-200"
+                  >
+                    <span>EXPLORE COLLECTIONS</span>
+                    <ArrowRight size={13} className="stroke-[2.5]" />
+                  </Link>
+
+                  <button
+                    onClick={() => setShowStoryModal(true)}
+                    className="inline-flex items-center gap-2 bg-black/35 hover:bg-black/55 border border-white/30 text-white font-semibold text-[11px] sm:text-xs tracking-[0.12em] uppercase px-6 py-3.5 rounded-full backdrop-blur-md transition-all duration-200 hover:border-white/60 active:scale-95"
+                  >
+                    <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-white text-[9px] pl-0.5">▶</span>
+                    <span>WATCH OUR STORY</span>
+                  </button>
+                </div>
+
+                {/* Social Proof: 3 Customer Avatars + 10,000+ Happy Customers */}
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="flex -space-x-2">
+                    <img src="/images/classic_silk_saree.jpg" alt="Client 1" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white shadow-sm" />
+                    <img src="/images/wedding_lehenga.jpg" alt="Client 2" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white shadow-sm" />
+                    <img src="/images/anarkali_set.jpg" alt="Client 3" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white shadow-sm" />
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-white/90">
+                    <span className="font-bold tracking-wide">10,000+ Happy Customers</span>
+                    <div className="flex text-[#FFD700] text-[10px] gap-0.5 mt-0.5">
+                      {'★★★★★'}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+
+            {/* Right Column: "Elegance in Every Detail ♡" Script + Watch Video Button + Scroll Indicator */}
+            <div className="hidden lg:flex flex-col items-end justify-between h-[420px] text-right self-stretch pr-2">
+              {/* Calligraphy Script */}
+              <div className="pt-4">
+                <p
+                  style={{ fontFamily: "'Alex Brush', 'Cormorant Garamond', cursive" }}
+                  className="text-4xl xl:text-5xl text-white transform -rotate-3 select-none leading-tight filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                >
+                  Elegance
+                </p>
+                <p
+                  style={{ fontFamily: "'Alex Brush', 'Cormorant Garamond', cursive" }}
+                  className="text-3xl xl:text-4xl text-[#E6C894] transform -rotate-3 select-none leading-none -mt-1 filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                >
+                  in Every Detail ♡
+                </p>
+              </div>
+
+              {/* Circular Watch Video Floating Button */}
+              <button
+                onClick={() => setShowStoryModal(true)}
+                className="group flex items-center gap-2.5 text-white/95 hover:text-white transition-all my-auto"
+              >
+                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-black/45 hover:bg-[#6B1426] border border-white/40 backdrop-blur-md flex items-center justify-center text-white shadow-2xl transition-all duration-300 group-hover:scale-110">
+                  <Play size={18} className="fill-white ml-1" />
+                </div>
+                <div className="text-left font-sans">
+                  <span className="block text-[9.5px] tracking-[0.22em] uppercase font-bold text-white/90 leading-tight">
+                    WATCH<br />VIDEO
+                  </span>
+                </div>
+              </button>
+
+              {/* Scroll Down Indicator */}
+              <div className="flex flex-col items-center gap-1.5 text-white/60 text-[9.5px] tracking-[0.25em] uppercase select-none pb-2">
+                <div className="w-5 h-8 rounded-full border border-white/40 flex items-start justify-center p-1">
+                  <span className="w-1 h-2 bg-white rounded-full animate-bounce" />
+                </div>
+                <span>Scroll +</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ══ GLASSMORPHIC FLOATING USP BAR ════════════════════════ */}
+        <div className="relative z-20 w-full container-luxury pt-3">
+          <div className="bg-black/40 backdrop-blur-xl border border-white/18 rounded-2xl py-3.5 px-4 sm:px-6 md:px-8 shadow-[0_20px_50px_rgba(0,0,0,0.4)] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 divide-y md:divide-y-0 md:divide-x divide-white/10 text-white">
+            
+            <div className="flex items-center gap-3 pt-2 md:pt-0 justify-center md:justify-start">
+              <div className="w-9 h-9 rounded-full bg-white/10 border border-[#E6C687]/40 flex items-center justify-center text-[#E6C687] shrink-0">
+                <Layers size={16} />
+              </div>
+              <div className="text-left">
+                <p className="font-serif text-xs sm:text-[13px] font-bold text-white leading-tight">Premium Fabrics</p>
+                <p className="font-sans text-[10px] text-[#E6C687]/80 tracking-wider">Handpicked Quality</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2 md:pt-0 justify-center md:justify-start md:pl-6">
+              <div className="w-9 h-9 rounded-full bg-white/10 border border-[#E6C687]/40 flex items-center justify-center text-[#E6C687] shrink-0">
+                <Gem size={16} />
+              </div>
+              <div className="text-left">
+                <p className="font-serif text-xs sm:text-[13px] font-bold text-white leading-tight">Bespoke Designs</p>
+                <p className="font-sans text-[10px] text-[#E6C687]/80 tracking-wider">Made for You</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2 md:pt-0 justify-center md:justify-start md:pl-6">
+              <div className="w-9 h-9 rounded-full bg-white/10 border border-[#E6C687]/40 flex items-center justify-center text-[#E6C687] shrink-0">
+                <ShieldCheck size={16} />
+              </div>
+              <div className="text-left">
+                <p className="font-serif text-xs sm:text-[13px] font-bold text-white leading-tight">Secure Payments</p>
+                <p className="font-sans text-[10px] text-[#E6C687]/80 tracking-wider">Safe & Trusted</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2 md:pt-0 justify-center md:justify-start md:pl-6">
+              <div className="w-9 h-9 rounded-full bg-white/10 border border-[#E6C687]/40 flex items-center justify-center text-[#E6C687] shrink-0">
+                <Globe size={16} />
+              </div>
+              <div className="text-left">
+                <p className="font-serif text-xs sm:text-[13px] font-bold text-white leading-tight">Worldwide Shipping</p>
+                <p className="font-sans text-[10px] text-[#E6C687]/80 tracking-wider">Delivering Happiness</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          2. SHOP BY COLLECTION (ARCHED CAROUSEL SHOWCASE)
+      ══════════════════════════════════════════════════════════════ */}
+      <InteractiveItemsReel items={allProducts} />
+
+      {/* ══════════════════════════════════════════════════════════════
+          3. BRIDAL TROUSSEAU, ELEVATED (EXACT REFERENCE DESIGN)
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="container-luxury my-6 md:my-10 relative z-10">
+        <div className="rounded-3xl overflow-hidden relative shadow-2xl bg-gradient-to-r from-[#24040B] via-[#480A17] to-[#24040B] border border-[#C9A45C]/35 py-8 px-5 sm:px-8 md:px-10 lg:px-12">
+          
+          {/* Subtle background damask & warm golden radial glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,164,92,0.12),transparent_70%)] pointer-events-none" />
+          
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Left 4 Cols: Headings & Action Buttons */}
+            <div className="lg:col-span-4 text-left space-y-3.5">
+              <div className="inline-flex items-center gap-1.5 text-[#C9A45C] text-[9.5px] font-bold tracking-[0.24em] uppercase">
+                <span>BESPOKE TROUSSEAU CURATION</span>
+                <span>•</span>
+              </div>
+
+              <h2 className="font-serif text-3xl sm:text-4xl xl:text-[2.6rem] text-white font-bold leading-tight tracking-tight">
+                Bridal Trousseau,<br />Elevated.
+              </h2>
+
+              <p className="font-sans text-xs sm:text-[13px] text-white/80 leading-relaxed max-w-sm">
+                Handpicked heirloom silks and embroidered ensembles delivered in a bespoke keepsake presentation.
+              </p>
+
+              <div className="flex flex-wrap gap-2.5 pt-2">
+                <Link
+                  to="/products?category=Lehengas"
+                  className="inline-flex items-center gap-2 bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold text-xs tracking-widest uppercase px-6 py-3 rounded-full shadow-lg transition-all active:scale-95"
+                >
+                  <span>EXPLORE TROUSSEAU</span>
+                  <ArrowRight size={13} className="stroke-[2.5]" />
+                </Link>
+
+                <Link
+                  to="/products?category=Sarees"
+                  className="inline-flex items-center gap-2 border border-white/40 hover:border-[#C9A45C] text-white hover:text-[#C9A45C] font-semibold text-xs tracking-widest uppercase px-5 py-3 rounded-full transition-all"
+                >
+                  <span>HEIRLOOM SAREES</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Center 5 Cols: Royal Indian Bride Seated on Velvet Sofa Photo */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-[#C9A45C]/40 max-w-[420px] w-full aspect-[16/10] group">
+                <img
+                  src="/images/bridal_trousseau_banner.jpg"
+                  alt="Royal Bridal Trousseau"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Right 3 Cols: 4 Vertical Features */}
+            <div className="lg:col-span-3 space-y-3 pt-2 lg:pt-0">
+              {[
+                { icon: Scissors, label: 'Custom Styling' },
+                { icon: Sparkles, label: 'Personal Consultation' },
+                { icon: Package, label: 'Premium Packaging' },
+                { icon: Ruler, label: 'Made-to-Measure' },
+              ].map((feat, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-[#C9A45C]/50 transition-colors"
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#C9A45C]/15 border border-[#C9A45C]/40 flex items-center justify-center text-[#C9A45C] shrink-0">
+                    <feat.icon size={15} />
+                  </div>
+                  <span className="font-serif text-xs sm:text-sm font-semibold text-white tracking-wide">
+                    {feat.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* ══ INTERACTIVE COLLECTION SCROLLER ══════════════════════ */}
-      <InteractiveItemsReel items={allProducts} />
-
-      {/* ══ BESTSELLERS (THE SIGNATURE EDIT) - 3D CURVED CAROUSEL ══ */}
-      <BestsellerCurvedCarousel bestsellers={bestsellers} onAdd={handleAdd} />
-
-
-      {/* ══ ALL PRODUCTS ══════════════════════════════════════════ */}
-      <section className="section relative z-10">
+      {/* ══════════════════════════════════════════════════════════════
+          4. THE AGVIA EDIT / EVERY DRAPE, PERFECTED
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="section relative z-10 pt-4">
         <div className="container-luxury">
-          <SectionHeader
-            tag="The Atelier Edit"
-            title="Every Drape, Perfected"
-            subtitle="From heirloom bridal drapes to contemporary soirée gowns — crafted for moments that endure."
-          />
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-2 border-b border-[#C9A45C]/20">
+            <div>
+              <span className="section-eyebrow text-[#C9A45C]">✦ THE AGVIA EDIT ✦</span>
+              <h2 className="section-title text-[#211D1E] mt-1">Every Drape, Perfected</h2>
+            </div>
+            <div className="hidden sm:block text-right">
+              <p
+                style={{ fontFamily: "'Alex Brush', 'Cormorant Garamond', cursive" }}
+                className="text-2xl lg:text-3xl text-[#8B1A32] transform -rotate-3 select-none leading-none"
+              >
+                Tradition Reimagined ♡
+              </p>
+            </div>
+          </div>
+
           {allProducts.length > 0 && (
             <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-3.5 lg:gap-4">
               {allProducts.map((p, i) => (
@@ -370,7 +563,7 @@ export default function Home() {
               ))}
             </div>
           )}
-          {/* Shop All Products CTA button */}
+
           <div className="section-cta">
             <Link to="/products" className="btn-primary">
               Shop All Silhouettes <ArrowRight size={14} />
@@ -379,40 +572,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ BRIDAL TROUSSEAU PROMO ════════════════════════════════ */}
-      <section className="container-luxury my-4 md:my-6 relative z-10">
-        <div className="rounded-2xl overflow-hidden relative shadow-lg min-h-[320px] md:min-h-[380px] flex items-center bg-[#5A1020]">
-          <img
-            src="/images/wedding_lehenga.jpg"
-            alt="Bridal Trousseau Curation"
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-right md:object-center"
-          />
-          {/* Gradient overlay on left half so text is readable while image shines on right half */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#5A1020] via-[#5A1020]/80 sm:via-[#5A1020]/50 to-transparent sm:w-3/4" />
-          
-          <div className="relative z-10 p-5 sm:p-8 md:p-10 max-w-xl">
-            <span className="section-eyebrow text-[#C9A45C]">✦ Bespoke Trousseau Curation</span>
-            <h2 className="font-serif text-2xl md:text-4xl text-white font-bold leading-tight mb-2.5">
-              Bridal Trousseau,<br />Elevated.
-            </h2>
-            <p className="font-sans text-xs md:text-sm text-white/90 mb-4 leading-normal max-w-md">
-              Handpicked heirloom silks and hand-embroidered zardozi ensembles delivered in a bespoke keepsake presentation. Includes complimentary made-to-measure tailoring.
-            </p>
-            <div className="flex gap-2.5 flex-wrap">
-              <Link to="/products?category=Lehengas" className="inline-flex items-center gap-1.5 bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold px-5 py-2.5 rounded-full text-xs tracking-wider uppercase transition-all shadow-md active:scale-95">
-                Explore Trousseau <Crown size={14} />
-              </Link>
-              <Link to="/products?category=Sarees" className="inline-flex items-center gap-1.5 border border-white/50 hover:border-[#C9A45C] text-white hover:text-[#C9A45C] font-semibold px-5 py-2.5 rounded-full text-xs tracking-wider uppercase transition-all backdrop-blur-sm">
-                Heirloom Sarees
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ══════════════════════════════════════════════════════════════
+          5. BESTSELLERS (THE SIGNATURE EDIT) - 3D CURVED CAROUSEL
+      ══════════════════════════════════════════════════════════════ */}
+      <BestsellerCurvedCarousel bestsellers={bestsellers} onAdd={handleAdd} />
 
-      {/* ══ TESTIMONIALS (PATRON EXPERIENCES) ═════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════
+          6. TESTIMONIALS (PATRON EXPERIENCES)
+      ══════════════════════════════════════════════════════════════ */}
       <section className="section relative z-10">
         <div className="container-luxury">
           <SectionHeader
@@ -452,6 +619,43 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══ VIDEO STORY MODAL ═════════════════════════════════════ */}
+      {showStoryModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="relative w-full max-w-2xl bg-[#1E050D] border border-[#C9A45C]/40 rounded-3xl overflow-hidden shadow-2xl p-6 text-center text-white">
+            <button
+              onClick={() => setShowStoryModal(false)}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <div className="inline-flex items-center gap-1.5 text-[#C9A45C] text-xs font-bold tracking-widest uppercase mb-3">
+              <span>✦ AGVIA ATELIER HERITAGE ✦</span>
+            </div>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold mb-3">Crafted for Royal Moments</h3>
+            <p className="font-sans text-xs sm:text-sm text-white/80 max-w-lg mx-auto leading-relaxed mb-6">
+              Step inside our Hyderabad atelier where master artisans hand-embroider zardozi motifs and handloom pure silk heirlooms for brides and discerning connoisseurs across the globe.
+            </p>
+            <div className="rounded-2xl overflow-hidden aspect-video relative border border-[#C9A45C]/30 mb-6 bg-black">
+              <img src="/images/hero_dupatta_couture.jpg" alt="Atelier Preview" className="w-full h-full object-cover opacity-85" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <div className="w-16 h-16 rounded-full bg-[#6B1426] flex items-center justify-center shadow-xl">
+                  <Play size={24} className="fill-white ml-1" />
+                </div>
+              </div>
+            </div>
+            <Link
+              to="/products"
+              onClick={() => setShowStoryModal(false)}
+              className="inline-flex items-center gap-2 bg-[#C9A45C] hover:bg-white text-[#211D1E] font-bold text-xs tracking-widest uppercase px-8 py-3.5 rounded-full shadow-lg transition-all"
+            >
+              <span>EXPLORE THE COLLECTION</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
