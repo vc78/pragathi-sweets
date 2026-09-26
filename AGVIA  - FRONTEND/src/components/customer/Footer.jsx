@@ -1,160 +1,437 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Instagram, Facebook, MapPin, Phone, Mail, ArrowUpRight, Clock } from 'lucide-react'
+import {
+  Instagram, Facebook, Youtube, Mail, ShoppingBag,
+  Info, Headphones, ShieldCheck, ChevronUp
+} from 'lucide-react'
 import toast from 'react-hot-toast'
 import { BUSINESS } from '../../constants/business'
 import api from '../../services/api'
 
+/* ── Decorative flower garland – top corners ── */
+function CornerFlowers({ side = 'left' }) {
+  const flip = side === 'right'
+  return (
+    <div
+      className="absolute top-0 pointer-events-none select-none"
+      style={{
+        [side]: 0,
+        width: 'clamp(90px, 12vw, 160px)',
+        height: 'clamp(120px, 20vw, 220px)',
+        transform: flip ? 'scaleX(-1)' : 'none',
+        transformOrigin: 'right top',
+      }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 160 220" fill="none" className="w-full h-full">
+        {/* Stem */}
+        <path d="M20,0 C30,50 10,110 40,160 C60,200 30,210 50,220" stroke="#C8A882" strokeWidth="1" fill="none" opacity="0.4"/>
+        {/* Blooms */}
+        {[
+          { cx: 40, cy: 40, r: 26 },
+          { cx: 20, cy: 100, r: 22 },
+          { cx: 60, cy: 155, r: 24 },
+          { cx: 30, cy: 205, r: 18 },
+        ].map((b, i) =>
+          [0,60,120,180,240,300].map(deg => {
+            const rad = (deg * Math.PI) / 180
+            const px = b.cx + b.r * 0.6 * Math.cos(rad)
+            const py = b.cy + b.r * 0.6 * Math.sin(rad)
+            return (
+              <ellipse key={`${i}-${deg}`} cx={px} cy={py}
+                rx={b.r * 0.44} ry={b.r * 0.27}
+                fill="#F5B8C4" opacity="0.68"
+                transform={`rotate(${deg + 30} ${px} ${py})`}
+              />
+            )
+          })
+        )}
+        {/* Centers */}
+        {[[40,40],[20,100],[60,155],[30,205]].map(([cx,cy], i) => (
+          <circle key={`c-${i}`} cx={cx} cy={cy} r="5" fill="#FADADD" opacity="0.85"/>
+        ))}
+        {/* Buds */}
+        {[[90,70],[15,135],[100,185]].map(([cx,cy], i) => (
+          <ellipse key={`b-${i}`} cx={cx} cy={cy} rx="8" ry="5" fill="#F9CDD5" opacity="0.55" transform={`rotate(${i*35} ${cx} ${cy})`}/>
+        ))}
+        {/* Leaves */}
+        {[[55,80],[30,150],[75,200]].map(([cx,cy], i) => (
+          <ellipse key={`l-${i}`} cx={cx} cy={cy} rx="10" ry="4" fill="#A8B890" opacity="0.4" transform={`rotate(${-20+i*20} ${cx} ${cy})`}/>
+        ))}
+        {/* Scattered petals */}
+        {[[110,50],[130,120],[115,190]].map(([cx,cy], i) => (
+          <ellipse key={`p-${i}`} cx={cx} cy={cy} rx="5" ry="3" fill="#FADADD" opacity="0.45" transform={`rotate(${i*55} ${cx} ${cy})`}/>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
+/* ── "Wear Your Story" arch top banner ── */
+function WearYourStoryBanner() {
+  return (
+    <div className="relative w-full overflow-hidden" style={{ height: 'clamp(52px,8vw,80px)' }}>
+      {/* Cream arch fill */}
+      <svg viewBox="0 0 1200 80" preserveAspectRatio="xMidYMax meet"
+        className="absolute inset-0 w-full h-full" aria-hidden="true">
+        <defs>
+          <linearGradient id="arch-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FDF5EE"/>
+            <stop offset="100%" stopColor="#F5E8DC"/>
+          </linearGradient>
+        </defs>
+        {/* Arch shape – wide shallow arch peaking at center */}
+        <path d="M0,80 L0,50 Q300,0 600,12 Q900,0 1200,50 L1200,80 Z" fill="url(#arch-fill)"/>
+        {/* Gold border on arch edge */}
+        <path d="M0,50 Q300,0 600,12 Q900,0 1200,50"
+          fill="none" stroke="#C9A45C" strokeWidth="0.8" opacity="0.6"/>
+        {/* Decorative gold dots flanking center */}
+        {[-260,-190,-120,-60,60,120,190,260].map((offset, i) => (
+          <circle key={i} cx={600+offset} cy={12 + Math.abs(offset)*0.07} r={i%2===0?1.8:1.2}
+            fill="#C9A45C" opacity="0.55"/>
+        ))}
+        {/* Center lotus ornament */}
+        {[0,45,90,135,180,225,270,315].map((deg, i) => {
+          const rad = (deg * Math.PI)/180
+          const r = 8
+          return (
+            <ellipse key={i} cx={600+r*Math.cos(rad)} cy={12+r*Math.sin(rad)*0.5}
+              rx="4" ry="2.5" fill="#C9A45C" opacity="0.65" transform={`rotate(${deg} ${600+r*Math.cos(rad)} ${12+r*Math.sin(rad)*0.5})`}/>
+          )
+        })}
+        <circle cx="600" cy="12" r="3" fill="#9B2043" opacity="0.8"/>
+      </svg>
+      {/* Text */}
+      <div className="absolute inset-0 flex items-center justify-center pb-1">
+        <span
+          className="text-[#7B1030]"
+          style={{
+            fontFamily: "'Alex Brush','Cormorant Garamond',cursive",
+            fontSize: 'clamp(18px,3.5vw,34px)',
+            letterSpacing: '0.02em',
+          }}
+        >
+          Wear Your Story
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/* ── Pinterest & WhatsApp SVG icons ── */
+const PinterestIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
+  </svg>
+)
+const WhatsAppIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+  </svg>
+)
+
+/* ── Vertical gold dot separator ── */
+function ColSep() {
+  return (
+    <div className="hidden lg:flex flex-col items-center gap-2 py-4 opacity-40 shrink-0 mx-1" aria-hidden="true">
+      {[...Array(7)].map((_, i) => (
+        <span key={i} className="block w-0.5 h-0.5 rounded-full bg-[#C9A45C]"/>
+      ))}
+    </div>
+  )
+}
+
+/* ── Scattered rose petals overlay ── */
+function RosePetals() {
+  const petals = [
+    { top:'12%', left:'18%', rot:-35 }, { top:'28%', left:'8%', rot:20 },
+    { top:'55%', left:'22%', rot:-55 }, { top:'70%', left:'14%', rot:40 },
+    { top:'15%', right:'20%', rot:35 }, { top:'40%', right:'10%', rot:-20 },
+    { top:'60%', right:'25%', rot:55 }, { top:'80%', right:'12%', rot:-40 },
+    { top:'35%', left:'45%', rot:15 }, { top:'65%', left:'55%', rot:-25 },
+    { top:'20%', left:'62%', rot:45 }, { top:'75%', right:'45%', rot:-15 },
+  ]
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      {petals.map((p, i) => (
+        <div key={i} className="absolute"
+          style={{ top: p.top, left: p.left, right: p.right,
+            width: 10, height: 6, borderRadius: '50%',
+            background: 'rgba(245,184,196,0.30)',
+            transform: `rotate(${p.rot}deg)` }}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function Footer() {
-  const handleScrollTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubscribe = async (e) => {
     e.preventDefault()
-    const email = e.target.email?.value?.trim()
-    if (!email) return
+    if (!email.trim()) return
+    setLoading(true)
     try {
       const { data } = await api.post('/newsletter/subscribe', { email })
-      if (data?.data) {
-        localStorage.setItem('ps_circle_member', JSON.stringify(data.data))
-      }
+      if (data?.data) localStorage.setItem('ps_circle_member', JSON.stringify(data.data))
       toast.success(data?.message || 'Welcome to AGVIA Haute Circle! Code CIRCLE15 unlocked.', {
-        icon: '👑',
-        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        icon: '👑', style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
       })
-      e.target.reset()
+      setEmail('')
     } catch {
       toast.success('Welcome to AGVIA Haute Circle! Your VIP perks are active.', {
-        icon: '👑',
-        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+        icon: '👑', style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
       })
-      e.target.reset()
+      setEmail('')
+    } finally {
+      setLoading(false)
     }
   }
 
+  const shopLinks = [
+    { label: 'All Collections', to: '/products' },
+    { label: 'Sarees', to: '/products?category=Sarees' },
+    { label: 'Lehengas', to: '/products?category=Lehengas' },
+    { label: 'Kurtas', to: '/products?category=Anarkalis+%26+Kurtas' },
+    { label: 'Anarkalis', to: '/products?category=Anarkalis+%26+Kurtas' },
+    { label: 'Western Wear', to: '/products?category=Western+Wear' },
+    { label: 'New Arrivals', to: '/products' },
+    { label: 'Festive Collection', to: '/products' },
+    { label: 'Wedding Collection', to: '/products?category=Lehengas' },
+    { label: 'Gift Cards', to: '/products' },
+  ]
+
+  const aboutLinks = [
+    { label: 'Our Story', to: '/about' },
+    { label: 'Craftsmanship', to: '/about' },
+    { label: 'Sustainability', to: '/about' },
+    { label: 'Blogs & Style Guide', to: '/about' },
+    { label: 'Store Locations', to: '/about' },
+    { label: 'Careers', to: '/about' },
+  ]
+
+  const helpLinks = [
+    { label: 'Track Order', to: '/orders' },
+    { label: 'Shipping & Delivery', to: '/about' },
+    { label: 'Returns & Exchanges', to: '/about' },
+    { label: 'Size Guide', to: '/about' },
+    { label: 'Product Care', to: '/about' },
+    { label: 'FAQs', to: '/about' },
+    { label: 'Contact Us', to: '/contact' },
+    { label: 'Bulk Orders', to: '/contact' },
+    { label: 'Styling Consultation', to: '/contact' },
+    { label: 'Atelier Appointments', to: '/contact' },
+  ]
+
+  const policyLinks = [
+    { label: 'Privacy Policy', to: '/about' },
+    { label: 'Terms & Conditions', to: '/about' },
+    { label: 'Refund Policy', to: '/about' },
+    { label: 'Shipping Policy', to: '/about' },
+    { label: 'Cancellation Policy', to: '/about' },
+    { label: 'Cookie Policy', to: '/about' },
+    { label: 'Return & Exchange Policy', to: '/about' },
+    { label: 'Intellectual Property', to: '/about' },
+    { label: 'Disclaimer', to: '/about' },
+  ]
+
+  const bottomLinks = [
+    { label: 'Home', to: '/' },
+    { label: 'About Us', to: '/about' },
+    { label: 'Privacy Policy', to: '/about' },
+    { label: 'Terms & Conditions', to: '/about' },
+    { label: 'Shipping Policy', to: '/about' },
+    { label: 'Return Policy', to: '/about' },
+    { label: 'Size Guide', to: '/about' },
+    { label: 'FAQs', to: '/about' },
+    { label: 'Contact Us', to: '/contact' },
+  ]
+
+  const socials = [
+    { icon: Instagram, href: BUSINESS.social.instagram, label: 'Instagram' },
+    { icon: Facebook, href: BUSINESS.social.facebook, label: 'Facebook' },
+    { icon: PinterestIcon, href: '#', label: 'Pinterest' },
+    { icon: Youtube, href: '#', label: 'YouTube' },
+    { icon: WhatsAppIcon, href: `https://wa.me/919032306961`, label: 'WhatsApp' },
+  ]
+
+  const linkCls = 'font-sans text-[11.5px] text-white/65 hover:text-[#E6C687] transition-colors leading-relaxed'
+  const headingCls = 'font-serif text-sm font-semibold text-white mb-3 flex items-center gap-1.5'
+
   return (
-    <footer className="relative text-[#FFFDF8] pt-8 md:pt-10 pb-5 md:pb-6 border-t border-[#C9A45C]/20 select-none overflow-hidden font-body">
-      
-      {/* Background Image Layer */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-105"
-        style={{ backgroundImage: `url('/images/hero_banner.jpg')` }}
-      />
-      {/* Deep Burgundy & Charcoal Luxury Vignette Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#18060B]/95 via-[#130508]/94 to-[#0C0305]/98 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#5A1020]/30 via-transparent to-transparent pointer-events-none" />
+    <footer className="relative select-none overflow-hidden font-body">
 
-      {/* Decorative Subtle Gold Glow */}
-      <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#C9A45C]/10 filter blur-[100px] pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-[#5A1020]/15 filter blur-[120px] pointer-events-none" />
+      {/* Background bridal image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/hero_banner.jpg')" }}/>
+      {/* Burgundy overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#3D0C18]/92 via-[#2A0810]/93 to-[#1E0509]/97"/>
+      {/* Soft vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(90,16,32,0.3),transparent_65%)]"/>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 pb-6 md:pb-8 border-b border-[#C9A45C]/15">
-          
-          {/* Brand Info */}
-          <div className="lg:col-span-4 flex flex-col items-start">
-            <Link to="/" className="flex items-center select-none mb-3 group">
-              <img
-                src="/images/agvia-logo.png"
-                alt="AGVIA Women's Wear Boutique"
-                className="h-10 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 brightness-110 drop-shadow-[0_2px_12px_rgba(201,164,92,0.25)]"
-              />
+      {/* Scattered petals */}
+      <RosePetals />
+
+      {/* Corner flowers */}
+      <CornerFlowers side="left" />
+      <CornerFlowers side="right" />
+
+      {/* ── "Wear Your Story" top arch banner ── */}
+      <WearYourStoryBanner />
+
+      {/* ── Main footer grid ── */}
+      <div className="relative z-10 max-w-[1340px] mx-auto px-4 sm:px-6 xl:px-8 pt-6 pb-4">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-0 pb-5 border-b border-white/10">
+
+          {/* Brand column */}
+          <div className="lg:w-[19%] shrink-0 flex flex-col items-start pr-6">
+            <Link to="/" className="mb-3 group">
+              <img src="/images/agvia-logo.png" alt="AGVIA Women's Wear Boutique"
+                className="h-14 w-auto object-contain brightness-110 drop-shadow-[0_2px_12px_rgba(201,164,92,0.3)] group-hover:scale-105 transition-transform duration-300"/>
             </Link>
-            <p className="font-sans text-xs tracking-wider text-white/70 leading-normal max-w-sm mb-3.5">
-              {BUSINESS.description}
+            <p className="font-sans text-[11.5px] text-white/60 leading-relaxed mb-4">
+              Curating bespoke ethnic and contemporary wear for the modern woman. Tradition, quality and elegance — all in one place.
             </p>
-            <div className="flex gap-3">
-              {[{ Icon: Instagram, link: BUSINESS.social.instagram }, { Icon: Facebook, link: BUSINESS.social.facebook }].map(({ Icon, link }, idx) => (
-                <a
-                  key={idx}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Social Link"
-                  className="w-8 h-8 rounded-full border border-[#C9A45C]/30 flex items-center justify-center text-[#C9A45C] hover:text-white hover:border-[#C9A45C] transition-all duration-300"
-                >
-                  <Icon size={14} />
+            <div className="flex gap-2 flex-wrap">
+              {socials.map(({ icon: Icon, href, label }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-8 h-8 rounded-full border border-[#C9A45C]/35 flex items-center justify-center text-[#E6C687] hover:bg-[#7B1030] hover:border-[#7B1030] transition-all duration-200">
+                  <Icon size={13}/>
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Navigation links */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-serif text-xs tracking-widest text-[#C9A45C] uppercase mb-3 font-semibold">
-                Collections
-              </h4>
-              <ul className="space-y-2 font-sans text-xs tracking-wider text-white/70">
-                <li><Link to="/products?category=Sarees" className="hover:text-[#C9A45C] transition-colors">Pure Silk Sarees</Link></li>
-                <li><Link to="/products?category=Lehengas" className="hover:text-[#C9A45C] transition-colors">Bridal Lehengas</Link></li>
-                <li><Link to="/products?category=Anarkalis+%26+Kurtas" className="hover:text-[#C9A45C] transition-colors">Handcrafted Anarkalis</Link></li>
-                <li><Link to="/products?category=Dresses+%26+Gowns" className="hover:text-[#C9A45C] transition-colors">Evening Gowns</Link></li>
-                <li><Link to="/orders" className="hover:text-[#C9A45C] transition-colors">Track Orders</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-serif text-xs tracking-widest text-[#C9A45C] uppercase mb-3 font-semibold">
-                Boutique Flagship
-              </h4>
-              <ul className="space-y-2 font-sans text-xs tracking-wider text-white/70">
-                <li className="flex items-start gap-2">
-                  <MapPin size={12} className="text-[#C9A45C] mt-0.5 shrink-0" />
-                  <span>{BUSINESS.location.street},<br />{BUSINESS.location.city}, {BUSINESS.location.state}</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone size={12} className="text-[#C9A45C] shrink-0" />
-                  <a href={`tel:${BUSINESS.contact.phoneRaw}`} className="hover:text-[#C9A45C] transition-colors">{BUSINESS.contact.phone}</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Clock size={12} className="text-[#C9A45C] shrink-0" />
-                  <span>{BUSINESS.contact.hours}</span>
-                </li>
-              </ul>
-            </div>
+          <ColSep />
+
+          {/* Shop */}
+          <div className="lg:w-[17%] shrink-0 px-3">
+            <h4 className={headingCls}><ShoppingBag size={13} className="text-[#C9A45C]"/> Shop</h4>
+            <ul className="space-y-1">
+              {shopLinks.map(l => (
+                <li key={l.label}><Link to={l.to} className={linkCls}>{l.label}</Link></li>
+              ))}
+            </ul>
           </div>
 
-          {/* Newsletter Box */}
-          <div className="lg:col-span-4 flex flex-col justify-start">
-            <h4 className="font-serif text-xs tracking-widest text-[#C9A45C] uppercase mb-2 font-semibold">
-              The AGVIA Edit
-            </h4>
-            <p className="font-sans text-xs text-white/60 tracking-wider mb-3 leading-normal">
-              Subscribe to receive private invitations to new bridal drops, seasonal couture previews, and VIP atelier appointments.
-            </p>
-            <form onSubmit={handleSubscribe} className="relative flex items-center border-b border-[#C9A45C]/40 pb-1.5">
-              <Mail size={13} className="text-[#C9A45C] mr-2.5 shrink-0" />
-              <input
-                type="email"
-                name="email"
-                placeholder="YOUR EMAIL ADDRESS"
-                required
-                className="w-full bg-transparent text-xs tracking-widest font-sans text-white placeholder-white/30 focus:outline-none uppercase"
-              />
-              <button
-                type="submit"
-                className="text-[#C9A45C] hover:text-white p-0.5 transition-colors"
-                aria-label="Subscribe"
-              >
-                <ArrowUpRight size={16} />
-              </button>
-            </form>
+          <ColSep />
+
+          {/* About */}
+          <div className="lg:w-[14%] shrink-0 px-3">
+            <h4 className={headingCls}><Info size={13} className="text-[#C9A45C]"/> About</h4>
+            <ul className="space-y-1">
+              {aboutLinks.map(l => (
+                <li key={l.label}><Link to={l.to} className={linkCls}>{l.label}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          <ColSep />
+
+          {/* Help & Support */}
+          <div className="lg:w-[22%] shrink-0 px-3">
+            <h4 className={headingCls}><Headphones size={13} className="text-[#C9A45C]"/> Help &amp; Support</h4>
+            <ul className="space-y-1">
+              {helpLinks.map(l => (
+                <li key={l.label}><Link to={l.to} className={linkCls}>{l.label}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          <ColSep />
+
+          {/* Policies */}
+          <div className="lg:flex-1 px-3">
+            <h4 className={headingCls}><ShieldCheck size={13} className="text-[#C9A45C]"/> Policies</h4>
+            <ul className="space-y-1">
+              {policyLinks.map(l => (
+                <li key={l.label}><Link to={l.to} className={linkCls}>{l.label}</Link></li>
+              ))}
+            </ul>
           </div>
 
         </div>
 
-        {/* Bottom Credits */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between font-sans text-[9.5px] text-white/50 tracking-widest uppercase">
-          <div>
-            © {new Date().getFullYear()} AGVIA WOMEN'S WEAR BOUTIQUE. ALL RIGHTS RESERVED.
+        {/* ── Newsletter + Trust badges bar ── */}
+        <div className="flex flex-col md:flex-row items-center gap-4 py-4 border-b border-white/10">
+          {/* Newsletter */}
+          <div className="flex items-center gap-3 md:flex-1 min-w-0">
+            <Mail size={20} className="text-[#C9A45C] shrink-0"/>
+            <div className="min-w-0">
+              <p className="font-serif text-[12px] font-semibold text-white leading-tight">Subscribe to Our World</p>
+              <p className="font-sans text-[10.5px] text-white/50 leading-tight">Get exclusive updates, new arrivals and special offers.</p>
+            </div>
           </div>
-          <button
-            onClick={handleScrollTop}
-            className="mt-2 sm:mt-0 text-[#B8860B] hover:text-white flex items-center gap-1 transition-colors border-b border-[#B8860B]/10 pb-0.5 hover:border-[#B8860B]"
-          >
-            <span>Back to top</span>
-            <ArrowUpRight size={11} />
-          </button>
+          <form onSubmit={handleSubscribe}
+            className="flex items-center gap-0 rounded-full overflow-hidden border border-[#C9A45C]/30 bg-white/8 backdrop-blur-sm md:w-72 w-full shrink-0">
+            <input
+              type="email" value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              required
+              className="flex-1 min-w-0 bg-transparent text-[11.5px] font-sans text-white placeholder-white/35 px-4 py-2.5 focus:outline-none"
+            />
+            <button type="submit" disabled={loading}
+              className="shrink-0 bg-[#7B1030] hover:bg-[#9B2043] text-white text-[10.5px] font-bold tracking-widest uppercase px-4 py-2.5 flex items-center gap-1.5 transition-colors">
+              SUBSCRIBE <ChevronUp size={12} className="rotate-90"/>
+            </button>
+          </form>
+          {/* Trust badges */}
+          <div className="hidden xl:flex items-center gap-5 shrink-0 pl-4 border-l border-white/10">
+            {[
+              { icon: '🚚', title: 'Free Shipping', sub: 'On all orders' },
+              { icon: '↩️', title: 'Easy Returns', sub: 'Hassle-free 7 days' },
+              { icon: '🔒', title: 'Secure Payments', sub: '100% Safe & Trusted' },
+            ].map(b => (
+              <div key={b.title} className="flex items-center gap-2">
+                <span className="text-lg leading-none">{b.icon}</span>
+                <div>
+                  <p className="font-serif text-[11px] font-semibold text-white leading-tight">{b.title}</p>
+                  <p className="font-sans text-[9.5px] text-white/45 leading-tight">{b.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Bottom bar ── */}
+        <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-2 flex-wrap">
+          {/* Copyright */}
+          <p className="font-sans text-[9.5px] text-white/40 tracking-wider">
+            © {new Date().getFullYear()} AGVIA Women's Wear Boutique. All rights reserved.
+          </p>
+
+          {/* Nav links */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 justify-center">
+            {bottomLinks.map((l, i) => (
+              <span key={l.label} className="flex items-center gap-2">
+                <Link to={l.to} className="font-sans text-[9.5px] text-white/40 hover:text-[#E6C687] tracking-wider transition-colors">
+                  {l.label}
+                </Link>
+                {i < bottomLinks.length - 1 && <span className="text-white/20 text-[9px]">|</span>}
+              </span>
+            ))}
+          </div>
+
+          {/* Payment icons + Back to top */}
+          <div className="flex items-center gap-3">
+            {/* Payment logos (text badges) */}
+            <div className="flex items-center gap-1.5">
+              {['VISA','MC','RuPay','PayTM'].map(p => (
+                <span key={p}
+                  className="inline-block px-1.5 py-0.5 text-[8px] font-bold rounded bg-white/10 text-white/50 tracking-wider border border-white/10">
+                  {p}
+                </span>
+              ))}
+            </div>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="flex items-center gap-1 text-[9.5px] font-sans tracking-widest text-[#C9A45C]/70 hover:text-[#C9A45C] border border-[#C9A45C]/25 hover:border-[#C9A45C]/50 rounded px-2 py-1 transition-all uppercase">
+              Back to Top ↑
+            </button>
+          </div>
         </div>
       </div>
     </footer>
