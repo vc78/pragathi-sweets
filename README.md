@@ -1,8 +1,18 @@
 <div align="center">
 
-# ✦ AGVIA
+<a href="#">
+  <img
+    src="./docs/assets/agvia-logo.png"
+    alt="AGVIA Women's Wear Boutique"
+    width="280"
+  />
+</a>
 
-### WOMEN'S WEAR BOUTIQUE
+<br/>
+
+<h1>AGVIA</h1>
+
+<h3>WOMEN'S WEAR BOUTIQUE</h3>
 
 <p>
   <em>Where tradition meets modern elegance.</em>
@@ -10,9 +20,15 @@
 
 <br/>
 
-<img src="./docs/assets/agvia-logo.png" width="180" alt="AGVIA Women's Wear Boutique"/>
+<p>
+  <strong>Premium Fashion Commerce</strong>
+  &nbsp;•&nbsp;
+  <strong>Secure Payments</strong>
+  &nbsp;•&nbsp;
+  <strong>Modern Operations</strong>
+</p>
 
-<br/><br/>
+</div>
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.java.com/)
