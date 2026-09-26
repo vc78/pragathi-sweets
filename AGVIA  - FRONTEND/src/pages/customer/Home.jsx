@@ -346,8 +346,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column: "Elegance in Every Detail ♡" Script + Watch Video Button + Scroll Indicator */}
-            <div className="hidden lg:flex flex-col items-end justify-between h-[420px] text-right self-stretch pr-2">
+            {/* Right Column: "Elegance in Every Detail ♡" Calligraphy Script */}
+            <div className="hidden lg:flex flex-col items-end justify-center h-[420px] text-right self-stretch pr-2">
               {/* Calligraphy Script */}
               <div className="pt-4">
                 <p
@@ -362,29 +362,6 @@ export default function Home() {
                 >
                   in Every Detail ♡
                 </p>
-              </div>
-
-              {/* Circular Watch Video Floating Button */}
-              <button
-                onClick={() => setShowStoryModal(true)}
-                className="group flex items-center gap-2.5 text-white/95 hover:text-white transition-all my-auto"
-              >
-                <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-black/45 hover:bg-[#6B1426] border border-white/40 backdrop-blur-md flex items-center justify-center text-white shadow-2xl transition-all duration-300 group-hover:scale-110">
-                  <Play size={18} className="fill-white ml-1" />
-                </div>
-                <div className="text-left font-sans">
-                  <span className="block text-[9.5px] tracking-[0.22em] uppercase font-bold text-white/90 leading-tight">
-                    WATCH<br />VIDEO
-                  </span>
-                </div>
-              </button>
-
-              {/* Scroll Down Indicator */}
-              <div className="flex flex-col items-center gap-1.5 text-white/60 text-[9.5px] tracking-[0.25em] uppercase select-none pb-2">
-                <div className="w-5 h-8 rounded-full border border-white/40 flex items-start justify-center p-1">
-                  <span className="w-1 h-2 bg-white rounded-full animate-bounce" />
-                </div>
-                <span>Scroll +</span>
               </div>
             </div>
 
