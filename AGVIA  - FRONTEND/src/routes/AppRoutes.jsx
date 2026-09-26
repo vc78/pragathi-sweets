@@ -33,6 +33,7 @@ const TrackOrder = lazy(() => import('../pages/customer/TrackOrder'))
 const Addresses = lazy(() => import('../pages/customer/Addresses'))
 const Notifications = lazy(() => import('../pages/customer/Notifications'))
 const Subscription = lazy(() => import('../pages/customer/Subscription'))
+const SizeGuide = lazy(() => import('../pages/customer/SizeGuide'))
 
 // Lazy loaded auth pages
 const Login = lazy(() => import('../pages/auth/Login'))
@@ -79,6 +80,8 @@ export default function AppRoutes() {
           <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
           <Route path="/refund-policy" element={<PageTransition><RefundPolicy /></PageTransition>} />
           <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
+          <Route path="/size-guide" element={<PageTransition><SizeGuide /></PageTransition>} />
+          <Route path="/shipping-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
           <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
           <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
           <Route path="/verify-otp" element={<PageTransition><VerifyOtp /></PageTransition>} />
