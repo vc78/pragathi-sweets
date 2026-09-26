@@ -1,306 +1,225 @@
-🍬 Pragathi Sweets
+<div align="center">
 
-Enterprise-Grade Indian Sweets & D2C E-Commerce Platform
+# ✦ AGVIA
 
-<p align="center">
-  <strong>Premium sweets • Secure checkout • Real-time order operations • Admin ERP</strong>
+### WOMEN'S WEAR BOUTIQUE
+
+<p>
+  <em>Where tradition meets modern elegance.</em>
 </p>
 
-<p align="center">
-  <a href="#-overview">Overview</a> •
+<br/>
+
+<img src="./docs/assets/agvia-logo.png" width="180" alt="AGVIA Women's Wear Boutique"/>
+
+<br/><br/>
+
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
+[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.java.com/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Razorpay](https://img.shields.io/badge/Razorpay-Payments-3395FF?style=for-the-badge)](https://razorpay.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
+<br/>
+
+### ✦ Premium Fashion Commerce · Secure Payments · Modern Operations
+
+<p>
+  <a href="#-experience">Experience</a> •
   <a href="#-features">Features</a> •
   <a href="#-architecture">Architecture</a> •
   <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-api-overview">API</a> •
-  <a href="#-local-development">Development</a> •
-  <a href="#-deployment">Deployment</a> •
-  <a href="#-security">Security</a>
+  <a href="#-api">API</a> •
+  <a href="#-security">Security</a> •
+  <a href="#-setup">Setup</a> •
+  <a href="#-deployment">Deployment</a>
 </p>
 
-📌 Overview
-
-Pragathi Sweets is a full-stack, production-oriented e-commerce platform built for Indian sweets, savouries, dry fruits, and festive gift collections.
-
-The platform combines a premium customer shopping experience with a secure Spring Boot backend, transactional checkout, Razorpay payments, Cash on Delivery, inventory management, coupon operations, order lifecycle tracking, and an administrative ERP-style dashboard.
-
-The system is designed with seasonal commerce in mind, including festivals, weddings, and gifting seasons. fileciteturn2file0L7-L21
-
-✨ Features
-
-🛍️ Premium product discovery and catalog
-
-🧁 Indian sweets, savouries, dry fruits & gift boxes
-
-🛒 Per-user cart isolation
-
-🔄 Guest-to-user cart migration
-
-💳 Razorpay payments
-
-💵 Cash on Delivery
-
-🎟️ Server-side coupon validation
-
-🚚 Delivery-fee calculation
-
-📦 End-to-end order lifecycle
-
-⭐ Product reviews
-
-📊 Admin ERP dashboard
-
-👥 Customer management
-
-📦 Inventory management
-
-🎫 Coupon management
-
-🔐 JWT authentication & role-based authorization
-
-🛡️ Login rate limiting and security headers
-
-📱 Responsive customer experience
-
-🐳 Dockerized deployment
-
-⚙️ GitHub Actions CI
-
-📚 OpenAPI / Swagger
-
-🩺 Health and monitoring endpoints
-
-🏗️ Architecture
-
-                         ┌──────────────────────────────┐
-                         │      Customer Browser        │
-                         │     Desktop / Mobile         │
-                         └──────────────┬───────────────┘
-                                        │
-                                        ▼
-                         ┌──────────────────────────────┐
-                         │       Nginx Reverse Proxy    │
-                         │          :80 / :443          │
-                         └──────────────┬───────────────┘
-                                        │
-                         ┌──────────────┴──────────────┐
-                         │                             │
-                         ▼                             ▼
-              ┌────────────────────┐        ┌────────────────────┐
-              │ React 18 + Vite    │        │ Spring Boot API    │
-              │ Tailwind + Redux   │        │ Java 21            │
-              └────────────────────┘        └─────────┬──────────┘
-                                                       │
-                          ┌────────────────────────────┼──────────────────────┐
-                          │                            │                      │
-                          ▼                            ▼                      ▼
-                 ┌────────────────┐          ┌────────────────┐      ┌───────────────┐
-                 │    MySQL 8     │          │    Razorpay    │      │  SMTP / Mail  │
-                 │   Persistence  │          │ Payments/API   │      │ Notifications │
-                 └────────────────┘          └────────────────┘      └───────────────┘
-
-The documented production architecture uses React/Vite behind Nginx, a Spring Boot API, MySQL persistence, Razorpay integration, SMTP, Docker Compose, and GitHub Actions CI. fileciteturn2file0L25-L103
-
-🧰 Tech Stack
-
-Layer
-
-Technology
-
-Frontend
-
-React 18
-
-Build Tool
-
-Vite 5.4
-
-Styling
-
-TailwindCSS
-
-State Management
-
-Redux Toolkit
-
-UI Icons
-
-Lucide React
-
-Animations
-
-Framer Motion
-
-HTTP
-
-Axios
-
-Backend
-
-Java 21
-
-Framework
-
-Spring Boot 3.5.3
-
-Security
-
-Spring Security 6
-
-Authentication
-
-JWT / JJWT
-
-Password Hashing
-
-BCrypt
-
-Persistence
-
-Spring Data JPA
-
-ORM
-
-Hibernate
-
-Database
-
-MySQL 8
-
-API Documentation
-
-SpringDoc OpenAPI / Swagger
-
-Payments
-
-Razorpay
-
-Web Server
-
-Nginx Alpine
-
-Containers
-
-Docker / Docker Compose
-
-CI
-
-GitHub Actions
-
-📁 Repository Structure
-
-.
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── docker-compose.yml
-├── .env.example
-├── pragathi-sweets-backend/
-│   ├── Dockerfile
-│   ├── pom.xml
-│   └── src/main/
-│       ├── java/com/ems/pragathisweets/
-│       │   ├── config/
-│       │   ├── controller/
-│       │   │   └── admin/
-│       │   ├── dto/
-│       │   ├── entity/
-│       │   ├── exception/
-│       │   ├── mapper/
-│       │   ├── repository/
-│       │   ├── security/
-│       │   └── service/
-│       └── resources/
-│           ├── application.properties
-│           └── application-prod.properties
-└── pragathi-sweets-frontend/
-    ├── Dockerfile
-    ├── nginx.conf
-    ├── package.json
-    ├── index.html
-    └── src/
-        ├── App.jsx
-        ├── main.jsx
-        ├── components/
-        ├── hooks/
-        ├── pages/
-        ├── services/
-        └── store/
-
-The documented repository separates the React SPA from the Spring Boot API and organizes backend concerns into controllers, DTOs, entities, repositories, services, security, and configuration. fileciteturn2file0L107-L207
-
-🛍️ Core Commerce
-
-Customer Experience
-
-Catalog discovery
-
-Categories and featured products
-
-Product details
-
-Package-size selection
-
-Customer reviews
-
-Responsive product grids
-
-Cart synchronization
-
-Cart Isolation
-
-Guest
-  │
-  ├── ps_cart_guest
-  │
-  ▼
-Authentication
-  │
-  ▼
-ps_cart_{userId}
-  │
-  └── Guest selections merged
-
-The documented cart lifecycle isolates users and supports guest-to-user migration. fileciteturn2file0L213-L229
-
-💳 Checkout & Payments
-
-Delivery
-
-Order < ₹999  →  ₹50 delivery
-Order ≥ ₹999  →  Free priority delivery
-
-Coupon validation and delivery pricing are enforced server-side. fileciteturn2file0L231-L240
-
-Razorpay Flow
-
+</div>
+
+---
+
+## ✦ About AGVIA
+
+**AGVIA** is a premium women's fashion e-commerce platform designed around
+Indian ethnic wear, contemporary fashion and occasion-based collections.
+
+The platform combines:
+
+- Elegant fashion discovery
+- Product collections
+- Secure authentication
+- Wishlist and cart
+- Razorpay payments
+- Cash on Delivery
+- Order management
+- Inventory operations
+- Coupon management
+- Customer accounts
+- Administrative operations
+- Responsive mobile-first experience
+
+> **AGVIA is designed as a commerce product — not simply a website.**
+
+---
+
+# ✦ Experience
+
+<div align="center">
+
+| Discover | Shop | Pay | Track |
+|:---:|:---:|:---:|:---:|
+| ✦ Collections | 🛍️ Products | 🔐 Secure Checkout | 📦 Orders |
+| Curated fashion | Product discovery | Razorpay + COD | Lifecycle tracking |
+
+</div>
+
+<br/>
+
+### The customer journey
+
+```text
+                 ┌─────────────────────┐
+                 │       AGVIA         │
+                 │  Women's Boutique   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Explore Collections │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Discover Products   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │   Product Details   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │     Add to Cart     │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │      Checkout       │
+                 └──────────┬──────────┘
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+          ┌─────────────┐       ┌─────────────┐
+          │   Razorpay  │       │     COD     │
+          │   Payment   │       │   Payment   │
+          └──────┬──────┘       └──────┬──────┘
+                 │                     │
+                 └──────────┬──────────┘
+                            ▼
+                 ┌─────────────────────┐
+                 │   Order Confirmed   │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                 ┌─────────────────────┐
+                 │ Track Order Status  │
+                 └─────────────────────┘
+```
+
+---
+
+# ✦ Features
+
+<details open>
+<summary><strong>🛍️ Customer Experience</strong></summary>
+
+<br/>
+
+- Premium fashion storefront
+- Responsive product discovery
+- Collection-based browsing
+- Product details
+- Product images
+- Category filtering
+- Search
+- Wishlist
+- Cart
+- Guest cart support
+- User cart synchronization
+- Customer accounts
+- Order history
+- Responsive mobile experience
+- Accessible interaction states
+
+</details>
+
+<details>
+<summary><strong>🛒 Commerce Engine</strong></summary>
+
+<br/>
+
+- Product catalogue
+- Category management
+- Inventory management
+- Server-side cart validation
+- Coupon validation
+- Delivery fee calculation
+- Order creation
+- Order status management
+- Stock management
+- Customer order history
+- COD support
+- Razorpay integration
+
+</details>
+
+<details>
+<summary><strong>💳 Payments</strong></summary>
+
+<br/>
+
+### Razorpay
+
+```text
 Customer
    │
    ▼
-POST /api/payments/create-order
+Checkout
    │
    ▼
-Spring Boot → Razorpay
+Create Razorpay Order
    │
    ▼
 Razorpay Checkout
    │
    ▼
-POST /api/payments/verify
+Payment Completed
    │
    ▼
-HMAC-SHA256 verification
+Backend Verification
    │
    ▼
-Order CONFIRMED
+Signature Validation
+   │
+   ▼
+Order Confirmed
+```
 
-The backend verifies the Razorpay signature before finalizing payment. fileciteturn2file0L241-L251
+The backend is responsible for payment verification.
 
-COD
+Never trust payment success information supplied only by the frontend.
 
-COD bypasses the initial gateway payment and is reconciled during fulfillment. fileciteturn2file0L253-L257
+</details>
 
-📦 Order Lifecycle
+<details>
+<summary><strong>📦 Order Operations</strong></summary>
 
+<br/>
+
+```text
 PENDING
    ↓
 CONFIRMED
@@ -314,271 +233,775 @@ SHIPPED
 OUT_FOR_DELIVERY
    ↓
 DELIVERED
+```
 
-Pre-dispatch orders may transition to CANCELLED with stock restoration. fileciteturn2file0L259-L311
+Pre-dispatch cancellation can restore inventory where applicable.
 
-🧑‍💼 Admin ERP
+</details>
 
-The administrative system provides:
+<details>
+<summary><strong>👨‍💼 Admin Operations</strong></summary>
 
-Live order monitoring
+<br/>
 
-Customer directory
+The administration layer provides operational control for:
 
-Revenue metrics
+- Products
+- Categories
+- Inventory
+- Orders
+- Customers
+- Coupons
+- Order status
+- Product availability
+- Business metrics
+- Customer order history
 
-Active-order metrics
+Backend authorization remains authoritative.
 
-Low-stock warnings
+</details>
 
-Product management
+---
 
-Inventory controls
+# ✦ Product Collections
 
-Category controls
+<div align="center">
 
-Coupon activation/deactivation
+### Curated for every occasion
 
-Customer order history
+| Collection | Purpose |
+|---|---|
+| ✦ Sarees | Traditional & contemporary sarees |
+| ✦ Lehengas | Bridal & festive wear |
+| ✦ Anarkalis & Kurtas | Elegant ethnic everyday wear |
+| ✦ Dresses & Gowns | Contemporary occasion wear |
+| ✦ Western Wear | Modern everyday fashion |
+| ✦ Kurtis | Comfortable Indian wear |
+| ✦ Dupattas | Festive & bridal styling |
 
-fileciteturn2file0L313-L323
+</div>
 
-🔐 Security
+---
 
-The application uses defense-in-depth security:
+# ✦ Architecture
 
-Stateless JWT authentication
+```mermaid
+flowchart TB
 
-24-hour token expiration
+    CUSTOMER["Customer"]
+    
+    subgraph FRONTEND["AGVIA FRONTEND"]
+        UI["React 18 + Vite"]
+        STATE["Redux Toolkit"]
+        STYLE["TailwindCSS"]
+        MOTION["Framer Motion"]
+    end
 
-BCrypt password hashing
+    subgraph BACKEND["AGVIA BACKEND"]
+        API["Spring Boot REST API"]
+        SECURITY["Spring Security"]
+        AUTH["JWT Authentication"]
+        SERVICE["Business Services"]
+        JPA["Spring Data JPA"]
+    end
 
-Role-based authorization
+    subgraph DATA["DATA"]
+        DB[("PostgreSQL")]
+    end
 
-Login rate limiting
+    subgraph EXTERNAL["EXTERNAL SERVICES"]
+        RZP["Razorpay"]
+        EMAIL["Email Service"]
+        SMS["OTP / Communication"]
+    end
 
-HSTS
+    CUSTOMER --> UI
 
-X-Frame-Options: DENY
+    UI --> STATE
+    UI --> API
 
-X-Content-Type-Options: nosniff
+    API --> SECURITY
+    SECURITY --> AUTH
+    API --> SERVICE
+    SERVICE --> JPA
+    JPA --> DB
 
-Strict referrer policy
+    API --> RZP
+    API --> EMAIL
+    API --> SMS
+```
 
-Global exception handling
+---
 
-Request correlation IDs
+# ✦ System Design
 
-Health probes
+```text
+┌──────────────────────────────────────────────────────────────┐
+│                         AGVIA                                │
+│                  Customer Experience                         │
+└──────────────────────────────┬───────────────────────────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     React / Vite                             │
+│       Components • Pages • Redux • API Services              │
+└──────────────────────────────┬───────────────────────────────┘
+                               │ HTTPS
+                               ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   Spring Boot REST API                       │
+│                                                              │
+│ Auth │ Products │ Cart │ Orders │ Payments │ Admin           │
+└─────────────┬────────────────┬─────────────────┬─────────────┘
+              │                │                 │
+              ▼                ▼                 ▼
+        ┌──────────┐    ┌────────────┐    ┌────────────┐
+        │PostgreSQL│    │  Razorpay  │    │ Messaging  │
+        │ Database │    │  Payments  │    │  Services  │
+        └──────────┘    └────────────┘    └────────────┘
+```
 
-Frontend Error Boundary
+---
 
-GET retry handling for transient failures
+# ✦ Tech Stack
 
-fileciteturn2file0L327-L359
+<div align="center">
 
-🔌 REST API
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 |
+| Build | Vite |
+| Styling | TailwindCSS |
+| State | Redux Toolkit |
+| Animation | Framer Motion |
+| Icons | Lucide React |
+| HTTP | Axios |
+| Backend | Java 21 |
+| Framework | Spring Boot 3.5.3 |
+| Security | Spring Security 6 |
+| Authentication | JWT / JJWT |
+| Password Hashing | BCrypt |
+| Persistence | Spring Data JPA |
+| ORM | Hibernate |
+| Database | PostgreSQL |
+| API Docs | SpringDoc OpenAPI / Swagger |
+| Payments | Razorpay |
+| Web Server | Nginx |
+| Containers | Docker / Docker Compose |
+| CI/CD | GitHub Actions |
 
-Authentication
+</div>
 
+---
+
+# ✦ Repository Structure
+
+```text
+AGVIA/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── docs/
+│   └── assets/
+│       └── agvia-logo.png
+│
+├── docker-compose.yml
+├── .env.example
+├── README.md
+│
+├── agvia-backend/
+│   ├── Dockerfile
+│   ├── pom.xml
+│   │
+│   └── src/
+│       └── main/
+│           ├── java/
+│           │   └── ...
+│           │
+│           └── resources/
+│               ├── application.properties
+│               └── application-prod.properties
+│
+└── agvia-frontend/
+    ├── Dockerfile
+    ├── nginx.conf
+    ├── package.json
+    ├── index.html
+    │
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        ├── components/
+        ├── hooks/
+        ├── pages/
+        ├── services/
+        └── store/
+```
+
+---
+
+# ✦ API
+
+<details>
+<summary><strong>🔐 Authentication</strong></summary>
+
+```http
 POST /api/auth/register
 POST /api/auth/login
 GET  /api/auth/me
+```
 
-Products
+</details>
 
+<details>
+<summary><strong>🛍️ Products</strong></summary>
+
+```http
 GET /api/products
 GET /api/products/{id}
 GET /api/products/featured
 GET /api/categories
+```
 
-Cart
+</details>
 
+<details>
+<summary><strong>🛒 Cart</strong></summary>
+
+```http
 GET    /api/cart
 POST   /api/cart/items
 DELETE /api/cart
+```
 
-Orders
+</details>
 
+<details>
+<summary><strong>📦 Orders</strong></summary>
+
+```http
 POST /api/orders/checkout
 GET  /api/orders
 GET  /api/orders/{id}
+```
 
-Payments
+</details>
 
+<details>
+<summary><strong>💳 Payments</strong></summary>
+
+```http
 POST /api/payments/create-order
 POST /api/payments/verify
 POST /api/payments/webhook
+```
 
-Health
+</details>
 
+<details>
+<summary><strong>🩺 Health</strong></summary>
+
+```http
 GET /api/health
 GET /actuator/health
+```
 
-Admin
+</details>
 
+<details>
+<summary><strong>👨‍💼 Admin</strong></summary>
+
+```http
 GET   /api/admin/orders
 PATCH /api/admin/orders/{id}/status
+
 GET   /api/admin/users
+
 GET   /api/admin/products
 POST  /api/admin/products
 PUT   /api/admin/products/{id}
+
 GET   /api/admin/coupons
 POST  /api/admin/coupons
 PATCH /api/admin/coupons/{id}/toggle
+```
 
-fileciteturn2file0L459-L519
+</details>
 
-🚀 Local Development
+---
 
-Prerequisites
+# ✦ Security
 
+AGVIA follows a defense-in-depth security model.
+
+<div align="center">
+
+| Security Layer | Implementation |
+|---|---|
+| Authentication | JWT |
+| Authorization | Role-based access |
+| Passwords | BCrypt |
+| Session Model | Stateless |
+| Token Expiry | Configurable |
+| Rate Limiting | Authentication endpoints |
+| Transport | HTTPS in deployment |
+| Headers | Security headers |
+| Errors | Centralized exception handling |
+| Observability | Correlation IDs |
+| Health | Health/readiness endpoints |
+| Payment | Server-side verification |
+
+</div>
+
+### Security principles
+
+```text
+NEVER
+├── Commit secrets
+├── Store passwords in frontend storage
+├── Trust frontend payment status
+├── Expose backend credentials
+├── Return stack traces to customers
+└── Authorize admin actions only in the frontend
+
+ALWAYS
+├── Validate input
+├── Authorize on the backend
+├── Hash passwords
+├── Verify payment signatures
+├── Protect secrets with environment variables
+├── Log security-relevant events
+└── Return safe user-facing errors
+```
+
+---
+
+# ✦ Responsive by Design
+
+AGVIA is designed for real-world screens rather than a single
+desktop resolution.
+
+```text
+320 ─── 360 ─── 375 ─── 390 ─── 414 ─── 430 ─── 480
+                         │
+                         ▼
+600 ─── 768 ─── 820 ─── 834 ─── 1024
+                         │
+                         ▼
+1280 ─── 1366 ─── 1440 ─── 1536 ─── 1920 ─── 2560
+```
+
+### Responsive priorities
+
+- Mobile-first layouts
+- Fluid typography
+- Adaptive product grids
+- Touch-friendly controls
+- Horizontal collection rails
+- Responsive checkout
+- Responsive admin dashboard
+- No intentional horizontal overflow
+- Accessible touch targets
+- Reduced-motion support
+
+---
+
+# ✦ Local Setup
+
+## Requirements
+
+```text
 Java 21
-
 Node.js
-
 npm
-
-MySQL 8
-
+PostgreSQL
 Git
+```
 
-Database
+---
 
-CREATE DATABASE IF NOT EXISTS pragathi_sweets;
+## 1. Clone
 
-Backend
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 
-cd pragathi-sweets-backend
-.\mvnw.cmd spring-boot:run
+cd YOUR_REPOSITORY
+```
 
-API:
+---
 
+## 2. Backend
+
+```bash
+cd agvia-backend
+```
+
+Configure your environment variables.
+
+Example:
+
+```env
+DB_URL=jdbc:postgresql://localhost:5432/agvia
+DB_USERNAME=postgres
+DB_PASSWORD=your-password
+
+JWT_SECRET=your-long-random-secret
+
+RAZORPAY_KEY_ID=your-key
+RAZORPAY_KEY_SECRET=your-secret
+```
+
+Start Spring Boot:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Windows:
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+Backend:
+
+```text
 http://localhost:8080
+```
 
 Swagger:
 
+```text
 http://localhost:8080/swagger-ui.html
+```
 
-Frontend
+---
 
-cd pragathi-sweets-frontend
+# ✦ Frontend
+
+```bash
+cd agvia-frontend
+
 npm install
+
 npm run dev
+```
 
 Frontend:
 
+```text
 http://localhost:5173
+```
 
-fileciteturn2file0L523-L563
+Production build:
 
-🐳 Docker Deployment
+```bash
+npm run build
+```
 
-cp .env.example .env
+Preview:
 
-Configure:
+```bash
+npm run preview
+```
 
-DB_NAME=pragathi_sweets
-DB_ROOT_PASSWORD=<strong-secret>
-DB_USER=<application-user>
-DB_PASSWORD=<strong-secret>
-JWT_SECRET=<strong-secret>
-RAZORPAY_KEY_ID=<razorpay-key>
-RAZORPAY_KEY_SECRET=<razorpay-secret>
-DEFAULT_ADMIN_EMAIL=<admin-email>
-DEFAULT_ADMIN_PASSWORD=<strong-secret>
-GEMINI_API_KEY=<gemini-api-key> (optional)
+---
 
-Start:
+# ✦ Environment Variables
 
+### Frontend
+
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+### Backend
+
+```env
+DB_URL=
+DB_USERNAME=
+DB_PASSWORD=
+
+JWT_SECRET=
+
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+
+EMAIL_SERVICE_KEY=
+OTP_SERVICE_KEY=
+```
+
+> Never commit `.env` files or production credentials.
+
+---
+
+# ✦ Docker
+
+Build and start the complete stack:
+
+```bash
 docker compose up -d --build
+```
 
-Verify:
+Check services:
 
+```bash
 docker compose ps
-curl http://localhost/api/health
+```
 
-The documented Docker deployment runs MySQL, Spring Boot, and Nginx/React as the production stack. fileciteturn2file0L567-L629
+View logs:
 
-⚠️ Never commit .env, payment secrets, JWT secrets, database passwords, or other private credentials.
+```bash
+docker compose logs -f
+```
 
-⚙️ CI/CD
+Stop:
 
-GitHub Actions is configured under:
+```bash
+docker compose down
+```
 
+---
+
+# ✦ CI/CD
+
+GitHub Actions validates the project before changes are merged.
+
+```text
+             Git Push
+                │
+                ▼
+        ┌───────────────┐
+        │ GitHub Actions│
+        └───────┬───────┘
+                │
+       ┌────────┴────────┐
+       ▼                 ▼
+ Backend Build      Frontend Build
+       │                 │
+       ▼                 ▼
+ Backend Tests       Production Build
+       │                 │
+       └────────┬────────┘
+                ▼
+             PASS ✓
+```
+
+Workflow:
+
+```text
 .github/workflows/ci.yml
+```
 
-The documented CI process validates backend Maven builds/tests and frontend production builds. fileciteturn2file0L101-L103
+---
 
-🧪 Quality Checklist
+# ✦ Quality Gate
 
 Before merging:
 
+```text
+[ ] Backend build passes
 [ ] Backend tests pass
-[ ] Frontend production build passes
+[ ] Frontend build passes
 [ ] Authentication tested
 [ ] Authorization tested
 [ ] Cart isolation tested
 [ ] Checkout tested
-[ ] Coupon validation tested
-[ ] Razorpay verification tested
+[ ] Payment verification tested
 [ ] COD tested
 [ ] Order lifecycle tested
 [ ] Inventory tested
 [ ] Admin APIs tested
 [ ] Mobile UI tested
+[ ] Responsive layouts tested
 [ ] Docker build tested
 [ ] Secrets checked
+```
 
-🤝 Contributing
+---
 
-Fork the repository.
+# ✦ Performance Philosophy
 
-Create a feature branch.
+AGVIA follows a simple engineering principle:
 
+```text
+MEASURE
+   ↓
+IDENTIFY BOTTLENECK
+   ↓
+OPTIMIZE
+   ↓
+MEASURE AGAIN
+```
+
+Areas considered:
+
+- API latency
+- Database queries
+- N+1 queries
+- Connection pooling
+- Image loading
+- Bundle size
+- Rendering performance
+- Network requests
+- Caching
+- Mobile performance
+- Core Web Vitals
+
+Performance numbers should be measured from real environments rather
+than invented benchmark claims.
+
+---
+
+# ✦ Development Philosophy
+
+### Build for the customer.
+
+Not for the screenshot.
+
+### Build for production.
+
+Not only for localhost.
+
+### Build secure systems.
+
+Not frontend-only security.
+
+### Build responsive interfaces.
+
+Not desktop layouts squeezed onto phones.
+
+### Build maintainable architecture.
+
+Not duplicated logic everywhere.
+
+---
+
+# ✦ Design Language
+
+AGVIA's visual direction follows a refined Indian fashion aesthetic.
+
+```text
+                    AGVIA
+                      │
+        ┌─────────────┼─────────────┐
+        ▼             ▼             ▼
+      WARM          WINE          GOLD
+      IVORY        BURGUNDY      CHAMPAGNE
+        │             │             │
+        └─────────────┼─────────────┘
+                      ▼
+             EDITORIAL LUXURY
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+      TRADITION                MODERN
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+                   AGVIA
+```
+
+Design principles:
+
+- Elegant typography
+- Restrained animation
+- Premium whitespace
+- Strong product imagery
+- Clear hierarchy
+- Mobile-first interaction
+- Accessible controls
+- No unnecessary visual noise
+
+---
+
+# ✦ Contributing
+
+<details>
+<summary><strong>Development workflow</strong></summary>
+
+<br/>
+
+### Create a branch
+
+```bash
 git checkout -b feature/your-feature
+```
 
-Make focused changes.
+### Make focused changes
 
-Run tests and production builds.
+Keep commits small and meaningful.
 
-Review security implications.
+### Validate
 
-Commit clearly.
+```bash
+npm run build
+```
 
-git commit -m "feat: improve product recommendations"
+Run backend tests before opening a pull request.
 
-Push:
+### Commit
 
+```bash
+git commit -m "feat: improve product discovery"
+```
+
+### Push
+
+```bash
 git push origin feature/your-feature
+```
 
-Open a Pull Request.
+### Pull Request
 
-For UI changes, include screenshots and explain relevant API, database, security, and deployment impact.
+Include:
 
-📄 License
+- What changed
+- Why it changed
+- Screenshots for UI changes
+- API impact
+- Database impact
+- Security impact
+- Deployment considerations
 
-Add the project's intended license before publishing the repository publicly.
+</details>
 
-Do not claim an open-source license unless the project owner has explicitly selected one.
+---
 
-🍬 Pragathi Sweets
+# ✦ License
 
-Premium Customer Experience
-          +
-Secure Backend
-          +
-Transactional Commerce
-          +
-Payment Infrastructure
-          +
-Administrative Operations
-          +
-Containerized Deployment
-          +
-CI/CD
+The project license should be explicitly selected by the project owner
+before publishing the repository publicly.
 
-<p align="center">
-  <strong>Pragathi Sweets</strong><br/>
-  Crafted for sweets. Engineered for scale.
-</p>
+Do not claim an open-source license unless the project owner has
+intentionally selected one.
+
+---
+
+<div align="center">
+
+## ✦ AGVIA
+
+### Women's Wear Boutique
+
+**Elegant styles. Thoughtful technology.**
+
+<br/>
+
+`React` · `Spring Boot` · `PostgreSQL` · `Razorpay` · `Docker`
+
+<br/>
+
+---
+
+<sub>
+Built with attention to design, security, performance and customer experience.
+</sub>
+
+<br/>
+
+**Wear Your Story.**
+
+</div>
