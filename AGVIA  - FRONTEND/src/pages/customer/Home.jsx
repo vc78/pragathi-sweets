@@ -24,6 +24,7 @@ import SweetCard from '../../components/customer/SweetCard'
 import InteractiveItemsReel from '../../components/customer/InteractiveItemsReel'
 import BestsellerCurvedCarousel from '../../components/customer/BestsellerCurvedCarousel'
 import RangoliDivider from '../../components/customer/RangoliDivider'
+import TestimonialsCarousel from '../../components/customer/TestimonialsCarousel'
 import { productService } from '../../services/productService'
 import { useCart } from '../../hooks/useCart'
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
@@ -573,45 +574,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           6. TESTIMONIALS (PATRON EXPERIENCES)
       ══════════════════════════════════════════════════════════════ */}
-      <section className="section relative z-10">
-        <div className="container-luxury">
-          <SectionHeader
-            tag="Patron Experiences"
-            title="Voices of Elegance"
-            subtitle="From royal wedding galas to intimate soirees — draped in timeless AGVIA grace."
-          />
-          <div className="grid md:grid-cols-3 gap-3.5 sm:gap-4">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="bg-white border border-[#C9A45C]/20 rounded-2xl p-4 sm:p-5 hover:shadow-[0_12px_40px_rgba(201,164,92,0.12)] hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex gap-1 mb-2.5">
-                    {[...Array(t.rating)].map((_, s) => (
-                      <Star key={s} size={12} className="text-[#C9A45C] fill-[#C9A45C]" />
-                    ))}
-                  </div>
-                  <p className="font-sans text-xs sm:text-[13px] text-[#211D1E]/80 leading-normal italic mb-3">
-                    "{t.quote}"
-                  </p>
-                </div>
-                <div className="flex items-center gap-2.5 pt-3 border-t border-[#C9A45C]/15">
-                  <img src={t.avatar} alt={t.name} className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border-2 border-[#C9A45C]/30 shrink-0" />
-                  <div>
-                    <p className="font-serif text-xs sm:text-sm font-bold text-[#5A1020]">{t.name}</p>
-                    <p className="font-sans text-[9.5px] text-[#211D1E]/60 tracking-wider">{t.city}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsCarousel />
 
       {/* ══ VIDEO STORY MODAL ═════════════════════════════════════ */}
       {showStoryModal && (
