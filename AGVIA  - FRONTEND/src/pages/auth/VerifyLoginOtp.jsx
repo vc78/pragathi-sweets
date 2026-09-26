@@ -1,0 +1,94 @@
+import { useState } from 'react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import toast from 'react-hot-toast'
+import { authService } from '../../services/authService'
+import { credentialsReceived } from '../../store/authSlice'
+import OtpVerificationCard from '../../components/auth/OtpVerificationCard'
+import { ArrowLeft } from 'lucide-react'
+
+export default function VerifyLoginOtp() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const challengeId = location.state?.challengeId || ''
+  const phoneMasked = location.state?.phoneMasked || ''
+  const from = location.state?.from || '/'
+
+  const [currentChallengeId, setCurrentChallengeId] = useState(challengeId)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  if (!currentChallengeId) {
+    return (
+      <div className="min-h-screen bg-[#FFFDF8] flex flex-col justify-center items-center px-4 font-body">
+        <div className="w-full max-w-md p-8 bg-white border border-[#B8860B]/15 rounded-3xl text-center shadow-sm">
+          <h2 className="font-display text-xl font-bold text-[#8B0000] mb-2">No Active Login Session</h2>
+          <p className="text-xs text-[#3A2D23]/70 mb-6">
+            Please log in first with your email/phone and password.
+          </p>
+          <Link to="/login" className="btn-primary inline-block text-xs font-bold px-6 py-3">
+            Go to Sign In
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const handleVerify = async (otpCode) => {
+    setLoading(true)
+    setError('')
+    try {
+      const { user, token } = await authService.verifyLoginOtp({
+        challengeId: currentChallengeId,
+        otp: otpCode
+      })
+      dispatch(credentialsReceived({ user, token }))
+      toast.success(`Welcome back, ${user.name}!`, {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+      navigate(user.role === 'ADMIN' && from === '/' ? '/admin/dashboard' : from, { replace: true })
+    } catch (err) {
+      setError(err?.response?.data?.message || err?.message || 'Verification failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleResend = async () => {
+    try {
+      const res = await authService.resendOtp({ challengeId: currentChallengeId })
+      if (res.challengeId) {
+        setCurrentChallengeId(res.challengeId)
+      }
+      toast.success('A new verification code has been sent!', {
+        style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
+      })
+    } catch (err) {
+      throw err
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#FFFDF8] flex flex-col justify-center items-center px-4 py-10 font-body relative">
+      <Link
+        to="/login"
+        className="absolute top-6 left-6 text-xs text-[#B8860B] hover:text-[#8B0000] font-bold uppercase flex items-center gap-1.5 transition-colors"
+      >
+        <ArrowLeft size={14} /> Back to Sign In
+      </Link>
+
+      <OtpVerificationCard
+        title="Sign-In Verification"
+        description="Enter the 6-digit OTP code sent to"
+        phoneMasked={phoneMasked}
+        loading={loading}
+        error={error}
+        onVerify={handleVerify}
+        onResend={handleResend}
+        onChangePhone={() => navigate('/login')}
+      />
+    </div>
+  )
+}

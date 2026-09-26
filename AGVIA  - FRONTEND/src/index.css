@@ -1,0 +1,422 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════
+   AGVIA WOMEN'S WEAR BOUTIQUE — LUXURY DESIGN TOKENS & SYSTEM
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* AGVIA Brand Colors */
+  --agvia-burgundy: #5A1020;
+  --agvia-burgundy-deep: #420B16;
+  --agvia-burgundy-rich: #7A1F32;
+  --agvia-gold: #C9A45C;
+  --agvia-gold-soft: #D8B978;
+  --agvia-ivory: #FAF7F2;
+  --agvia-cream: #F2ECE4;
+  --agvia-blush: #E8C7C3;
+  --agvia-text: #211D1E;
+  --agvia-muted: #756B6C;
+  --agvia-border: #E4D8D2;
+
+  /* 12-step Compact Spacing Scale */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 20px;
+  --space-8: 24px;
+  --space-9: 28px;
+  --space-10: 32px;
+  --space-11: 40px;
+  --space-12: 48px;
+
+  /* Responsive Page & Container Padding */
+  --page-padding-mobile: 14px;
+  --page-padding-tablet: 20px;
+  --page-padding-desktop: 28px;
+  --page-padding-wide: 36px;
+
+  /* Responsive Section Vertical Padding */
+  --section-padding-mobile: 24px;
+  --section-padding-tablet: 36px;
+  --section-padding-desktop: 48px;
+  --section-padding-max: 56px;
+
+  /* Content Max Widths */
+  --content-max-width: 1280px;
+  --content-max-width-wide: 1320px;
+  --text-max-width: 620px;
+  --hero-text-max-width: 680px;
+
+  /* Button Dimensions (40px-44px desktop & mobile) */
+  --btn-height-desktop: 42px;
+  --btn-height-mobile: 42px;
+}
+
+/* Global Box-Sizing & Body Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+  }
+  
+  body {
+    @apply antialiased overflow-x-hidden;
+    background-color: var(--agvia-ivory);
+    color: var(--agvia-text);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+    color: var(--agvia-burgundy);
+    letter-spacing: 0.02em;
+    font-weight: 600;
+    margin-top: 0;
+  }
+
+  /* Custom AGVIA Gold Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--agvia-cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--agvia-gold);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--agvia-gold-soft);
+  }
+}
+
+@layer components {
+  /* ── Responsive Layout & Spacing Utilities (Master AGVIA Spec) ── */
+  .container-luxury,
+  .agvia-container {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 481px) {
+    .container-luxury,
+    .agvia-container {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-luxury,
+    .agvia-container {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-luxury,
+    .agvia-container {
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-luxury,
+    .agvia-container {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+
+  /* Accessible Touch Target Utility (Minimum 44x44px) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Fluid Typography */
+  .fluid-title {
+    font-size: clamp(1.5rem, 3.8vw, 2.75rem);
+    line-height: 1.15;
+  }
+  .fluid-subtitle {
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    line-height: 1.5;
+  }
+
+  /* Fluid Responsive Section Spacing */
+  .section {
+    padding-block: clamp(24px, 3.5vw, 48px);
+  }
+
+  .section--compact {
+    padding-block: clamp(16px, 2vw, 32px);
+  }
+
+  .section--hero {
+    padding-block: clamp(28px, 3.5vw, 48px);
+  }
+
+  /* Normalized Section Typography Hierarchy */
+  .section-header {
+    text-align: center;
+    margin-bottom: clamp(16px, 2vw, 28px);
+  }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body, inherit);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--agvia-gold);
+    margin-bottom: 6px;
+  }
+
+  .section-title {
+    font-family: var(--font-display, serif);
+    font-size: clamp(1.5rem, 3vw, 2.35rem);
+    line-height: 1.15;
+    color: var(--agvia-burgundy);
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .section-description {
+    font-family: var(--font-body, inherit);
+    font-size: clamp(0.8125rem, 1.1vw, 0.9rem);
+    color: var(--agvia-muted);
+    max-width: var(--text-max-width);
+    margin-inline: auto;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Section CTA Container */
+  .section-cta {
+    text-align: center;
+    margin-top: clamp(16px, 2vw, 24px);
+  }
+
+  /* Premium AGVIA buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 font-semibold px-5 py-2.5 rounded-full border transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden tracking-wider text-xs uppercase;
+    background-color: var(--agvia-burgundy);
+    border-color: var(--agvia-burgundy);
+    color: var(--agvia-ivory);
+    min-height: var(--btn-height-desktop);
+  }
+  .btn-primary:hover {
+    background-color: var(--agvia-burgundy-deep);
+    border-color: var(--agvia-burgundy-deep);
+    color: #ffffff;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 font-semibold px-5 py-2.5 rounded-full border transition-all duration-300 relative overflow-hidden tracking-wider text-xs uppercase;
+    border-color: var(--agvia-gold);
+    color: var(--agvia-burgundy);
+    min-height: var(--btn-height-desktop);
+  }
+  .btn-outline:hover {
+    background-color: var(--agvia-gold);
+    color: var(--agvia-burgundy-deep);
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 font-bold px-5 py-2.5 rounded-full transition-all duration-300 tracking-wider text-xs uppercase;
+    background-color: var(--agvia-gold);
+    color: var(--agvia-burgundy-deep);
+    min-height: var(--btn-height-desktop);
+  }
+  .btn-accent:hover {
+    background-color: var(--agvia-burgundy);
+    color: var(--agvia-ivory);
+  }
+
+  .input-field {
+    @apply w-full px-3.5 py-2.5 rounded-lg border bg-white transition-all duration-300 font-body text-sm;
+    border-color: var(--agvia-border);
+    color: var(--agvia-text);
+    min-height: 42px;
+  }
+  @media (max-width: 767px) {
+    .input-field {
+      min-height: 44px;
+    }
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--agvia-burgundy);
+    box-shadow: 0 0 0 2px rgba(90, 16, 32, 0.1);
+  }
+
+  .card-luxury {
+    @apply bg-white border border-gold/15 rounded-2xl p-4 sm:p-5 md:p-6 shadow-card hover:shadow-luxury hover:border-gold/30 transition-all duration-500 bg-opacity-70 backdrop-blur-sm;
+  }
+
+  /* Premium logo */
+  .logo-luxury {
+    @apply font-display text-2xl tracking-[0.2em] font-normal uppercase text-maroon;
+  }
+
+  /* Glassmorphism helpers */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+
+  .glass-navbar {
+    @apply bg-cream/70 backdrop-blur-xl border-b border-gold/10 shadow-sm transition-all duration-500;
+  }
+
+  /* Custom animated underline */
+  .underline-hover {
+    @apply relative py-1;
+  }
+  .underline-hover::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-[1px] bg-gold transition-all duration-500;
+  }
+  .underline-hover:hover::after {
+    @apply w-full;
+  }
+
+  /* Gold Gradient Text */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #B8860B 0%, #E6C687 50%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Micro animations & floaters */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float-reverse {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(8px) rotate(-3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes slow-glow {
+  0%, 100% { opacity: 0.3; filter: blur(50px); }
+  50% { opacity: 0.6; filter: blur(70px); }
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 9s ease-in-out infinite;
+}
+
+.animate-glow-slow {
+  animation: slow-glow 6s ease-in-out infinite;
+}
+
+/* Image reveal mask effect */
+.reveal-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.reveal-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFFDF8;
+  transform: translateX(0);
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.reveal-wrapper.revealed::after {
+  transform: translateX(101%);
+}
+
+/* Headline Scroller Announcement Bar Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Swiper Custom Luxury Styling */
+.swiper-button-next, .swiper-button-prev {
+  color: #C79A3B !important; /* Gold */
+  transform: scale(0.65);
+}
+.swiper-pagination-bullet-active {
+  background: #C79A3B !important; /* Gold */
+}
+
+/* Form inputs readability & mobile iOS auto-zoom prevention */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Global Media & Container Containment */
+img, svg, video, canvas, audio, iframe, embed, object {
+  max-width: 100%;
+}
+
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

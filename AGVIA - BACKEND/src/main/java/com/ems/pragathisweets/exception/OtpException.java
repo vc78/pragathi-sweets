@@ -1,0 +1,7 @@
+package com.ems.pragathisweets.exception;
+
+public class OtpException extends RuntimeException {
+    public OtpException(String message) {
+        super(message);
+    }
+}
