@@ -260,3 +260,64 @@ export function FaqPage() {
     </div>
   )
 }
+/* ---------------------------------------
+   GENERIC PAGES
+--------------------------------------- */
+function GenericPage({ tag, title, children }) {
+  return (
+    <div className="min-h-screen bg-[#FAF7F2] text-[#211D1E] font-body">
+      <Navbar />
+      <PageHero tag={tag} title={title} />
+      <div className="max-w-3xl mx-auto px-6 pt-12 pb-24 font-sans text-[12.5px] leading-relaxed space-y-4">
+        {children}
+        <p className="text-[10.5px] text-[#211D1E]/40 mt-8 border-t border-[#C9A45C]/15 pt-4">
+          AGVIA Women's Wear Boutique, Jubilee Hills, Hyderabad
+        </p>
+      </div>
+      <Footer />
+    </div>
+  )
+}
+
+export function ShippingPolicyPage() {
+  return <GenericPage tag="Delivery" title="Shipping Policy"><p>Detailed shipping terms will be published soon.</p></GenericPage>
+}
+export function CancellationPolicyPage() {
+  return <GenericPage tag="Orders" title="Cancellation Policy"><p>Cancellation policies apply to all orders placed via our website.</p></GenericPage>
+}
+export function CookiePolicyPage() {
+  return <GenericPage tag="Privacy" title="Cookie Policy"><p>We use cookies to improve your boutique experience.</p></GenericPage>
+}
+export function IntellectualPropertyPage() {
+  return <GenericPage tag="Legal" title="Intellectual Property"><p>All designs and assets are copyright of AGVIA.</p></GenericPage>
+}
+export function DisclaimerPage() {
+  return <GenericPage tag="Legal" title="Disclaimer"><p>Please read our terms carefully before purchasing.</p></GenericPage>
+}
+export function CraftsmanshipPage() {
+  return <GenericPage tag="Our Heritage" title="Craftsmanship"><p>Discover the artisanal techniques behind every AGVIA ensemble.</p></GenericPage>
+}
+export function SustainabilityPage() {
+  return <GenericPage tag="Our Commitment" title="Sustainability"><p>Our dedication to sustainable, ethical fashion.</p></GenericPage>
+}
+export function ProductCarePage() {
+  return <GenericPage tag="Aftercare" title="Product Care"><p>Preserve your heirlooms with our detailed care instructions.</p></GenericPage>
+}
+export function BlogsPage() {
+  return <GenericPage tag="Journal" title="Blogs & Style Guide"><p>Styling tips and the latest trends from AGVIA.</p></GenericPage>
+}
+export function StoreLocationsPage() {
+  return <GenericPage tag="Visit Us" title="Store Locations"><p>Find our flagship boutiques and partner stores.</p></GenericPage>
+}
+export function CareersPage() {
+  return <GenericPage tag="Join Us" title="Careers"><p>Explore career opportunities at AGVIA.</p></GenericPage>
+}
+export function BulkOrdersPage() {
+  return <GenericPage tag="Wholesale" title="Bulk Orders"><p>Please contact us via WhatsApp for bulk or wholesale inquiries.</p></GenericPage>
+}
+export function StylingPage() {
+  return <GenericPage tag="Consultation" title="Styling Consultation"><p>Book a private session with our styling experts.</p></GenericPage>
+}
+export function AppointmentsPage() {
+  return <GenericPage tag="Bespoke" title="Atelier Appointments"><p>Book a virtual or in-person bridal appointment at our Jubilee Hills atelier.</p></GenericPage>
+}

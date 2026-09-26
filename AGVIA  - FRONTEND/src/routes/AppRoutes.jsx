@@ -34,6 +34,21 @@ const Addresses = lazy(() => import('../pages/customer/Addresses'))
 const Notifications = lazy(() => import('../pages/customer/Notifications'))
 const Subscription = lazy(() => import('../pages/customer/Subscription'))
 const SizeGuide = lazy(() => import('../pages/customer/SizeGuide'))
+const ShippingPolicy = lazy(() => import('../pages/customer/ShippingPolicy'))
+const CancellationPolicy = lazy(() => import('../pages/customer/CancellationPolicy'))
+const CookiePolicy = lazy(() => import('../pages/customer/CookiePolicy'))
+const ReturnExchangePolicy = lazy(() => import('../pages/customer/ReturnExchangePolicy'))
+const IntellectualProperty = lazy(() => import('../pages/customer/IntellectualProperty'))
+const Disclaimer = lazy(() => import('../pages/customer/Disclaimer'))
+const Craftsmanship = lazy(() => import('../pages/customer/Craftsmanship'))
+const Sustainability = lazy(() => import('../pages/customer/Sustainability'))
+const ProductCare = lazy(() => import('../pages/customer/ProductCare'))
+const Blogs = lazy(() => import('../pages/customer/Blogs'))
+const StoreLocations = lazy(() => import('../pages/customer/StoreLocations'))
+const Careers = lazy(() => import('../pages/customer/Careers'))
+const BulkOrders = lazy(() => import('../pages/customer/BulkOrders'))
+const Styling = lazy(() => import('../pages/customer/Styling'))
+const Appointments = lazy(() => import('../pages/customer/Appointments'))
 
 // Lazy loaded auth pages
 const Login = lazy(() => import('../pages/auth/Login'))
@@ -81,7 +96,21 @@ export default function AppRoutes() {
           <Route path="/refund-policy" element={<PageTransition><RefundPolicy /></PageTransition>} />
           <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
           <Route path="/size-guide" element={<PageTransition><SizeGuide /></PageTransition>} />
-          <Route path="/shipping-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+          <Route path="/shipping-policy" element={<PageTransition><ShippingPolicy /></PageTransition>} />
+          <Route path="/cancellation-policy" element={<PageTransition><CancellationPolicy /></PageTransition>} />
+          <Route path="/cookie-policy" element={<PageTransition><CookiePolicy /></PageTransition>} />
+          <Route path="/return-exchange-policy" element={<PageTransition><ReturnExchangePolicy /></PageTransition>} />
+          <Route path="/intellectual-property" element={<PageTransition><IntellectualProperty /></PageTransition>} />
+          <Route path="/disclaimer" element={<PageTransition><Disclaimer /></PageTransition>} />
+          <Route path="/craftsmanship" element={<PageTransition><Craftsmanship /></PageTransition>} />
+          <Route path="/sustainability" element={<PageTransition><Sustainability /></PageTransition>} />
+          <Route path="/product-care" element={<PageTransition><ProductCare /></PageTransition>} />
+          <Route path="/blogs" element={<PageTransition><Blogs /></PageTransition>} />
+          <Route path="/store-locations" element={<PageTransition><StoreLocations /></PageTransition>} />
+          <Route path="/careers" element={<PageTransition><Careers /></PageTransition>} />
+          <Route path="/bulk-orders" element={<PageTransition><BulkOrders /></PageTransition>} />
+          <Route path="/styling" element={<PageTransition><Styling /></PageTransition>} />
+          <Route path="/appointments" element={<PageTransition><Appointments /></PageTransition>} />
           <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
           <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
           <Route path="/verify-otp" element={<PageTransition><VerifyOtp /></PageTransition>} />
