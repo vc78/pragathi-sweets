@@ -23,6 +23,7 @@ import Footer from '../../components/customer/Footer'
 import SweetCard from '../../components/customer/SweetCard'
 import InteractiveItemsReel from '../../components/customer/InteractiveItemsReel'
 import BestsellerCurvedCarousel from '../../components/customer/BestsellerCurvedCarousel'
+import RangoliDivider from '../../components/customer/RangoliDivider'
 import { productService } from '../../services/productService'
 import { useCart } from '../../hooks/useCart'
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
@@ -417,10 +418,16 @@ export default function Home() {
 
       </section>
 
+      {/* Rangoli Divider — between Hero and Shop by Collection */}
+      <RangoliDivider />
+
       {/* ══════════════════════════════════════════════════════════════
           2. SHOP BY COLLECTION (ARCHED CAROUSEL SHOWCASE)
       ══════════════════════════════════════════════════════════════ */}
       <InteractiveItemsReel items={allProducts} />
+
+      {/* Rangoli Divider — between Shop by Collection and Bridal Trousseau */}
+      <RangoliDivider flip />
 
       {/* ══════════════════════════════════════════════════════════════
           3. BRIDAL TROUSSEAU, ELEVATED (EXACT REFERENCE DESIGN)
@@ -504,6 +511,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Rangoli Divider — between Bridal Trousseau and AGVIA Edit */}
+      <RangoliDivider />
+
       {/* ══════════════════════════════════════════════════════════════
           4. THE AGVIA EDIT / EVERY DRAPE, PERFECTED
       ══════════════════════════════════════════════════════════════ */}
@@ -549,10 +559,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Rangoli Divider — between AGVIA Edit and Bestsellers */}
+      <RangoliDivider flip />
+
       {/* ══════════════════════════════════════════════════════════════
           5. BESTSELLERS (THE SIGNATURE EDIT) - 3D CURVED CAROUSEL
       ══════════════════════════════════════════════════════════════ */}
       <BestsellerCurvedCarousel bestsellers={bestsellers} onAdd={handleAdd} />
+
+      {/* Rangoli Divider — between Bestsellers and Testimonials */}
+      <RangoliDivider />
 
       {/* ══════════════════════════════════════════════════════════════
           6. TESTIMONIALS (PATRON EXPERIENCES)
