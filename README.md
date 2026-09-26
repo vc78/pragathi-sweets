@@ -2,7 +2,7 @@
 
 <a href="#">
   <img
-    src="./docs/assets/agvia-logo.png"
+    src="docs/assests/agvia-logo.png"
     alt="AGVIA Women's Wear Boutique"
     width="280"
   />
