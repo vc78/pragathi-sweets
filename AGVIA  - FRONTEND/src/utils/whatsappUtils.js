@@ -14,11 +14,11 @@ export function buildWhatsAppOrderMessage({ order, customerName, phone, address,
     ? 'Cash on Delivery 💵' 
     : 'Online Payment (Razorpay) 💳'
 
-  let msg = `🎉 *PRAGATHI SWEETS* 🎉\n`
+  let msg = `👑 *AGVIA WOMEN'S WEAR BOUTIQUE* 👑\n`
   msg += `━━━━━━━━━━━━━━━━━━━━━━\n`
   msg += `✅ *Order Confirmed!*\n\n`
   msg += `👤 Dear *${name}*,\n`
-  msg += `Your order has been placed successfully!\n\n`
+  msg += `Your bespoke order has been placed successfully!\n\n`
   msg += `📦 *Order Details*\n`
   msg += `━━━━━━━━━━━━━━━━━━━━━━\n`
   msg += `🔖 Order No : *${orderNum}*\n`
@@ -29,7 +29,7 @@ export function buildWhatsAppOrderMessage({ order, customerName, phone, address,
     msg += `🛒 *Items Ordered*\n`
     msg += `━━━━━━━━━━━━━━━━━━━━━━\n`
     itemsList.forEach((item) => {
-      const pName = item.productName || item.name || 'Artisanal Confection'
+      const pName = item.productName || item.name || 'Bespoke Silhouette'
       const qty = item.quantity || item.qty || 1
       const pPrice = item.subtotal || (item.price ? item.price * qty : 0)
       msg += `• ${pName} × ${qty}  ₹${pPrice}\n`

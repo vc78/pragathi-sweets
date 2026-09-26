@@ -1,6 +1,6 @@
 import emailjs from '@emailjs/browser'
 
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_pragathi'
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_agvia'
 const CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID || 'template_5k3xk4j'
 const AUTOREPLY_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID || 'template_mz2tfnj'
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
@@ -76,17 +76,17 @@ export async function sendOrderConfirmationEmails({ order, customerEmail, custom
   const finalTotal = total || order?.finalAmount || order?.totalAmount || '0.00'
   const itemsText = Array.isArray(items) && items.length > 0
     ? items.map(i => `${i.productName || i.name} x ${i.quantity} (₹${i.price})`).join(', ')
-    : 'Artisanal Sweets & Snacks Box'
+    : 'Bespoke Couture Wardrobe Order'
 
   const templateParams = {
     name,
-    from_name: 'Pragathi Sweets',
+    from_name: "AGVIA Women's Wear Boutique",
     to_name: name,
     to_email: email,
     reply_to: 'venkatbodduluri78@gmail.com',
     user_email: email,
     email: email,
-    subject: `✅ Order Confirmed #${orderNum} — Pragathi Sweets`,
+    subject: `✅ Order Confirmed #${orderNum} — AGVIA Boutique`,
     order_id: orderNum,
     order_number: orderNum,
     total_amount: `₹${finalTotal}`,
@@ -94,14 +94,14 @@ export async function sendOrderConfirmationEmails({ order, customerEmail, custom
     items_summary: itemsText,
     phone: phone || address?.phone || '',
     shipping_address: address ? `${address.line1 || ''}, ${address.city || ''}, ${address.pincode || ''}` : '',
-    message: `Thank you for your order #${orderNum}! Total: ₹${finalTotal}.\nItems: ${itemsText}\nYour sweets are freshly made and dispatched with care.`,
+    message: `Thank you for your bespoke order #${orderNum}! Total: ₹${finalTotal}.\nSilhouettes: ${itemsText}\nYour boutique pieces are hand-inspected and dispatched with care in our luxury keepsake packaging.`,
     sent_at: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
   }
 
   const customerPromise = emailjs.send(SERVICE_ID, AUTOREPLY_TEMPLATE_ID, templateParams, PUBLIC_KEY)
   const adminPromise = emailjs.send(SERVICE_ID, CONTACT_TEMPLATE_ID, {
     ...templateParams,
-    subject: `🔔 [New Order Alert] #${orderNum} received — ₹${finalTotal}`,
+    subject: `🔔 [New Boutique Order] #${orderNum} received — ₹${finalTotal}`,
     to_email: 'venkatbodduluri78@gmail.com'
   }, PUBLIC_KEY)
 
@@ -121,7 +121,7 @@ export async function sendOtpEmail({ toEmail, customerName, otpCode, type = 'EMA
     return { skipped: true }
   }
 
-  const name = customerName || 'Valued Customer'
+  const name = customerName || 'Valued Patron'
   const isEmail = type === 'EMAIL_CHANGE'
   const purpose = isEmail ? 'Primary Email Verification' : 'Mobile Number Verification'
 
@@ -129,14 +129,14 @@ export async function sendOtpEmail({ toEmail, customerName, otpCode, type = 'EMA
     name,
     customer_name: name,
     user_name: name,
-    from_name: 'Pragathi Sweets Security',
+    from_name: 'AGVIA Boutique Concierge',
     to_name: name,
     to_email: toEmail,
     reply_to: 'venkatbodduluri78@gmail.com',
     user_email: toEmail,
     email: toEmail,
-    subject: `🔐 Your Pragathi Sweets Verification Code: ${otpCode}`,
-    message: `Your 6-digit verification code for ${purpose} is:\n\n👉 ${otpCode} 👈\n\nThis OTP is valid for 10 minutes. Please do not share this code with anyone.\n\nThank you for choosing Pragathi Sweets!`,
+    subject: `🔐 Your AGVIA Boutique Verification Code: ${otpCode}`,
+    message: `Your 6-digit verification code for ${purpose} is:\n\n👉 ${otpCode} 👈\n\nThis OTP is valid for 10 minutes. Please do not share this code with anyone.\n\nThank you for choosing AGVIA Women's Wear Boutique!`,
     otp_message: `Your 6-digit verification code is: ${otpCode}`,
     otp_code: otpCode,
     otp: otpCode,

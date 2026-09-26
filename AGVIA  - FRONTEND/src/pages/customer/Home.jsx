@@ -162,12 +162,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
 
-  // Pragathi Circle Subscription state
+  // AGVIA Haute Circle Subscription state
   const [emailInput, setEmailInput] = useState('')
   const [subscribing, setSubscribing] = useState(false)
   const [circleMember, setCircleMember] = useState(() => {
     try {
-      const saved = localStorage.getItem('ps_circle_member')
+      const saved = localStorage.getItem('agvia_circle_member') || localStorage.getItem('ps_circle_member')
       return saved ? JSON.parse(saved) : null
     } catch {
       return null
@@ -188,8 +188,8 @@ export default function Home() {
       if (data?.success && data?.data) {
         const memberData = data.data
         setCircleMember(memberData)
-        localStorage.setItem('ps_circle_member', JSON.stringify(memberData))
-        toast.success(data.message || 'Welcome to the Pragathi Circle! 🎉', {
+        localStorage.setItem('agvia_circle_member', JSON.stringify(memberData))
+        toast.success(data.message || 'Welcome to the AGVIA Haute Circle! 🎉', {
           icon: '👑',
           style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '14px' }
         })

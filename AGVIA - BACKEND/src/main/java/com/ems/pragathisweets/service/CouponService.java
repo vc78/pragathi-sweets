@@ -195,13 +195,13 @@ public class CouponService {
 
         // 1. Known VIP, Subscription, and Storewide Coupons
         if ("CIRCLE15".equals(upper)) {
-            return saveAutoCoupon(upper, "Pragathi Circle VIP 15% Confectionery Credit", DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
+            return saveAutoCoupon(upper, "AGVIA Haute Circle VIP 15% Boutique Credit", DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
         }
         if ("AGVIAVIP10".equals(upper)) {
             return saveAutoCoupon(upper, "Exclusive VIP 10% Boutique Discount", DiscountType.PERCENTAGE, new BigDecimal("10.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
         }
         if ("AGVIA15".equals(upper)) {
-            return saveAutoCoupon(upper, "VIP Welcome Voucher 15% Confectionery & Couture Credit", DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
+            return saveAutoCoupon(upper, "VIP Welcome Voucher 15% Boutique Credit", DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
         }
         if ("AGVIA10".equals(upper)) {
             return saveAutoCoupon(upper, "Special 10% Storewide Boutique Discount", DiscountType.PERCENTAGE, new BigDecimal("10.00"), BigDecimal.ZERO, new BigDecimal("1500.00"));

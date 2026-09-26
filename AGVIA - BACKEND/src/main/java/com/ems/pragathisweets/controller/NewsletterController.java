@@ -25,14 +25,14 @@ public class NewsletterController {
     private final com.ems.pragathisweets.repository.CouponRepository couponRepository;
 
     private static final List<String> CIRCLE_BENEFITS = List.of(
-            "15% Confectionery Credit on your first boutique order",
-            "Complimentary Royale Gift Wrapping with silk ribbon",
+            "15% Boutique Credit on your first designer order",
+            "Complimentary Royal Keepsake Gift Wrapping with gold satin ribbon",
             "Guaranteed priority same-day dispatch during festive peaks",
-            "Exclusive invitations to secret heritage recipe tasting drops"
+            "Exclusive invitations to private couture showcases and atelier previews"
     );
 
     @PostMapping("/subscribe")
-    @Operation(summary = "Subscribe to Pragathi Circle", description = "Subscribes email, activates VIP perks, and returns an exclusive coupon code with validity")
+    @Operation(summary = "Subscribe to AGVIA Haute Circle", description = "Subscribes email, activates VIP perks, and returns an exclusive coupon code with validity")
     public ResponseEntity<ApiResponse<Map<String, Object>>> subscribe(@RequestBody Map<String, String> request) {
         String rawEmail = request.get("email");
         if (rawEmail == null || rawEmail.trim().isEmpty() || !rawEmail.contains("@")) {
@@ -48,7 +48,7 @@ public class NewsletterController {
         if (existingOpt.isPresent()) {
             subscriber = existingOpt.get();
             alreadySubscribed = true;
-            log.info("Existing Pragathi Circle subscriber requested perks: {}", email);
+            log.info("Existing AGVIA Haute Circle subscriber requested perks: {}", email);
         } else {
             subscriber = Subscriber.builder()
                     .email(email)
@@ -59,7 +59,7 @@ public class NewsletterController {
                     .active(true)
                     .build();
             subscriber = subscriberRepository.save(subscriber);
-            log.info("New Pragathi Circle subscriber enrolled: {}", email);
+            log.info("New AGVIA Haute Circle subscriber enrolled: {}", email);
         }
 
         // Ensure CIRCLE15 exists in coupons repository
@@ -67,7 +67,7 @@ public class NewsletterController {
             try {
                 couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
                         .code("CIRCLE15")
-                        .description("Pragathi Circle VIP 15% Confectionery Credit")
+                        .description("AGVIA Haute Circle VIP 15% Boutique Credit")
                         .discountType(com.ems.pragathisweets.entity.DiscountType.PERCENTAGE)
                         .discountValue(new java.math.BigDecimal("15.00"))
                         .minOrderAmount(java.math.BigDecimal.ZERO)
@@ -96,8 +96,8 @@ public class NewsletterController {
         data.put("alreadySubscribed", alreadySubscribed);
 
         String message = alreadySubscribed
-                ? "Welcome back, Pragathi Circle VIP! Your privileges and coupon are active."
-                : "Welcome to the Pragathi Circle! Your VIP perks & 15% code are now unlocked.";
+                ? "Welcome back, AGVIA Haute Circle VIP! Your privileges and coupon are active."
+                : "Welcome to the AGVIA Haute Circle! Your VIP perks & 15% code are now unlocked.";
 
         return ResponseEntity.ok(ApiResponse.success(message, data));
     }

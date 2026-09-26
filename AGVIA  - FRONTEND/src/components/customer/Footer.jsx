@@ -18,13 +18,13 @@ export default function Footer() {
       if (data?.data) {
         localStorage.setItem('ps_circle_member', JSON.stringify(data.data))
       }
-      toast.success(data?.message || 'Welcome to Pragathi Circle! Code CIRCLE15 unlocked.', {
+      toast.success(data?.message || 'Welcome to AGVIA Haute Circle! Code CIRCLE15 unlocked.', {
         icon: '👑',
         style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
       })
       e.target.reset()
     } catch {
-      toast.success('Welcome to Pragathi Circle! Your VIP perks are active.', {
+      toast.success('Welcome to AGVIA Haute Circle! Your VIP perks are active.', {
         icon: '👑',
         style: { background: '#8B0000', color: '#FFFDF8', borderRadius: '12px' }
       })

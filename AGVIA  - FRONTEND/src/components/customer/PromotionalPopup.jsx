@@ -19,19 +19,19 @@ const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
 
 // ── Trust pillars ─────────────────────────────────────────────────────────────
 const TRUST = [
-  { icon: Flame,       label: 'Pure Desi Ghee',    sub: 'Every Batch'     },
-  { icon: ShieldCheck, label: 'No Preservatives',  sub: '100% Natural'    },
-  { icon: Gift,        label: 'Keepsake Box',       sub: 'Gift Ready'      },
-  { icon: Truck,       label: 'Same-Day Delivery',  sub: 'Orders ≥ ₹999'  },
+  { icon: ShieldCheck, label: 'Pure Handloom Silk',  sub: 'Silk Mark Certified' },
+  { icon: Sparkles,    label: 'Zardozi Handcraft',   sub: 'Master Embroidered' },
+  { icon: Gift,        label: 'Luxury Keepsake Box', sub: 'Trousseau Wrap' },
+  { icon: Truck,       label: 'Express Courier',     sub: 'Orders ≥ ₹999' },
 ]
 
 // ── Offer data ─────────────────────────────────────────────────────────────────
 const OFFER = {
-  code:       'AZADI15',
+  code:       'CIRCLE15',
   discount:   '15% OFF',
-  headline:   'Welcome Gift',
-  subline:    'On Handcrafted Sweets, Savouries & Gift Hampers',
-  validity:   'Valid on orders above ₹499 · Expires midnight',
+  headline:   'Haute Circle Welcome',
+  subline:    'On Handcrafted Sarees, Lehengas & Couture Ensembles',
+  validity:   'Valid on orders above ₹499 · First Purchase',
 }
 
 export default function PromotionalPopup() {
@@ -43,7 +43,7 @@ export default function PromotionalPopup() {
 
   /* ── show once per session ── */
   useEffect(() => {
-    const hasSeen = sessionStorage.getItem('pragathi_promo_seen')
+    const hasSeen = sessionStorage.getItem('agvia_promo_seen')
     if (!hasSeen) {
       timerRef.current = setTimeout(() => setIsOpen(true), 1400)
     }
@@ -52,7 +52,7 @@ export default function PromotionalPopup() {
 
   const handleClose = () => {
     setIsOpen(false)
-    sessionStorage.setItem('pragathi_promo_seen', 'true')
+    sessionStorage.setItem('agvia_promo_seen', 'true')
   }
 
   const handleCopy = () => {

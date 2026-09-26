@@ -175,17 +175,17 @@ public class SubscriptionService {
 
         // Send confirmation WhatsApp if phone is available
         if (saved.getCustomerPhone() != null && !saved.getCustomerPhone().isBlank()) {
-            String msg = "👑 *PRAGATHI CIRCLE VIP ACTIVATED* 👑\n" +
+            String msg = "👑 *AGVIA HAUTE CIRCLE VIP ACTIVATED* 👑\n" +
                          "━━━━━━━━━━━━━━━━━━━━━━\n" +
                          "Dear *" + saved.getCustomerName() + "*,\n\n" +
                          "🎉 Your VIP Membership is now *ACTIVE*!\n\n" +
                          "✨ *Your VIP Privileges:*\n" +
-                         "• 15% OFF Voucher: *" + saved.getExclusiveCoupon() + "*\n" +
-                         "• Complimentary Royale Gift Packaging\n" +
-                         "• Priority Kitchen Preparation & Same-Day Dispatch\n" +
-                         "• Secret Heritage Recipes & Festive Pre-Access\n\n" +
+                         "• 15% Designer Credit Voucher: *" + saved.getExclusiveCoupon() + "*\n" +
+                         "• Complimentary Royal Keepsake Wrap with Gold Ribbon\n" +
+                         "• Priority Atelier Preparation & Same-Day Dispatch\n" +
+                         "• Private Couture Showcases & Festive Pre-Access\n\n" +
                          "📅 Valid Till: " + saved.getValidTill().toLocalDate() + "\n\n" +
-                         "Taste the Tradition at pragathisweets.com 🍮";
+                         "Wear Your Story with AGVIA Boutique ✨";
             whatsAppService.sendOrderStatusUpdate("VIP-" + saved.getId(), "CONFIRMED", saved.getCustomerName(), saved.getCustomerPhone());
         }
 
@@ -260,7 +260,7 @@ public class SubscriptionService {
             if (!couponRepository.existsByCodeIgnoreCase(code)) {
                 couponRepository.save(com.ems.pragathisweets.entity.Coupon.builder()
                         .code(code)
-                        .description("Exclusive Pragathi Circle VIP Member Voucher")
+                        .description("Exclusive AGVIA Haute Circle VIP Member Voucher")
                         .discountType(com.ems.pragathisweets.entity.DiscountType.PERCENTAGE)
                         .discountValue(sub.getDiscountPercent() != null ? BigDecimal.valueOf(sub.getDiscountPercent()) : new BigDecimal("15.00"))
                         .minOrderAmount(BigDecimal.ZERO)

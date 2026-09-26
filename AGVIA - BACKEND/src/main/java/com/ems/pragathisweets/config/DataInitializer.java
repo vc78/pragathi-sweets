@@ -138,9 +138,9 @@ public class DataInitializer implements CommandLineRunner {
 
     private void seedOfficialCoupons() {
         log.info("Seeding AGVIA official coupons and subscription codes...");
-        seedCouponIfAbsent("CIRCLE15", "Pragathi Circle VIP 15% Confectionery Credit", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
+        seedCouponIfAbsent("CIRCLE15", "AGVIA Haute Circle VIP 15% Boutique Credit", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
         seedCouponIfAbsent("AGVIAVIP10", "Exclusive VIP 10% Boutique Discount", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("10.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
-        seedCouponIfAbsent("AGVIA15", "VIP Welcome Voucher 15% Confectionery & Couture Credit", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
+        seedCouponIfAbsent("AGVIA15", "VIP Welcome Voucher 15% Boutique Credit", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("15.00"), BigDecimal.ZERO, new BigDecimal("2000.00"));
         seedCouponIfAbsent("AGVIA10", "Special 10% Storewide Boutique Discount", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("10.00"), BigDecimal.ZERO, new BigDecimal("1500.00"));
         seedCouponIfAbsent("WELCOME10", "Welcome 10% Off on First Boutique Purchase", com.ems.pragathisweets.entity.DiscountType.PERCENTAGE, new BigDecimal("10.00"), BigDecimal.ZERO, new BigDecimal("1000.00"));
         seedCouponIfAbsent("FIRST50", "₹50 Flat Credit on Debut Order", com.ems.pragathisweets.entity.DiscountType.FLAT, new BigDecimal("50.00"), new BigDecimal("299.00"), new BigDecimal("50.00"));

@@ -514,11 +514,11 @@ export const adminService = {
 
       if (categoryBreakdown.length === 0) {
         categoryBreakdown = [
-          { name: 'Milk Sweets', value: 34 },
-          { name: 'Dry Fruit Sweets', value: 26 },
-          { name: 'Bengali Sweets', value: 18 },
-          { name: 'Savouries', value: 12 },
-          { name: 'Festival Hampers', value: 10 },
+          { name: 'Bridal Lehengas', value: 34 },
+          { name: 'Designer Sarees', value: 26 },
+          { name: 'Anarkalis', value: 18 },
+          { name: 'Occasion Gowns', value: 12 },
+          { name: 'Accessories & Stoles', value: 10 },
         ]
       }
 

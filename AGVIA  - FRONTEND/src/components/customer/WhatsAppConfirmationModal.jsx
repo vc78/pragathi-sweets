@@ -30,11 +30,11 @@ export default function WhatsAppConfirmationModal({ isOpen, onClose, order, cust
     const name = customerName || order.customer || 'Valued Customer'
     const items = order.items || []
 
-    let msg = `🎉 *PRAGATHI SWEETS* 🎉\n`
+    let msg = `👑 *AGVIA WOMEN'S WEAR BOUTIQUE* 👑\n`
     msg += `━━━━━━━━━━━━━━━━━━━━━━\n`
     msg += `✅ *Order Confirmed!*\n\n`
     msg += `👤 Dear *${name}*,\n`
-    msg += `Your order has been placed successfully!\n\n`
+    msg += `Your bespoke order has been placed successfully!\n\n`
     msg += `📦 *Order Details*\n`
     msg += `━━━━━━━━━━━━━━━━━━━━━━\n`
     msg += `🔖 Order No : *${orderNum}*\n`
@@ -246,10 +246,10 @@ export default function WhatsAppConfirmationModal({ isOpen, onClose, order, cust
               <button
                 onClick={handleSendToStore}
                 className="flex-[2] py-2.5 px-4 rounded-xl bg-[#128C7E] hover:bg-[#0a7468] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
-                title="Send receipt to Pragathi Sweets kitchen & dispatch team"
+                title="Send receipt to AGVIA boutique concierge & dispatch team"
               >
                 <Store size={14} />
-                <span>Send to Pragathi Sweets</span>
+                <span>Send to AGVIA Boutique</span>
               </button>
             </div>
           </div>
